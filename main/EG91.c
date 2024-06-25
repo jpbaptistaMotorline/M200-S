@@ -68,24 +68,24 @@ uint8_t EG91_PowerOn()
 {
 	uint8_t EG91_PowerON_TimeOut = 0;
 
-	// ////printf("\ngpio_get_level(GPIO_INPUT_IO_EG91_STATUS) %d\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
+	// printf("\ngpio_get_level(GPIO_INPUT_IO_EG91_STATUS) %d\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
 
 	if (!gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 	{
 		gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 0);
 		vTaskDelay(pdMS_TO_TICKS(200));
-		// ////printf("\n\nINIT EG915 4\n\n");
+		// printf("\n\nINIT EG915 4\n\n");
 
 		gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 1);
 		vTaskDelay(pdMS_TO_TICKS(2000));
-		// ////printf("\n\nINIT EG915 5\n\n");
+		// printf("\n\nINIT EG915 5\n\n");
 		gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 0);
-		// ////printf("\ngpio_get_level(GPIO_INPUT_IO_EG91_STATUS) %d\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
+		// printf("\ngpio_get_level(GPIO_INPUT_IO_EG91_STATUS) %d\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
 		vTaskDelay(pdMS_TO_TICKS(8000));
-		// ////printf("\n\nINIT EG915 6\n\n");
+		// printf("\n\nINIT EG915 6\n\n");
 		while (!gpio_get_level(GPIO_INPUT_IO_EG91_STATUS) && EG91_PowerON_TimeOut < 3)
 		{
-			// ////printf("\nerror power on\n");
+			// printf("\nerror power on\n");
 			vTaskDelay(pdMS_TO_TICKS(1000));
 			EG91_PowerON_TimeOut++;
 		}
@@ -104,7 +104,7 @@ uint8_t EG91_PowerOn()
 	{
 		/* if (check_NetworkState() != 1)
 		{ */
-		// ////printf("\n\n\n before power on 11\n\n\n");
+		// printf("\n\n\n before power on 11\n\n\n");
 		return EG91_Power_Reset();
 		//}
 
@@ -136,15 +136,15 @@ uint8_t EG91_Power_OFF()
 		vTaskDelay(pdMS_TO_TICKS(2000)); */
 			gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 1);
 			vTaskDelay(pdMS_TO_TICKS(5000));
-			// ////printf("\n\nbefore reset 11\n\n");
+			// printf("\n\nbefore reset 11\n\n");
 			gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 0);
 			// vTaskDelay(pdMS_TO_TICKS(60000));
-			// ////printf("\n\nbefore reset 22\n\n");
+			// printf("\n\nbefore reset 22\n\n");
 
 			while (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS) && EG91_PowerON_TimeOut < 40)
 			{
 				vTaskDelay(pdMS_TO_TICKS(2000));
-				// ////printf("\n\nbefore reset - %d\n\n", EG91_PowerON_TimeOut);
+				// printf("\n\nbefore reset - %d\n\n", EG91_PowerON_TimeOut);
 				if (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 				{
 					EG91_PowerON_TimeOut++;
@@ -162,15 +162,15 @@ uint8_t EG91_Power_OFF()
 		 vTaskDelay(pdMS_TO_TICKS(2000)); */
 		gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 1);
 		vTaskDelay(pdMS_TO_TICKS(5000));
-		// ////printf("\n\nbefore reset 11\n\n");
+		// printf("\n\nbefore reset 11\n\n");
 		gpio_set_level(GPIO_OUTPUT_IO_PWRKEY, 0);
 		// vTaskDelay(pdMS_TO_TICKS(60000));
-		// ////printf("\n\nbefore reset 22\n\n");
+		// printf("\n\nbefore reset 22\n\n");
 
 		while (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS) && EG91_PowerON_TimeOut < 40)
 		{
 			vTaskDelay(pdMS_TO_TICKS(2000));
-			// ////printf("\n\nbefore reset - %d\n\n", EG91_PowerON_TimeOut);
+			// printf("\n\nbefore reset - %d\n\n", EG91_PowerON_TimeOut);
 			if (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 			{
 				EG91_PowerON_TimeOut++;
@@ -196,17 +196,17 @@ uint8_t EG91_Power_Reset()
 {
 
 	uint8_t EG91_PowerON_TimeOut = 0;
-	// ////printf("\n ENTER IN RESET EG\n");
+	// printf("\n ENTER IN RESET EG\n");
 
 	if (EG91_send_AT_Command("AT+QPOWD=1", "OK", 1500))
 	{
 
-		// ////printf("\n ENTER IN RESET EG 11\n");
+		// printf("\n ENTER IN RESET EG 11\n");
 		vTaskDelay(pdMS_TO_TICKS(1000));
 
 		if (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 		{
-			// ////printf("\n RESET EG22\n");
+			// printf("\n RESET EG22\n");
 			return 0;
 		}
 		else
@@ -263,12 +263,13 @@ uint8_t EG91_Power_Reset()
 
 	if (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 	{
-		// ////printf("\n RESET EG555\n");
+		
+		// printf("\n RESET EG555\n");
 		return 1;
 	}
 	else
 	{
-		// ////printf("\n RESET EG666\n");
+		// printf("\n RESET EG666\n");
 		return 0;
 	}
 
@@ -298,7 +299,7 @@ uint8_t parse_NetworkStatus(char *payload)
 	char *str = strtok(payload, (const char *)",");
 	str = strtok((char *)NULL, (const char *)"\r");
 
-	// ////printf("check %d", atoi(str));
+	// printf("check %d", atoi(str));
 
 	if ((atoi(str) == 1) || (atoi(str) == 5))
 	{
@@ -324,132 +325,118 @@ uint8_t send_UDP_Send(char *data, char *topic)
 {
 	char UDP_OK_Data[10];
 	uint8_t count_Send_UDP = 0;
-	////printf("\n\n udp send 00\n\n");
+	printf("\n\n udp send 00\n\n");
 	int64_t time1 = esp_timer_get_time();
-	label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
-
-	if (label_network_portalRegister == 255)
-	{
-		label_network_portalRegister = 1;
-		save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
-	}
-
-	////printf("\n\n label_network_portalRegister 222 %d - %s\n\n", label_network_portalRegister, data);
+	
 
 	if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
 	{
 
-		if (label_network_portalRegister == 1)
+		if (!gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 		{
-
-			if (!gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
+			gpio_set_level(GPIO_OUTPUT_ACT, 1);
+			uint8_t pwrFD = 0;
+			uint8_t InitNetworkCount = 0;
+			uint8_t pwrFD_count = 0;
+			// system_stack_high_water_mark("SEND UDP1");
+			while (pwrFD != 1)
 			{
-				gpio_set_level(GPIO_OUTPUT_ACT, 1);
-				uint8_t pwrFD = 0;
-				uint8_t InitNetworkCount = 0;
-				uint8_t pwrFD_count = 0;
-				// system_stack_high_water_mark("SEND UDP1");
-				while (pwrFD != 1)
+				if (pwrFD_count == 3 || pwrFD == 1)
 				{
-					if (pwrFD_count == 3 || pwrFD == 1)
+					break;
+				}
+				pwrFD_count++;
+
+				pwrFD = EG91_PowerOn();
+			}
+			// system_stack_high_water_mark("SEND UDP2");
+			if (pwrFD == 1)
+			{
+
+				while (InitNetworkCount < 3)
+				{
+					// printf("INIT EG915 311");
+					if (!EG91_initNetwork())
 					{
+						RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
+
+						gpio_set_level(GPIO_OUTPUT_ACT, 1);
+						update_ACT_TimerVAlue((double)RSSI_NOT_DETECT);
+						InitNetworkCount++;
+					}
+					else
+					{
+						// printf("\n\n activate network 1\n\n");
 						break;
 					}
-					pwrFD_count++;
-
-					pwrFD = EG91_PowerOn();
 				}
-				// system_stack_high_water_mark("SEND UDP2");
-				if (pwrFD == 1)
+
+				if (InitNetworkCount == 3)
 				{
-
-					while (InitNetworkCount < 3)
-					{
-						// ////printf("INIT EG915 311");
-						if (!EG91_initNetwork())
-						{
-							RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
-
-							gpio_set_level(GPIO_OUTPUT_ACT, 1);
-							update_ACT_TimerVAlue((double)RSSI_NOT_DETECT);
-							InitNetworkCount++;
-						}
-						else
-						{
-							// ////printf("\n\n activate network 1\n\n");
-							break;
-						}
-					}
-
-					if (InitNetworkCount == 3)
-					{
-						nvs_erase_key(nvs_System_handle, NVS_NETWORK_LOCAL_CHANGED);
-						return 1;
-					}
+					nvs_erase_key(nvs_System_handle, NVS_NETWORK_LOCAL_CHANGED);
+					return 1;
 				}
 			}
-
-			// TODO:DESCOMENTAR CASO NAO FUNCIONE
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			// TODO: RETIRAR CASO FUNCIONE MAL
-			if (strlen(topic) < 2)
-			{
-				/* code */
-
-				xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-				while (count_Send_UDP < 3)
-				{
-					memset(UDP_OK_Data, 0, sizeof(UDP_OK_Data));
-					// ////printf("\nsms ghghkk444433 %s\n",data);
-					// ////printf("\nsms ghghkk555\n");
-					////printf("\n\n task_EG91_Send_UDP 12345 %s\n\n", data);
-					if (send_UDP_Package(data, strlen(data), ""))
-					{
-						return 1;
-					}
-
-					count_Send_UDP++;
-				}
-			}
-			else
-			{
-				xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-				while (count_Send_UDP < 3)
-				{
-					memset(UDP_OK_Data, 0, sizeof(UDP_OK_Data));
-					////printf("\nsms ghghkk444433 %s\n", data);
-					// ////printf("\nsms ghghkk555\n");
-					// ////printf("\n\n task_EG91_Send_UDP 12345 %s\n\n", data);
-					if (send_UDP_Package(data, strlen(data), topic))
-					{
-						return 1;
-					}
-
-					count_Send_UDP++;
-				}
-			}
-
-			count_Send_UDP = 0;
-			checkIf_mqttSend_fail(data);
-			// ////printf("\n\nlost pack %d\n\n", label_UDP_fail_and_changed);
-
-			/* if (label_Reset_Password_OR_System == 2)
-			{
-				vTaskResume(handle_SEND_SMS_TASK);
-				// vTaskResume(handle_SMS_TASK);
-				timer_start(TIMER_GROUP_1, TIMER_0);
-			} */
 		}
+
+		// TODO:DESCOMENTAR CASO NAO FUNCIONE
+		// xSemaphoreGive(rdySem_Control_Send_AT_Command);
+
+		// TODO: RETIRAR CASO FUNCIONE MAL
+		if (strlen(topic) < 2)
+		{
+			/* code */
+
+			xSemaphoreGive(rdySem_Control_Send_AT_Command);
+
+			while (count_Send_UDP < 3)
+			{
+				memset(UDP_OK_Data, 0, sizeof(UDP_OK_Data));
+				// printf("\nsms ghghkk444433 %s\n",data);
+				// printf("\nsms ghghkk555\n");
+				printf("\n\n task_EG91_Send_UDP 12345 %s\n\n", data);
+				if (send_UDP_Package(data, strlen(data), ""))
+				{
+					return 1;
+				}
+
+				count_Send_UDP++;
+			}
+		}
+		else
+		{
+			xSemaphoreGive(rdySem_Control_Send_AT_Command);
+
+			while (count_Send_UDP < 3)
+			{
+				memset(UDP_OK_Data, 0, sizeof(UDP_OK_Data));
+				printf("\nsms ghghkk444433 %s\n", data);
+				// printf("\nsms ghghkk555\n");
+				// printf("\n\n task_EG91_Send_UDP 12345 %s\n\n", data);
+				if (send_UDP_Package(data, strlen(data), topic))
+				{
+					return 1;
+				}
+
+				count_Send_UDP++;
+			}
+		}
+
+		count_Send_UDP = 0;
+		checkIf_mqttSend_fail(data);
+		// printf("\n\nlost pack %d\n\n", label_UDP_fail_and_changed);
+
+		/* if (label_Reset_Password_OR_System == 2)
+		{
+			vTaskResume(handle_SEND_SMS_TASK);
+			// vTaskResume(handle_SMS_TASK);
+			timer_start(TIMER_GROUP_1, TIMER_0);
+		} */
 	}
 	else
 	{
-		if (label_network_portalRegister == 1)
-		{
-			checkIf_mqttSend_fail(data);
-		}
+
+		checkIf_mqttSend_fail(data);
 
 		return 0;
 	}
@@ -464,21 +451,21 @@ void checkIf_mqttSend_fail(char *data)
 	uint8_t label_UDP_fail_and_changed = 0;
 
 	char delim[] = " ";
-	// ////printf("\n\ncount_Send_UDP++ 11;\n\n");
+	// printf("\n\ncount_Send_UDP++ 11;\n\n");
 	char *command = strtok(data, delim);
-	// ////printf("\n\ncount_Send_UDP++ 22;\n\n");
+	// printf("\n\ncount_Send_UDP++ 22;\n\n");
 	char *parameter = strtok(NULL, delim);
-	// ////printf("\n\ncount_Send_UDP++ 33;\n\n");
+	// printf("\n\ncount_Send_UDP++ 33;\n\n");
 	char *element = strtok(NULL, delim);
-	// ////printf("\n\ncount_Send_UDP++ 44;\n\n");
+	// printf("\n\ncount_Send_UDP++ 44;\n\n");
 	//  char *element = strtok(NULL, delim);
 
-	// ////printf("\n\ncount_Send_UDP++ 55;\n\n");
-	//  ////printf("\n\n cmd - %s, parameter - %s, elemente - %s\n\n",command,parameter,element);
-	// ////printf("\n\ncount_Send_UDP++ 66;\n\n");
+	// printf("\n\ncount_Send_UDP++ 55;\n\n");
+	//  printf("\n\n cmd - %s, parameter - %s, elemente - %s\n\n",command,parameter,element);
+	// printf("\n\ncount_Send_UDP++ 66;\n\n");
 	label_UDP_fail_and_changed = get_INT8_Data_From_Storage(NVS_NETWORK_LOCAL_CHANGED, nvs_System_handle);
-	// ////printf("\n\ncount_Send_UDP++ 77;\n\n");
-	// ////printf("\n\ncount_Send_UDP++ 66;\n\n");
+	// printf("\n\ncount_Send_UDP++ 77;\n\n");
+	// printf("\n\ncount_Send_UDP++ 66;\n\n");
 
 	if (label_UDP_fail_and_changed == 255)
 	{
@@ -495,7 +482,7 @@ void checkIf_mqttSend_fail(char *data)
 	if (!strcmp(command, "UR") || (!strcmp(command, "ME") && (parameter[0] == 'S' || parameter[0] == 'R') && (element[0] == 'A' || element[0] == 'U')))
 	{
 		label_UDP_fail_and_changed |= 2;
-		// ////printf("\n\nlost pack UR %d\n\n", label_UDP_fail_and_changed);
+		// printf("\n\nlost pack UR %d\n\n", label_UDP_fail_and_changed);
 	}
 
 	if (!strcmp(command, "ME") && parameter[0] == 'R' && element[0] == 'K')
@@ -520,22 +507,22 @@ void task_EG91_Send_UDP(void *pvParameter)
 
 		xQueueReceive(UDP_Send_queue, &mqttInfo, portMAX_DELAY);
 
-		// //printf("\nsms mqtt00\n");
+		// printf("\nsms mqtt00\n");
 		/* if (label_ResetSystem == 1)
 		{
 			timer_pause(TIMER_GROUP_1, TIMER_0);
-			//////printf("\nsms mqtt\n");
+			//printf("\nsms mqtt\n");
 			disableAlarm();
 			vTaskSuspend(xHandle_Timer_VerSystem);
-			//////printf("\nsms mqtt1\n");
+			//printf("\nsms mqtt1\n");
 			vTaskSuspend(handle_SEND_SMS_TASK);
-			//////printf("\nsms mqtt2\n");
+			//printf("\nsms mqtt2\n");
 			xSemaphoreGive(rdySem_Control_Send_AT_Command);
 		} */
 
 		// save_INT8_Data_In_Storage(NVS_QMT_LARGE_DATA_TIMER_LABEL, 1, nvs_System_handle);
 		// xSemaphoreTake(rdySem_Control_SMS_UDP, pdMS_TO_TICKS(3000));
-		////printf("\n\n receive UDP queue %s - %s\n\n", mqttInfo.data, mqttInfo.topic);
+		printf("\n\n receive UDP queue %s - %s\n\n", mqttInfo.data, mqttInfo.topic);
 		send_UDP_Send(mqttInfo.data, mqttInfo.topic);
 
 		/* if (label_ResetSystem == 1)
@@ -552,7 +539,7 @@ void task_EG91_Send_UDP(void *pvParameter)
 
 void send_UDP_queue(mqtt_information *mqttInfo)
 {
-	////printf("\n\ntask_refresh_SystemTime 000111 - %s - %s\n\n", mqttInfo->data, mqttInfo->topic);
+	printf("\n\ntask_refresh_SystemTime 000111 - %s - %s\n\n", mqttInfo->data, mqttInfo->topic);
 
 	xQueueSendToBack(UDP_Send_queue, mqttInfo, pdMS_TO_TICKS(3000));
 }
@@ -566,14 +553,13 @@ void EG915_fota(mqtt_information *mqttInfo)
 	uint32_t CRC32_FOTA = 0;
 
 	timer_pause(TIMER_GROUP_1, TIMER_0);
-	// // ////printf("\nsms\n");
+	// // printf("\nsms\n");
 	// disableAlarm();
 	// vTaskSuspend(xHandle_Timer_VerSystem);
 	// vTaskSuspend(handle_SEND_SMS_TASK);
 
 	EG915_readDataFile_struct.mode = EG91_FILE_FOTA_MODE;
 	disableBLE();
-	
 
 	EG91_send_AT_Command("AT+QFDEL=\"sound_8.wav\"", "OK", 1000);
 	EG91_send_AT_Command("AT+QFDEL=\"sound_7.wav\"", "OK", 1000);
@@ -582,7 +568,6 @@ void EG915_fota(mqtt_information *mqttInfo)
 	EG91_send_AT_Command("AT+QFDEL=\"sound_4.wav\"", "OK", 1000);
 	EG91_send_AT_Command("AT+QFDEL=\"sound_3.wav\"", "OK", 1000);
 	EG91_send_AT_Command("AT+QFDEL=\"sound_2.wav\"", "OK", 1000);
-
 
 	EG91_send_AT_Command("AT+QINDCFG=\"ring\", 0", "OK", 1000);
 
@@ -628,7 +613,7 @@ void EG915_fota(mqtt_information *mqttInfo)
 	esp_err_t err;
 	int idFile = atoi(fileID);
 	int nowFileSize = 0;
-	//printf("\nfile id %d - %s", idFile, fileID);
+	printf("\nfile id %d - %s", idFile, fileID);
 	sprintf((char *)iv, "%s", "cqfDXcNe167GMAT2");
 	if (ACK)
 	{
@@ -659,10 +644,10 @@ void EG915_fota(mqtt_information *mqttInfo)
 				break;
 			}
 
-			//printf("\n\nnowFileSize 11 - %d - %d \n\n", nowFileSize, EG915_readDataFile_struct.fileSize);
+			printf("\n\nnowFileSize 11 - %d - %d \n\n", nowFileSize, EG915_readDataFile_struct.fileSize);
 
 			CRC32_FOTA = esp_rom_crc32_le(CRC32_FOTA, (uint8_t *)EG915_readDataFile_struct.receiveData, EG915_readDataFile_struct.packetFile_size);
-			//printf("CRC32: 0x%08X - 0x%08X\n", CRC32_FOTA, EG915_readDataFile_struct.ckm);
+			printf("CRC32: 0x%08X - 0x%08X\n", CRC32_FOTA, EG915_readDataFile_struct.ckm);
 
 			count++;
 		}
@@ -696,13 +681,13 @@ void EG915_fota(mqtt_information *mqttInfo)
 	}
 	else
 	{
-		//esp_ota_abort(updateHandle);
+		// esp_ota_abort(updateHandle);
 		send_UDP_Send("«\0", "");
 	}
 
 	restartBLE();
 	EG91_send_AT_Command("AT+QFDEL=\"UFS:3.txt\"", "OK", 1000);
-	////printf("CRC32: 0x%08X - 0x%08X\n", CRC32_FOTA, EG915_readDataFile_struct.ckm);
+	printf("CRC32: 0x%08X - 0x%08X\n", CRC32_FOTA, EG915_readDataFile_struct.ckm);
 	EG91_send_AT_Command("AT+QINDCFG=\"ring\", 1", "OK", 1000);
 	EG915_readDataFile_struct.ckm = 0;
 	EG91_send_AT_Command("AT+CNMI=2,1,0,0,0", "OK", 1000);
@@ -717,28 +702,28 @@ void EG915_fota(mqtt_information *mqttInfo)
 void init_EG91(void)
 {
 	// xTaskCreate(uart_event_task, "uart_event_task", 8000, NULL, 4, NULL);
-	// ////printf("INIT EG915 1");
+	// printf("INIT EG915 1");
+	printf("\n\n akakak 777\n\n");
 	uartInit();
+	printf("\n\n akakak 888\n\n");
 	uint8_t pwrFD = 0;
 
 	mqtt_openLabel = 0;
 	mqtt_connectLabel = 0;
-	// ////printf("INIT EG915 2");
+	// printf("INIT EG915 2");
 
 	rdySem_Control_Send_AT_Command = xSemaphoreCreateBinary();
-	rdySem_Control_IncomingCALL = xSemaphoreCreateMutex();
-	rdySem_No_Carrie_Call = xSemaphoreCreateBinary();
+	printf("\n\n akakak 999\n\n");
 	rdySem_QPSND = xSemaphoreCreateBinary();
 	rdySem_UART_CTR = xSemaphoreCreateBinary();
-	rdySem_Lost_SMS = xSemaphoreCreateBinary();
-	rdySem_Control_SMS_Task = xSemaphoreCreateBinary();
+
 	rdySem_Control_SMS_UDP = xSemaphoreCreateBinary();
 	rdySem_Control_pubx = xSemaphoreCreateBinary();
-
+	printf("\n\n akakak 1000\n\n");
 	xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	xSemaphoreTake(rdySem_No_Carrie_Call, 0);
+
 	xSemaphoreTake(rdySem_QPSND, 0);
-	xSemaphoreTake(rdySem_Lost_SMS, 0);
+	printf("\n\n akakak 1001\n\n");
 
 	// xSemaphoreTake(rdySem_Control_IncomingCALL, (portTickType) portMAX_DELAY);
 
@@ -748,12 +733,9 @@ void init_EG91(void)
 	// ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
 	AT_Command_Feedback_queue = xQueueCreate(AT_QUEUE_SIZE, sizeof(char) * BUF_SIZE);
-	EG91_CALL_SMS_UART_queue = xQueueCreate(3, 180);
-	// EG91_CALL_CALL_UART_queue = xQueueCreate(1, sizeof(data_ReceiveAT_Serial));
-	EG91_CALL_CLCC_UART_queue = xQueueCreate(3, sizeof(char) * 50);
-	EG91_CALL_CHUP_UART_queue = xQueueCreate(1, 50);
+
 	// Type_Call_queue = xQueueCreate(2, sizeof(call_Type));
-	receive_mqtt_queue = xQueueCreate(2, sizeof(char) * 250);
+	receive_mqtt_queue = xQueueCreate(2, sizeof(char) * 500);
 	NO_CARRIER_Call_queue = xQueueCreate(1, 50);
 	UDP_Send_queue = xQueueCreate(2, sizeof(mqtt_information));
 	HTTPS_data_queue = xQueueCreate(2, sizeof(char) * 30);
@@ -764,22 +746,11 @@ void init_EG91(void)
 
 	// EG91_WRITE_FILE_queue = xQueueCreate(5, 100);
 
-	xTaskCreate(task_EG91_Run_SMS, "task_EG91_Run_SMS", /* 22 */ 21 * 1024, NULL, 29, &handle_SMS_TASK);
-	// ////printf("\n pwrfg = finish create run sms\n");
-
-	xTaskCreate(task_EG91_SendSMS, "task_EG91_SendSMS", 6 * 2048 + 1024, NULL, 31, &handle_SEND_SMS_TASK);
-	// ////printf("\n pwrfg = finish create run send sms\n");
-
-	// xTaskCreate(task_EG91_Feedback_Call, "task_EG91_Feedback_Call", 6000, NULL, 26, NULL);
-
-	xTaskCreate(task_EG91_Receive_UDP, "task_EG91_Receive_UDP", 15000 + 2046 + 1024, NULL, 20, NULL);
-
-	xTaskCreate(task_EG91_Send_UDP, "task_EG91_Send_UDP", 9 * 1024, NULL, 26, &handle_UDP_TASK);
-
 	// xTaskCreate(task_EG91_Verify_Unread_SMS, "task_EG91_Verify_Unread_SMS", 7000, NULL, 20, NULL);
 
-	// ////printf("\n\n\n before power on\n\n\n");
-
+	// printf("\n\n\n before power on\n\n\n");
+	xTaskCreate(task_EG91_Send_UDP, "task_EG91_Send_UDP", 9 * 1024, NULL, 26, &handle_UDP_TASK);
+	xTaskCreate(task_EG91_Receive_UDP, "task_EG91_Receive_UDP", 15000 + 2046 + 1024, NULL, 20, NULL);
 	//  initTimers();
 
 	if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
@@ -811,18 +782,17 @@ void init_EG91(void)
 		// ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
 		// ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
-		xSemaphoreGive(rdySem_Control_SMS_Task);
-		// ////printf("INIT EG915 3");
+		// printf("INIT EG915 3");
 		//   EG91_writeFile(f1, t1);
 		//   EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
 		//   gpio_set_level(GPIO_OUTPUT_ACT, 1);
-		// ////printf("\n pwrfg = %d\n", pwrFD);
+		// printf("\n pwrfg = %d\n", pwrFD);
 
 		if (pwrFD == 1)
 		{
 			while (InitNetworkCount < 3)
 			{
-				// ////printf("INIT EG915 311");
+				// printf("INIT EG915 311");
 				if (!EG91_initNetwork())
 				{
 					RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
@@ -833,7 +803,7 @@ void init_EG91(void)
 				}
 				else
 				{
-					// ////printf("\n\n init OK label \n\n");
+					// printf("\n\n init OK label \n\n");
 					break;
 				}
 			}
@@ -850,7 +820,7 @@ void init_EG91(void)
 	}
 	else
 	{
-		// ////printf("\n\n init NOT OK label \n\n");
+		// printf("\n\n init NOT OK label \n\n");
 	}
 
 	// EG915_fota();
@@ -878,42 +848,42 @@ void EG91_writeFile(char *fileName, char *file, int filesize)
 	//     unsigned int somFinal_len = sizeof(uint8_t) * (som_final_end - som_final);
 	//     /* FILE *exemple;
 	//     fopen() */
-	//     ////printf("\nWRITE atCommand1 11\n");
+	//     printf("\nWRITE atCommand1 11\n");
 	//     // EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-	//     ////printf("\nWRITE atCommand1 22\n");
+	//     printf("\nWRITE atCommand1 22\n");
 	//     sprintf(atCommand, " AT+QFOPEN=\"%s\"", "sound_8.wav" /* fileName */);
 
 	//     EG91_send_AT_Command(atCommand, "QFOPEN", 1000);
-	//     ////printf("\nWRITE atCommand1 33\n");
+	//     printf("\nWRITE atCommand1 33\n");
 	//     /* sprintf(atCommand, "AT+QFREAD=%d,%d", atoi(fileID), 30);
-	//     ////printf("\nWRITE atCommand1 %s - atoi %d - %d\n", atCommand, atoi(fileID), strlen(atCommand));
+	//     printf("\nWRITE atCommand1 %s - atoi %d - %d\n", atCommand, atoi(fileID), strlen(atCommand));
 	//     EG91_send_AT_Command(atCommand, "OK", 3000); */
 
 	//     memset(atCommand, 0, sizeof(atCommand));
 	//     sprintf(atCommand, "AT+QFWRITE=%d,%d,80", atoi(fileID), som_len /* filesize */);
-	//     ////printf("\nWRITE atCommand1 %s - atoi %d - %d\n", atCommand, atoi(fileID), strlen(atCommand));
+	//     printf("\nWRITE atCommand1 %s - atoi %d - %d\n", atCommand, atoi(fileID), strlen(atCommand));
 	//     EG91_send_AT_Command(atCommand, "CONNECT", 5000);
 	//     // vTaskDelay(pdMS_TO_TICKS(250));
 
-	//     ////printf("\nWRITE FILESIZE %d\n", filesize);
+	//     printf("\nWRITE FILESIZE %d\n", filesize);
 
 	//     uart_write_bytes(UART_NUM_1, som /* file */, som_len /* filesize */);
-	//     ////printf("\nWRITE FILE 1 %s - %d\n", som_final, somFinal_len);
+	//     printf("\nWRITE FILE 1 %s - %d\n", som_final, somFinal_len);
 
 	//     while (counterACK > 0)
 	//     {
 	//         memset(dtmp1, 0, sizeof(dtmp1));
-	//         ////printf("\nWRITE FILE 2\n");
+	//         printf("\nWRITE FILE 2\n");
 	//         xQueueReceive(EG91_WRITE_FILE_queue, &dtmp1, pdMS_TO_TICKS(5000 * 2));
-	//         ////printf("\nWRITE FILE 3\n");
-	//         ////printf("\nAT_Command_Feedback_queue = %s\n", dtmp1);
-	//         ////printf("\nWRITE FILE 4\n");
+	//         printf("\nWRITE FILE 3\n");
+	//         printf("\nAT_Command_Feedback_queue = %s\n", dtmp1);
+	//         printf("\nWRITE FILE 4\n");
 	//         if (strstr(dtmp1, "OK") != NULL)
 	//         {
 	//             /* char *fileName;
 	//             FILE *f = NULL;
 	//             asprintf(&fileName, "/sdcard/%s", fileName);
-	//             ////printf("\nfileName sdcard %s\n", fileName);
+	//             printf("\nfileName sdcard %s\n", fileName);
 	//             f = fopen(fileName, "a");
 
 	//             for (int i = 0; i < filesize; i++)
@@ -929,13 +899,13 @@ void EG91_writeFile(char *fileName, char *file, int filesize)
 	//             memset(atCommand, 0, sizeof(atCommand));
 	//             // sprintf(atCommand, "AT+QFCLOSE=%d", atoi(fileID));
 	//             // EG91_send_AT_Command(atCommand, "OK", 1000);
-	//             ////printf("\nWRITE FILE 5\n"); // file_CRC32
+	//             printf("\nWRITE FILE 5\n"); // file_CRC32
 	//             // esp_rom_crc32_le(crc32_val, data1, strlen(file));
 	//             break;
 	//         }
 	//         else
 	//         {
-	//             ////printf("\nWRITE FILE 6\n");
+	//             printf("\nWRITE FILE 6\n");
 	//             counterACK--;
 	//         }
 
@@ -944,8 +914,8 @@ void EG91_writeFile(char *fileName, char *file, int filesize)
 	//     }
 
 	//     // EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-	//     ////printf("\nWRITE FILE 7\n");
-	//     ////printf("\nWRITE FILE 8\n");
+	//     printf("\nWRITE FILE 7\n");
+	//     printf("\nWRITE FILE 8\n");
 	//     send_ATCommand_Label = 0;
 	// return 0;
 }
@@ -977,7 +947,7 @@ uint8_t parse_OpenFile(char *payload)
 	sscanf(token, "%s", fileID);
 
 	// Imprimir o código
-	////printf("Código do arquivo: %s\n", fileID);
+	printf("Código do arquivo: %s\n", fileID);
 
 	/* for (int i = 0; i < strlen(payload); i++)
 	{
@@ -1003,7 +973,7 @@ uint8_t parse_OpenFile(char *payload)
 		}
 	} */
 
-	////printf("\ntoken3 =%s\n", fileID);
+	printf("\ntoken3 =%s\n", fileID);
 
 	if (strlen(fileID) == 0 || (regexec(&regex, fileID, 0, NULL, 0)))
 	{
@@ -1013,16 +983,16 @@ uint8_t parse_OpenFile(char *payload)
 	/*
 
 		token = strtok(payload, s);
-		//////printf("\ntxt1 = %s\n", payload);
+		//printf("\ntxt1 = %s\n", payload);
 		token = strtok(NULL, s);
-		////printf("\ntoken1 =%s\n", token);
+		printf("\ntoken1 =%s\n", token);
 		token = strtok(token, ":");
-		////printf("\ntoken2 =%s\n", token);
+		printf("\ntoken2 =%s\n", token);
 		token = strtok(NULL, sp);
-		////printf("\ntoken3 =%s\n", token);
+		printf("\ntoken3 =%s\n", token);
 
 		sprintf(fileID, "%s", token);
-		////printf("\nfileID =%s\n", fileID); */
+		printf("\nfileID =%s\n", fileID); */
 
 	return 1;
 }
@@ -1050,7 +1020,7 @@ uint8_t EG91_parse_CPAS(char *receiveData)
 	/* walk through other tokens */
 
 	token = strtok(NULL, s2);
-	// ////printf("token cpas=%s\n", token);
+	// printf("token cpas=%s\n", token);
 
 	if (token[0] == '0')
 	{
@@ -1099,14 +1069,14 @@ uint8_t parse_IMEI(char *payload)
 		}
 	}
 
-	// ////printf("\n\n\n parse imei %s\n\n\n", EG91_IMEI);
+	// printf("\n\n\n parse imei %s\n\n\n", EG91_IMEI);
 	return 1;
 }
 
 uint8_t EG91_parse_CPIN(char *payload)
 {
 
-	// ////printf("\n\n parse CPIN \n\n");
+	// printf("\n\n parse CPIN \n\n");
 
 	if (strstr(payload, "READY") != NULL)
 	{
@@ -1133,7 +1103,7 @@ uint8_t parse_QMTOPEN(char *receiveData)
 	uint8_t auxcounter = 0;
 	char qmtopenResult = 0;
 
-	// ////printf("\n\n QMTOPEN data %s\n\n", receiveData);
+	// printf("\n\n QMTOPEN data %s\n\n", receiveData);
 
 	for (size_t i = 0; i < strlen(receiveData); i++)
 	{
@@ -1144,7 +1114,7 @@ uint8_t parse_QMTOPEN(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\n QMTOPEN data %c\n\n", qmtopenResult);
+	// printf("\n\n QMTOPEN data %c\n\n", qmtopenResult);
 
 	if (qmtopenResult == '0')
 	{
@@ -1179,7 +1149,7 @@ uint8_t parse_at_qmtopen_(char *receiveData)
 		mqtt_openLabel = 1;
 	}
 
-	// ////printf("\n\n mqtt_openLabel - %d - %s\n\n", mqtt_openLabel, receiveData);
+	// printf("\n\n mqtt_openLabel - %d - %s\n\n", mqtt_openLabel, receiveData);
 
 	return 1;
 }
@@ -1188,7 +1158,7 @@ uint8_t EG91_parse_QFREAD(char *payload)
 {
 	if (payload == NULL)
 	{
-		////printf("Payload inválido.\n");
+		printf("Payload inválido.\n");
 		return 0; // Se o argumento for inválido, retorna falso
 	}
 
@@ -1200,7 +1170,7 @@ uint8_t EG91_parse_QFREAD(char *payload)
 	if (connectPtr != NULL)
 	{
 		sscanf(connectPtr, "CONNECT %d", &EG915_readDataFile_struct.nowFileSize); // Lê o nowFileSize após "CONNECT"
-		// //printf("nowFileSize: %d\n", EG915_readDataFile_struct.nowFileSize);
+		// printf("nowFileSize: %d\n", EG915_readDataFile_struct.nowFileSize);
 		char *dataStart = strchr(connectPtr, '\n'); // Início da sequência de dados
 		if (dataStart != NULL)
 		{
@@ -1208,16 +1178,16 @@ uint8_t EG91_parse_QFREAD(char *payload)
 			if (dataEnd != NULL)
 			{
 				size_t dataSize = dataEnd - dataStart - 1; // Calcula o tamanho da sequência de dados
-														   // //printf("Data size: %zu\n", dataSize);
+														   // printf("Data size: %zu\n", dataSize);
 				// if (dataSize < sizeof(EG915_readDataFile_struct.receiveData)) {
 				unsigned char decrypted[2000] = {};
 
 				strncpy(EG915_readDataFile_struct.receiveData, dataStart + 1, dataSize); // Copia a sequência de dados
 				EG915_readDataFile_struct.receiveData[dataSize] = '\0';
-				/* //printf("\n\n aaa 2222\n\n");
+				/* printf("\n\n aaa 2222\n\n");
 				free(connectPtr);				 // Adiciona o terminador de string
-				////printf("\n\n aaa 3333\n\n"); */
-				// //printf("\nData received1111: %s\n", EG915_readDataFile_struct.receiveData);
+				printf("\n\n aaa 3333\n\n"); */
+				// printf("\nData received1111: %s\n", EG915_readDataFile_struct.receiveData);
 				if (EG915_readDataFile_struct.mode == EG91_FILE_FOTA_MODE)
 				{
 					decrypt_aes_cfb_padding((unsigned char *)EG915_readDataFile_struct.receiveData, strlen((char *)EG915_readDataFile_struct.receiveData), &decrypted);
@@ -1237,22 +1207,22 @@ uint8_t EG91_parse_QFREAD(char *payload)
 			}
 			else
 			{
-				////printf("OK not found.\n");
+				printf("OK not found.\n");
 				return 0; // Retorna falso se "\nOK" não for encontrado
 			}
 		}
 		else
 		{
-			////printf("Data start not found.\n");
+			printf("Data start not found.\n");
 			return 0; // Retorna falso se o início dos dados não for encontrado
 		}
 	}
 	else
 	{
-		////printf("CONNECT not found.\n");
+		printf("CONNECT not found.\n");
 		return 0; // Retorna falso se "CONNECT" não for encontrado
 	}
-	// //printf("\n\nnowlifesize %d\n\n", EG915_readDataFile_struct.nowFileSize);
+	// printf("\n\nnowlifesize %d\n\n", EG915_readDataFile_struct.nowFileSize);
 	return EG915_readDataFile_struct.readOK; // Retorna 1 se OK foi encontrado, senão retorna 0
 
 	return 0;
@@ -1265,7 +1235,7 @@ int8_t EG91_Parse_ReceiveData(char *receiveData, char *rsp)
 
 	if ((strstr(receiveData, rsp)) != NULL)
 	{
-		// ////printf("\n(strstr(receiveData, rsp)) != NULL\n");
+		// printf("\n(strstr(receiveData, rsp)) != NULL\n");
 		// system_stack_high_water_mark("receiveData1");
 		if (!strcmp(rsp, "OK"))
 		{
@@ -1290,13 +1260,13 @@ int8_t EG91_Parse_ReceiveData(char *receiveData, char *rsp)
 		}
 		else if (!strcmp(rsp, "+CMGR"))
 		{
-			////printf("\n\nparse_SMS_Payload %s\n\n", receiveData);
-			parse_SMS_Payload(receiveData);
+			printf("\n\nparse_SMS_Payload %s\n\n", receiveData);
+
 			return 1;
 		}
 		else if (!strcmp(rsp, "AT+QMTCONN?"))
 		{
-			// ////printf("\nstrcmp(rsp, +CMGR)\n");
+			// printf("\nstrcmp(rsp, +CMGR)\n");
 			//   xSemaphoreGive(rdySem_Control_Send_AT_Command);
 
 			return parse_qmtconn(receiveData);
@@ -1340,49 +1310,39 @@ int8_t EG91_Parse_ReceiveData(char *receiveData, char *rsp)
 		{
 			return EG91_parse_CPAS(receiveData);
 		}
-		else if (!strcmp(rsp, "CLCC"))
-		{
-			return parse_IncomingCall_Payload(receiveData);
-		}
 		else if (!strcmp(rsp, "QLTS"))
 		{
 			return parse_NowTime(receiveData);
 		}
 		else if (!strcmp(rsp, "CSQ"))
 		{
-			// ////printf("\nparse RSSI\n");
+			// printf("\nparse RSSI\n");
 			parse_RSSI(receiveData);
 			return 1;
 		}
 		else if (!strcmp(rsp, "CMGL"))
 		{
-			parse_SMS_List(receiveData);
 
 			return 1;
 		}
-		else if (!strcmp(rsp, "CMGS:"))
-		{
-			// ////printf("\nparse RSSI\n");
-			return parse_Confirmation_Send_SMS(receiveData);
-		}
 		else if (!strcmp(rsp, "+QFOPEN:"))
 		{
-			// ////printf("\nparse RSSI\n");
+			// printf("\nparse RSSI\n");
 			return parse_OpenFile(receiveData);
 		}
 		else if (!strcmp(rsp, "CONNECT"))
 		{
-			// ////printf("\nparse verify_QFWRITE\n");
+			// printf("\nparse verify_QFWRITE\n");
 			return verify_QFWRITE(receiveData);
 		}
 		/* else if (!strcmp(rsp, "CUSD"))
 		{
-			// ////printf("\nparse CUSD\n");
+			// printf("\nparse CUSD\n");
 			return EG91_parse_CUSD(receiveData);
 		} */
 		else if (!strcmp(rsp, "+QCCID"))
 		{
-			// ////printf("\nparse CUSD\n");
+			// printf("\nparse CUSD\n");
 			return EG91_parse_ICCID(receiveData);
 		}
 		else if (!strcmp(rsp, "+CIMI"))
@@ -1417,7 +1377,7 @@ uint8_t EG91_parse_ICCID(char *receiveData)
 	char *number;
 	char *prefix = "+QCCID: ";
 
-	// ////printf("\n\niccid iccid\n\n");
+	// printf("\n\niccid iccid\n\n");
 
 	// Procurar a sequência "+QCCID: " na resposta
 	number_start = strstr(receiveData, prefix);
@@ -1438,12 +1398,12 @@ uint8_t EG91_parse_ICCID(char *receiveData)
 			strncpy(number, number_start, length);
 			number[length] = '\0';
 
-			// ////printf("Número:%s\n", number);
+			// printf("Número:%s\n", number);
 			memset(EG91_ICCID_Number, 0, sizeof(EG91_ICCID_Number));
 
 			sprintf(EG91_ICCID_Number, "%s", number);
 			save_STR_Data_In_Storage(NVS_EG91_ICCID_VALUE, EG91_ICCID_Number, nvs_System_handle);
-			// ////printf("EG91_ICCID_Number:%s\n", EG91_ICCID_Number);
+			// printf("EG91_ICCID_Number:%s\n", EG91_ICCID_Number);
 			//  Liberar a memória alocada
 			free(number);
 		}
@@ -1452,146 +1412,14 @@ uint8_t EG91_parse_ICCID(char *receiveData)
 	return 1;
 }
 
-/* uint8_t EG91_parse_CUSD(char *receiveData)
-{
-	uint8_t auxCount = 0;
-	uint8_t strIndex = 0;
-
-	memset(SIM_Balance, 0, sizeof(SIM_Balance));
-
-	for (int i = 0; i < strlen(receiveData); i++)
-	{
-		if (receiveData[i] == ':')
-		{
-			for (i = i; i < strlen(receiveData); i++)
-			{
-				if (receiveData[i] == '"')
-				{
-					auxCount++;
-					strIndex = 0;
-				}
-				else
-				{
-					if (auxCount == 1)
-					{
-						SIM_Balance[strIndex++] = receiveData[i];
-					}
-					else if (auxCount == 2)
-					{
-						break;
-					}
-				}
-			}
-
-			if (auxCount == 2)
-			{
-				break;
-			}
-		}
-	}
-
-	// ////printf("\n\n USDD output = %s \nfiledata - %s\n\n", receiveData, SIM_Balance);
-	// ////printf("\n\n receiveData[strlen(receiveData) - 1] = %c\n\n", receiveData[strlen(receiveData) - 1]);
-	return 1;
-} */
-
-// char *EG91_Send_Parse_CUSD(char *payload, char *output)
-// {
-//     char receiveData[200] = {};
-//     char AT_CUSD_Command[100] = {};
-//     char aux_OutputData[200] = {};
-//     uint8_t auxCount = 0;
-//     int strIndex = 0;
-
-//     // timer_pause(TIMER_GROUP_1, TIMER_0);
-
-//     memset(SIM_Balance, 0, 500);
-
-//     xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-//     // EG91_send_AT_Command("AT+CHLD=0", "OK", 3000);
-
-//     EG91_send_AT_Command("ATE0", "OK", 3000);
-
-//     if (EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",1", "OK", 10000))
-//     {
-
-//         sprintf(AT_CUSD_Command, "AT+CUSD=1,\"%s\",15", payload);
-
-//         xSemaphoreTake(rdySem_Control_Send_AT_Command, pdMS_TO_TICKS(15000));
-
-//         if (EG91_send_AT_Command(AT_CUSD_Command, "CUSD", 25000))
-//         {
-//             // ////printf("\n\n\n pass after balance\n\n\n");
-//             //  xSemaphoreTake(rdySem_Control_Send_AT_Command, pdMS_TO_TICKS(5000));
-//             sprintf(AT_CUSD_Command, "%c%c", 1, 26);
-//             EG91_send_AT_Command(AT_CUSD_Command, "ERROR", 1000);
-
-//             // EG91_send_AT_Command("ATH", "OK", 1000);
-//             // EG91_send_AT_Command("AT+CUSD=2", "OK", 1000);
-//             EG91_send_AT_Command("ATE1", "OK", 1000);
-//             EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",0", "OK", 8000);
-//             vTaskDelay(pdMS_TO_TICKS(1000));
-//             // ////printf("\n\nexit get balance\n\n");
-//             check_NetworkState();
-//             // xSemaphoreGive(rdySem_Control_Send_AT_Command);
-//             /* vTaskResume(xHandle_Timer_VerSystem);
-//             timer_start(TIMER_GROUP_1, TIMER_0); */
-
-//             // ////printf("\n\n strlen SIM BALANCE 11 - %d\n\n", strlen(SIM_Balance));
-//             return SIM_Balance;
-//             /*   }
-//           } */
-//         }
-//         else
-//         {
-//             sprintf(AT_CUSD_Command, "%c%c", 1, 26);
-//             EG91_send_AT_Command(AT_CUSD_Command, "ERROR", 1000);
-//             EG91_send_AT_Command("AT+CUSD=2", "OK", 1000);
-//             EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",0", "OK", 3000);
-//             EG91_send_AT_Command("ATE1", "OK", 1000);
-//             vTaskDelay(pdMS_TO_TICKS(1000));
-//             check_NetworkState();
-//             // xSemaphoreGive(rdySem_Control_Send_AT_Command);
-//             /*  vTaskResume(xHandle_Timer_VerSystem);
-//              timer_start(TIMER_GROUP_1, TIMER_0); */
-
-//             return return_Json_SMS_Data("ERROR_GET");
-//         }
-
-//         /* sprintf(AT_CUSD_Command, "%c%c", 1, 26);
-//         EG91_send_AT_Command(AT_CUSD_Command, "ERROR", 1000);
-//         EG91_send_AT_Command("AT+CUSD=2", "OK", 1000);
-//         EG91_send_AT_Command("ATE1", "OK", 1000);
-//         EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",0", "OK", 3000); */
-//         check_NetworkState();
-//         // xSemaphoreGive(rdySem_Control_Send_AT_Command);
-//         /* vTaskResume(xHandle_Timer_VerSystem);
-//         timer_start(TIMER_GROUP_1, TIMER_0); */
-
-//         return return_Json_SMS_Data("ERROR_GET");
-//     }
-//     sprintf(AT_CUSD_Command, "%c%c", 1, 26);
-//     EG91_send_AT_Command(AT_CUSD_Command, "ERROR", 1000);
-//     EG91_send_AT_Command("AT+CUSD=2", "OK", 1000);
-//     EG91_send_AT_Command("ATE1", "OK", 1000);
-//     EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",0", "OK", 3000);
-//     check_NetworkState();
-//     // xSemaphoreGive(rdySem_Control_Send_AT_Command);
-//     /*   vTaskResume(xHandle_Timer_VerSystem);
-//       timer_start(TIMER_GROUP_1, TIMER_0); */
-
-//     return return_Json_SMS_Data("ERROR_GET");
-// }
-
 uint8_t parse_RSSI(char *payload)
 {
 
 	char *RSSI_ValueSTR = (strtok((char *)payload, (const char *)":") + 2);
-	// ////printf("\nRSSI value11 = %s\n", RSSI_ValueSTR);
+	// printf("\nRSSI value11 = %s\n", RSSI_ValueSTR);
 	RSSI_ValueSTR = strtok(((char *)NULL), (const char *)",");
 
-	// ////printf("\nint rssi %d\n", atoi(RSSI_ValueSTR));
+	// printf("\nint rssi %d\n", atoi(RSSI_ValueSTR));
 	RSSI_VALUE = atoi(RSSI_ValueSTR);
 
 	if ((RSSI_VALUE >= 20 && RSSI_VALUE <= 31) || (RSSI_VALUE >= 120 && RSSI_VALUE <= 131))
@@ -1631,7 +1459,7 @@ uint8_t parse_RSSI(char *payload)
 		updateSystemTimer(SYSTEM_TIMER_URGENT_STATE);
 	}
 
-	// ////printf("\nRSSI value22 = %s\n", RSSI_ValueSTR);
+	// printf("\nRSSI value22 = %s\n", RSSI_ValueSTR);
 
 	return 1;
 }
@@ -1644,328 +1472,6 @@ void verify_SMS_List()
 	EG91_send_AT_Command("AT+CMGL=\"ALL\"", "CMGL", 1500);
 	/* sprintf(AT_Command, "%s%c", "AT+CMGL=\"ALL\"", 13);
 	uart_write_bytes(UART_NUM_1, AT_Command, strlen (AT_Command));*/
-}
-
-uint8_t parse_SMS_List(char *payload)
-{
-
-	data_EG91_Receive_SMS receive_SMS_data;
-	char smsID[10];
-	char *token;
-	char auxID[3];
-	char phoneNumber[100];
-	char auxPayload[200];
-	uint8_t strIndex = 0;
-	uint8_t plusCounter = 0;
-	uint8_t auxCount = 0;
-	uint8_t dotCounter = 0;
-
-	size_t required_size;
-	char aux_own_Number[30] = {};
-	memset(aux_own_Number, 0, sizeof(aux_own_Number));
-
-	if (nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, NULL, &required_size) == ESP_OK)
-	{
-
-		nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, aux_own_Number, &required_size);
-	}
-
-	// ////printf("\nENTER PARSE SMS LIST 1\n");
-	//   xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	for (int i = 0; i < strlen(payload); i++)
-	{
-		if (payload[i] == '+')
-		{
-			plusCounter++;
-		}
-	}
-
-	// ////printf("\nENTER PARSE SMS LIST 2\n");
-	if (plusCounter > 1)
-	{
-		// ////printf("\nENTER PARSE SMS LIST 3\n");
-		plusCounter = 0;
-		for (int i = 0; i < strlen(payload); i++)
-		{
-			if (payload[i] == '+')
-			{
-				plusCounter++;
-				auxCount = 0;
-				strIndex = 0;
-				dotCounter = 0;
-				memset(&receive_SMS_data, 0, sizeof(receive_SMS_data));
-				memset(smsID, 0, sizeof(smsID));
-				int y = 0;
-				if (plusCounter > 1)
-				{
-					dotCounter = 0;
-					for (int j = i; payload[j] != '\n'; j++)
-					{
-						if (payload[j] == ',')
-						{
-							dotCounter++;
-						}
-					}
-					// ////printf("\nDOT COUNTER PARSE SMS LIST = %d\n", dotCounter);
-					if (dotCounter == 7)
-					{
-						/* code */
-
-						/* for (y = i; y < strlen(payload); y++)
-						{
-
-							if (payload[y] == ',' || payload[y] == '\n')
-							{
-								auxCount++;
-							}
-
-							if (auxCount == 9)
-							{
-								////printf("\nauxCount == 9\n");
-								break;
-							}
-						} */
-
-						/* if (auxCount == 9)
-						{
-							auxCount = 0;
-						}
-						else
-						{
-							i = y - 1;
-							break;
-						} */
-
-						for (int j = i; j < strlen(payload); j++)
-						{
-
-							if (payload[j] == ',' || payload[j] == '\n')
-							{
-								auxCount++;
-								strIndex = 0;
-							}
-							else
-							{
-
-								if (auxCount == 0)
-								{
-									if (payload[j] != '"')
-									{
-										smsID[strIndex] = payload[j];
-										strIndex++;
-									}
-								}
-
-								if (auxCount == 1)
-								{
-									if (payload[j] != '"')
-									{
-										receive_SMS_data.SMS_Status[strIndex] = payload[j];
-										strIndex++;
-									}
-								}
-
-								if (auxCount == 2)
-								{
-									if (payload[j] != '"')
-									{
-										receive_SMS_data.phNumber[strIndex] = payload[j];
-										strIndex++;
-									}
-								}
-
-								if (auxCount == 4)
-								{
-									if (payload[j] != '"')
-									{
-										// if (payload[j] != '/')
-										//{
-										receive_SMS_data.strDate[strIndex] = payload[j];
-										strIndex++;
-										// }
-									}
-								}
-
-								if (auxCount == 5)
-								{
-									/* if (payload[j] == ':')
-									{
-										dotCounter++;
-									}*/
-
-									if (payload[j] != '"')
-										/*if (payload[j] != ':')
-											if (dotCounter < 2)
-											{ */
-										receive_SMS_data.strHour[strIndex] = payload[j];
-									strIndex++;
-									// }
-								}
-
-								if (auxCount == 8)
-								{
-									if (payload[j] != 13)
-									{
-										receive_SMS_data.receiveData[strIndex] = payload[j];
-										strIndex++;
-									}
-								}
-								if (auxCount == 9)
-								{
-									i = j - 1;
-
-									break;
-								}
-							}
-						}
-
-						char *token;
-
-						token = strtok(smsID, ":");
-						token = strtok(NULL, ":");
-
-						// ////printf("token = %s\n", token);
-						receive_SMS_data.SMS_ID = 0;
-						receive_SMS_data.SMS_ID = atoi(token);
-
-						// ////printf("\nid = %d\n", receive_SMS_data.SMS_ID);
-
-						char dst1[strlen(receive_SMS_data.phNumber)];
-						char dst2[5];
-						char dst3[strlen(receive_SMS_data.receiveData)];
-
-						for (int i = 0; i < strlen(receive_SMS_data.phNumber); i = i + 4)
-						{
-							char aux_UTF8[5] = {};
-							memset(aux_UTF8, 0, 4);
-
-							aux_UTF8[0] = receive_SMS_data.phNumber[i];
-							aux_UTF8[1] = receive_SMS_data.phNumber[i + 1];
-							aux_UTF8[2] = receive_SMS_data.phNumber[i + 2];
-							aux_UTF8[3] = receive_SMS_data.phNumber[i + 3];
-							aux_UTF8[4] = 0;
-							utf8decode((utf8chr_t *)aux_UTF8, &dst2);
-
-							if (i == 0)
-							{
-								strcpy(dst1, dst2);
-							}
-							else
-							{
-								strcat(dst1, dst2);
-							}
-						}
-
-						// ////printf("\n\n dst1 after hex  %s \n\n", dst1);
-						memset(receive_SMS_data.phNumber, 0, strlen(receive_SMS_data.phNumber));
-						sprintf(receive_SMS_data.phNumber, "%s", dst1);
-						// ////printf("\n\n GMGL dst1\n %s \n\n", receive_SMS_data.phNumber);
-
-						for (int i = 0; i < strlen(receive_SMS_data.receiveData); i = i + 4)
-						{
-							char aux_UTF8[5] = {};
-							memset(aux_UTF8, 0, 4);
-
-							aux_UTF8[0] = receive_SMS_data.receiveData[i];
-							aux_UTF8[1] = receive_SMS_data.receiveData[i + 1];
-							aux_UTF8[2] = receive_SMS_data.receiveData[i + 2];
-							aux_UTF8[3] = receive_SMS_data.receiveData[i + 3];
-							aux_UTF8[4] = 0;
-							utf8decode((utf8chr_t *)aux_UTF8, &dst2);
-
-							if (i == 0)
-							{
-								strcpy(dst3, dst2);
-							}
-							else
-							{
-								strcat(dst3, dst2);
-							}
-						}
-
-						// ////printf("\n\n dst1 after receiveData  %s \n\n", dst1);
-
-						memset(receive_SMS_data.receiveData, 0, strlen(receive_SMS_data.receiveData));
-						sprintf(receive_SMS_data.receiveData, "%s", dst3);
-
-						char atCommand[50] = {};
-						// ////printf("\n\n GMGL aaaaa2\n\n");
-						if (/* abs(atoi(receive_SMS_data.strHour) - nowTime.time) < 2 && (atoi(receive_SMS_data.strDate) == nowTime.date) &&  */ !strcmp(SMS_UNREAD, receive_SMS_data.SMS_Status))
-						{
-							// ////printf("\nENTER PARSE LOST SMS\n");
-
-							// TODO:DESCOMENTAR SE NAO FUNCIONAR
-							xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-							if (!strcmp(check_IF_haveCountryCode(aux_own_Number, 0), check_IF_haveCountryCode(receive_SMS_data.phNumber, 0)))
-							{
-								sprintf(atCommand, "%s%d,0", "AT+CMGD=", receive_SMS_data.SMS_ID);
-								EG91_send_AT_Command(atCommand, "OK", 1000);
-							}
-							else
-							{
-								// ////printf("\n\n GMGL aaaaa3\n\n");
-								parse_SMS_data(&receive_SMS_data);
-								// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-								sprintf(atCommand, "%s%d,0", "AT+CMGD=", receive_SMS_data.SMS_ID);
-								EG91_send_AT_Command(atCommand, "OK", 1000);
-							}
-
-							// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-							// ////printf("\nEND PARSE LOST SMS\n");
-							// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-						}
-						else
-						{
-							// TODO:DESCOMENTAR SE NAO FUNCIONAR
-							xSemaphoreGive(rdySem_Control_Send_AT_Command);
-							sprintf(atCommand, "%s%d,0", "AT+CMGD=", receive_SMS_data.SMS_ID);
-							// ////printf("\n\n GMGL aaaaa4 - %s\n\n", atCommand);
-							EG91_send_AT_Command(atCommand, "OK", 1000);
-							// ////printf("\n\n GMGL aaaaa41\n\n");
-						}
-						// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-					}
-					// ////printf("\nEND PARSE SMS LIST\n");
-				}
-			}
-		}
-		xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	}
-	else
-	{
-		xSemaphoreGive(rdySem_Control_Send_AT_Command);
-		// ////printf("\n\n\nEND PARSE SMS LIST GIVE\n\n\n");
-	}
-	// ////printf("\n\n GMGL aaaaa5\n\n");
-	// ////printf("\nEND PARSE SMS LIST\n");
-	return 1;
-}
-
-uint8_t parse_Confirmation_Send_SMS(char *payload)
-{
-
-	if ((strstr(payload, "CMGS:")) != NULL)
-	{
-
-		if ((strstr(payload, "OK")) != NULL)
-		{
-			// ////printf("\nconfirmation_Send_SMS 2 - %s", payload);
-			return 1;
-		}
-		else
-		{
-			// ////printf("\nconfirmation_Send_SMS 3 - %s", payload);
-			return 0;
-		}
-	}
-	else
-	{
-
-		return 0;
-	}
-	return 0;
 }
 
 static unsigned int
@@ -2005,7 +1511,7 @@ time_t epoch_Calculator(struct tm *tm)
 
 uint8_t parse_NowTime(char *payload)
 {
-	// ////printf("\n parse_NowTime\n");
+	// printf("\n parse_NowTime\n");
 
 	// ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
 	// ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -2033,7 +1539,7 @@ uint8_t parse_NowTime(char *payload)
 	memset(aux_hour, 0, sizeof(aux_hour));
 	memset(aux_minute, 0, sizeof(aux_minute));
 
-	// ////printf("\ntime payload %s\n", payload);
+	// printf("\ntime payload %s\n", payload);
 
 	for (int i = 0; i < strlen(payload); i++)
 	{
@@ -2072,7 +1578,7 @@ uint8_t parse_NowTime(char *payload)
 		}
 	}
 
-	// ////printf("\n\nTIMEZONE QLTS - %c\n\n", timeZone_Signal);
+	// printf("\n\nTIMEZONE QLTS - %c\n\n", timeZone_Signal);
 
 	for (int i = 0; i < strlen(nowTime.strTime); i++)
 	{
@@ -2092,11 +1598,11 @@ uint8_t parse_NowTime(char *payload)
 
 	auxCount = 0;
 	strIndex = 0;
-	// ////printf("\ntime strtime %s\n", nowTime.strTime);
+	// printf("\ntime strtime %s\n", nowTime.strTime);
 
 	if (slashCounter == 2 && colonCounter == 2 && commaCounter == 1)
 	{
-		// ////printf("\ntime strtime 11%s\n", nowTime.strTime);
+		// printf("\ntime strtime 11%s\n", nowTime.strTime);
 
 		for (int i = 0; i < strlen(nowTime.strTime); i++)
 		{
@@ -2140,17 +1646,17 @@ uint8_t parse_NowTime(char *payload)
 			}
 		}
 
-		// ////printf("\nyear year %s\n", aux_year);
+		// printf("\nyear year %s\n", aux_year);
 		nowTime.date = ((atoi(aux_year) - 2000) * 10000) + (atoi(aux_month) * 100) + atoi(aux_day);
 		nowTime.time = (atoi(aux_hour) * 100) + atoi(aux_minute);
 		nowTime.year = (atoi(aux_year) - 2000);
-		// ////printf("\nyear year111 %d\n", nowTime.year);
+		// printf("\nyear year111 %d\n", nowTime.year);
 		nowTime.month = atoi(aux_month);
 		nowTime.day = atoi(aux_day);
 		int weekDay_now = calculate_weekDay(nowTime.year, nowTime.month, nowTime.day);
 
 		nowTime.weekDay = pow(2, weekDay_now);
-		// ////printf("\nyear year111 %s\n", aux_year);
+		// printf("\nyear year111 %s\n", aux_year);
 		/*  uint8_t lastMonth = nowTime.month;
 		 save_NVS_Last_Month(lastMonth); */
 
@@ -2159,16 +1665,16 @@ uint8_t parse_NowTime(char *payload)
 
 		int int_epoch = 0; // mktime(&timeinfo);
 
-		// ////printf("\n\n\n int epoch %d\n\n\n", int_epoch);
+		// printf("\n\n\n int epoch %d\n\n\n", int_epoch);
 		char timeZone[50] = {};
 
 		esp_err_t err = 0;
 		size_t required_size;
 
-		// ////printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
-		//  ////printf("\nerror 1 %d\n", err);
+		// printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
+		//  printf("\nerror 1 %d\n", err);
 
-		// ////printf("\n\n\n getenv - %s",getenv("TZ"));
+		// printf("\n\n\n getenv - %s",getenv("TZ"));
 		//  settimeofday(&epoch, NULL);
 
 		timeinfo.tm_year = atoi(aux_year) - 1900;
@@ -2184,22 +1690,22 @@ uint8_t parse_NowTime(char *payload)
 
 		/* localtime_r(&now, &timeinfo_Now);*/
 
-		// ////printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo.tm_year + 1900), timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_wday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+		// printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo.tm_year + 1900), timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_wday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 
 		// int_epoch = mktime(&timeinfo);
 
 		/* memset(timezone_network, 0, 5);
 		sprintf(timezone_network, "%s", "32");
 		timeZone_Signal = '-'; */
-		// ////printf("\n\n timezone network %d\n\n", atoi(timezone_network));
+		// printf("\n\n timezone network %d\n\n", atoi(timezone_network));
 
 		if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, NULL, &required_size) == ESP_OK)
 		{
-			// ////printf("\nrequire size %d\n", required_size);
+			// printf("\nrequire size %d\n", required_size);
 
 			if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timeZone, &required_size) == ESP_OK)
 			{
-				// ////printf("\n\n enter qlts memory\n\n");
+				// printf("\n\n enter qlts memory\n\n");
 				if (strcmp(timeZone, "GMT0"))
 				{
 					PCF85_SetTime(timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
@@ -2208,22 +1714,22 @@ uint8_t parse_NowTime(char *payload)
 					// asprintf(timeinfo.tm_zone,"%s",timeZone);
 					int_epoch = epoch_Calculator(&timeinfo);
 					// int_epoch = mktime(&timeinfo);
-					// ////printf("\n\n epoch11 - %d\n\n", int_epoch);
+					// printf("\n\n epoch11 - %d\n\n", int_epoch);
 				}
 				else
 				{
 					if (timeZone_Signal == '+')
 					{
 						int_epoch = epoch_Calculator(&timeinfo) + atoi(timezone_network) * 15 * 60;
-						// ////printf("\n\n int_epoch plus 55\n\n");
+						// printf("\n\n int_epoch plus 55\n\n");
 					}
 					else if (timeZone_Signal == '-')
 					{
 						int_epoch = epoch_Calculator(&timeinfo) - atoi(timezone_network) * 15 * 60;
-						// ////printf("\n\n int_epoch minus 66\n\n");
+						// printf("\n\n int_epoch minus 66\n\n");
 					}
 
-					// ////printf("\n\n int_epoch %d\n\n", int_epoch);
+					// printf("\n\n int_epoch %d\n\n", int_epoch);
 
 					memset(timeZone, 0, 50);
 
@@ -2242,15 +1748,15 @@ uint8_t parse_NowTime(char *payload)
 				if (timeZone_Signal == '+')
 				{
 					int_epoch = epoch_Calculator(&timeinfo) + atoi(timezone_network) * 15 * 60;
-					// ////printf("\n\n int_epoch plus\n\n");
+					// printf("\n\n int_epoch plus\n\n");
 				}
 				else if (timeZone_Signal == '-')
 				{
 					int_epoch = epoch_Calculator(&timeinfo) - atoi(timezone_network) * 15 * 60;
-					// ////printf("\n\n int_epoch minus\n\n");
+					// printf("\n\n int_epoch minus\n\n");
 				}
 
-				// ////printf("\n\n int_epoch %d\n\n", int_epoch);
+				// printf("\n\n int_epoch %d\n\n", int_epoch);
 
 				memset(timeZone, 0, 50);
 
@@ -2268,7 +1774,7 @@ uint8_t parse_NowTime(char *payload)
 
 				int_epoch = epoch_Calculator(&timeinfo) + atoi(timezone_network) * 15 * 60;
 
-				// ////printf("\n\n plus clock epoch %d, %d\n\n", int_epoch, atoi(timezone_network));
+				// printf("\n\n plus clock epoch %d, %d\n\n", int_epoch, atoi(timezone_network));
 			}
 			else if (timeZone_Signal == '-')
 			{
@@ -2287,25 +1793,25 @@ uint8_t parse_NowTime(char *payload)
 
 		struct timeval epoch = {.tv_sec = int_epoch};
 
-		//     ////printf("\n\n hour hour 1221\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
+		//     printf("\n\n hour hour 1221\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
 
 		if (!settimeofday(&epoch, NULL))
 		{
 
-			// ////printf("\n\n epoch33 - %d\n\n", int_epoch);
+			// printf("\n\n epoch33 - %d\n\n", int_epoch);
 			time(&now);
 
-			// ////printf("\n\n timezone qlts %s", timeZone);
+			// printf("\n\n timezone qlts %s", timeZone);
 			if (!setenv("TZ", timeZone, 1))
 			{
 
-				// ////printf("\n\n\n getenv22 - %s", getenv("TZ"));
+				// printf("\n\n\n getenv22 - %s", getenv("TZ"));
 				save_STR_Data_In_Storage(NVS_TIMEZONE, timeZone, nvs_System_handle);
 				tzset();
 
 				localtime_r(&now, &timeinfo_Now);
 
-				// ////printf("\n\n hour hour 1221\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
+				// printf("\n\n hour hour 1221\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
 			}
 			else
 			{
@@ -2335,7 +1841,7 @@ uint8_t parse_NowTime(char *payload)
 
 			date_To_Send_Periodic_SMS = parseDatetoInt(nowTime.date, 60);
 			nvs_set_u32(nvs_System_handle, NVS_KEY_DATE_PERIODIC_SMS, date_To_Send_Periodic_SMS);
-			// ////printf("\n\n enter label inicial sms periodic %d\n\n", date_To_Send_Periodic_SMS);
+			// printf("\n\n enter label inicial sms periodic %d\n\n", date_To_Send_Periodic_SMS);
 		}
 		// getLocalTime(&timeinfo_Now, 0);
 
@@ -2345,13 +1851,13 @@ uint8_t parse_NowTime(char *payload)
 
 		strftime(str_Time, 256, "%c", &timeinfo_Now);
 
-		// ////printf("\n\n str_Time - %s\n\n", str_Time);
+		// printf("\n\n str_Time - %s\n\n", str_Time);
 
 		// printftf("\n\n hour hour 1221\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
 
 		get_RTC_System_Time();
 
-		// ////printf("\nafter verify_WeekAcess\n");
+		// printf("\nafter verify_WeekAcess\n");
 		// ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
 		// ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
 		// ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
@@ -2367,8 +1873,8 @@ char *activateUDP_network()
 {
 	char rsp[50] = {};
 	uint8_t InitNetworkCount = 0;
-	label_network_portalRegister = 1;
-	save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
+	/* label_network_portalRegister = 1;
+	save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle); */
 	timer_pause(TIMER_GROUP_1, TIMER_0);
 
 	if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
@@ -2383,7 +1889,7 @@ char *activateUDP_network()
 			while (InitNetworkCount < 3)
 			{
 
-				// ////printf("INIT EG915 311");
+				// printf("INIT EG915 311");
 				if (!EG91_initNetwork())
 				{
 					RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
@@ -2394,15 +1900,14 @@ char *activateUDP_network()
 				}
 				else
 				{
-					// ////printf("\n\n activate network 1\n\n");
+					// printf("\n\n activate network 1\n\n");
 					break;
 				}
 			}
 
 			if (InitNetworkCount == 3)
 			{
-				label_network_portalRegister = 0;
-				save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
+				
 				save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 1, nvs_System_handle);
 				RSSI_LED_TOOGLE = MQTT_NOT_CONECT_LED_TIME;
 				timer_start(TIMER_GROUP_1, TIMER_0);
@@ -2431,7 +1936,7 @@ char *activateUDP_network()
 
 				while (InitNetworkCount < 3)
 				{
-					// ////printf("INIT EG915 311");
+					// printf("INIT EG915 311");
 					if (!EG91_initNetwork())
 					{
 						RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
@@ -2442,15 +1947,15 @@ char *activateUDP_network()
 					}
 					else
 					{
-						// ////printf("\n\n activate network 1\n\n");
+						// printf("\n\n activate network 1\n\n");
 						break;
 					}
 				}
 
 				if (InitNetworkCount == 3)
 				{
-					label_network_portalRegister = 0;
-					save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
+					/* label_network_portalRegister = 0;
+					save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle); */
 					timer_start(TIMER_GROUP_1, TIMER_0);
 					return "ERROR";
 				}
@@ -2458,7 +1963,7 @@ char *activateUDP_network()
 		}
 	}
 
-	// ////printf("\n\n activate network 22\n\n");
+	// printf("\n\n activate network 22\n\n");
 	//  sprintf(rsp, "ME S W %s", "OK");
 	timer_start(TIMER_GROUP_1, TIMER_0);
 	return "OK";
@@ -2487,650 +1992,6 @@ uint8_t desactivateUDP_network()
 	return 0;
 }
 
-int8_t parse_IncomingCall_Payload(char *payload)
-{
-	char phNumber[18];
-	int strIndex = 0;
-	char callState = 0;
-	int dotCounter = 0;
-	char id[2] = {};
-	char ATCommand[100] = {};
-	char sdCard_log[100] = {};
-	char incomingCALL_IDX = 0;
-	uint8_t plusCounter = 0;
-	// ////printf("\n\nparse_IncomingCall_Payload: %s\n\n", payload);
-	memset(phNumber, 0, sizeof(phNumber));
-
-	for (int i = 0; i < strlen(payload); i++)
-	{
-		if (payload[i] == ':')
-		{
-			plusCounter++;
-		}
-	}
-
-	// EG91_send_AT_Command("AT+CHLD=3", "OK", 2000);
-
-	// plusCounter = plusCounter - 1;
-	// ////printf("\nplusCounter = %d\n", plusCounter);
-
-	if (plusCounter == 0 || plusCounter == 255)
-	{
-		if (strstr(payload, "OK") != NULL)
-		{
-			return -1;
-		}
-
-		return -1;
-	}
-	else if (plusCounter > 1)
-	{
-		for (int i = plusCounter; i > 1; i--)
-		{
-			// ////printf("\nplusCounter in for = %d\n", plusCounter);
-			if (plusCounter <= 1)
-			{
-				plusCounter = 1;
-				break;
-			}
-
-			// sprintf(ATCommand, "%s%d", "AT+CHLD=1" /* "AT+QHUP=17" */, plusCounter);
-			// EG91_send_AT_Command(ATC                                                            ommand, "OK", 2000);
-		}
-		// return 255;
-	}
-	plusCounter = 0;
-	if ((strstr(payload, "CLCC")))
-	{
-
-		// ////printf("\n\nCLCC payload %s \n\n", payload);
-		for (int i = 0; i < strlen(payload); i++)
-		{
-			if (payload[i] == ':' && payload[i + 1] == ' ')
-			{
-				for (i = i + 2; i < strlen(payload); i++)
-				{
-
-					if (payload[i] == ',')
-					{
-						dotCounter++;
-						strIndex = 0;
-					}
-					else
-					{
-						if (dotCounter == 0)
-						{
-							id[strIndex] = payload[i];
-							strIndex++;
-
-							if (strIndex == 2)
-							{
-								return 0;
-								// parseCHUP("AT+QHUP=27");
-								break;
-							}
-						}
-
-						if (dotCounter == 2)
-						{
-							callState = payload[i];
-						}
-
-						if (dotCounter == 5)
-						{
-							if (payload[i] != '"')
-							{
-								phNumber[strIndex] = payload[i];
-								strIndex++;
-							}
-						}
-					}
-				}
-			}
-		}
-		// system_stack_high_water_mark("call state");
-		//  ////printf("\ncallState - %c\n", callState);
-		if (callState == '4')
-		{
-			/* code */
-			char awnser_QHUP[30] = {};
-			char cpy_phNumber[18] = {};
-			memset(cpy_phNumber, 0, sizeof(cpy_phNumber));
-			strcpy(cpy_phNumber, phNumber);
-
-			save_STR_Data_In_Storage(NVS_LAST_CALL, phNumber, nvs_System_handle);
-
-			// sprintf(phNumber, "%s", check_IF_haveCountryCode(phNumber));
-			//  ////printf("\n incoming call phnumber: %s\n", phNumber);
-			int line = 0;
-			char aabff[200];
-			MyUser user_validateData;
-			memset(&user_validateData, 0, sizeof(user_validateData));
-			memset(sdCard_log, 0, sizeof(sdCard_log));
-			data_EG91_Send_SMS IncomingCALL_data;
-			IncomingCALL_data.labelIncomingCall = 1;
-
-			get_RTC_System_Time();
-
-			vTaskDelay(pdMS_TO_TICKS((2000)));
-			// vTaskDelay(200);
-			esp_err_t search_User_err = ESP_FAIL;
-			char *phNumber1 = remove_non_printable(phNumber, strlen(phNumber));
-			;
-			// //printf("\n\n ph number aux 0000 %s - %d\n\n", phNumber, search_User_err);
-			// sprintf(phNumber, "%s", remove_non_printable(phNumber, strlen(phNumber)));
-			// //printf("\n\n ph number aux 1111 %s - %d\n\n", phNumber, search_User_err);
-			search_User_err = MyUser_Search_User(phNumber1, aabff);
-
-			free(phNumber1);
-			// //printf("\n\n ph number aux 2222 %s - %d\n\n", phNumber, search_User_err);
-			if (search_User_err != ESP_OK)
-			{
-				memset(aabff, 0, sizeof(aabff));
-				search_User_err = MyUser_Search_User_AUX_Call(phNumber1, aabff);
-			}
-
-			uint8_t sms_call_verifications = get_INT8_Data_From_Storage(NVS_SMS_CALL_VERIFICATION, nvs_System_handle);
-
-			if (sms_call_verifications == 255)
-			{
-				save_INT8_Data_In_Storage(NVS_SMS_CALL_VERIFICATION, 0, nvs_System_handle);
-				sms_call_verifications = 0;
-			}
-
-			// //printf("\n\n ph number aux 6666 %s - %d\n\n", phNumber, search_User_err);
-			if (search_User_err == ESP_OK)
-			{
-				parse_ValidateData_User(aabff, &user_validateData);
-				// ////printf("\n\n ph number aux 6666 %s - %d\n\n",phNumber,search_User_err);
-				// ////printf("\n\n ph number aux 7777 %d - %d - %c - %c\n\n",label_Routine1_ON,fd_configurations.alarmMode.A,user_validateData.relayPermition, user_validateData.permition);
-				if (user_validateData.permition == '0')
-				{
-					if (label_Routine1_ON == 1 || fd_configurations.alarmMode.A == 1 || user_validateData.relayPermition == '1')
-					{
-
-						sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-						EG91_send_AT_Command(awnser_QHUP, "OK", 500);
-
-						// parseCHUP(awnser_QHUP);
-
-						/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-						{ */
-						sdCard_Logs_struct logs_struct;
-						memset(&logs_struct, 0, sizeof(logs_struct));
-
-						sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-						sprintf(logs_struct.name, "%s", user_validateData.firstName);
-
-						sprintf(logs_struct.phone, "%s", user_validateData.phone);
-						sprintf(logs_struct.relay, "%s", "R1");
-						sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
-
-						if (get_RTC_System_Time())
-						{
-							sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-
-							if (user_validateData.relayPermition == '1')
-							{
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_NOT_HAVE_PERMITION_THIS_RELAY"));
-							}
-							else if (label_Routine1_ON == 1)
-							{
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-							}
-							else
-							{
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_USER_NOT_PERMITION"));
-							}
-						}
-						else
-						{
-							sprintf(logs_struct.date, "%s", "0;0");
-							sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-
-							if (user_validateData.relayPermition == '1')
-							{
-								strcat(logs_struct.error, "/\0");
-								strcat(logs_struct.error, return_Json_SMS_Data("ERROR_LOGS_NOT_HAVE_PERMITION_THIS_RELAY"));
-							}
-							else if (label_Routine1_ON == 1)
-							{
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-							}
-							else
-							{
-								strcat(logs_struct.error, "/\0");
-								strcat(logs_struct.error, return_Json_SMS_Data("ERROR_LOGS_USER_NOT_PERMITION"));
-							}
-						}
-
-						sdCard_Write_LOGS(&logs_struct);
-						//}
-						// ////printf("\nuser not acess call\n");
-						return 0;
-					}
-
-					if (verify_TimeAcess(&user_validateData) || sms_call_verifications == 2 || sms_call_verifications == 4)
-					{
-
-						// EG91_send_AT_Command("AT+QHUP=88,1", "OK", 1000);
-						IncomingCALL_data.labelIncomingCall = 1;
-						sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-						EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-						// EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-						// EG91_send_AT_Command("AT+QHUP=88,1", "OK", 500);
-						// parseCHUP("AT+QHUP=88,1");
-						setReles(RELE1_NUMBER, NULL, NULL, NULL, NULL, &IncomingCALL_data, NULL);
-
-						/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-						{ */
-						sdCard_Logs_struct logs_struct;
-						memset(&logs_struct, 0, sizeof(logs_struct));
-
-						sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-						sprintf(logs_struct.name, "%s", user_validateData.firstName);
-
-						sprintf(logs_struct.phone, "%s", user_validateData.phone);
-						sprintf(logs_struct.relay, "%s", "R1");
-
-						rele1_Mode_Label = get_INT8_Data_From_Storage(NVS_RELAY1_MODE, nvs_System_handle);
-
-						if (rele1_Mode_Label == BIESTABLE_MODE_INDEX)
-						{
-							if (getRele1())
-							{
-								sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("ON"));
-							}
-							else
-							{
-								sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-							}
-						}
-						else
-						{
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("PULSE"));
-						}
-
-						sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-
-						sdCard_Write_LOGS(&logs_struct);
-						//}
-
-						char rsp_notify[100] = {};
-						sprintf(rsp_notify, "%s %c %c %d", RELE1_ELEMENT, 'S', 'R', getRele1());
-
-						BLE_Broadcast_Notify(rsp_notify);
-						// vTaskDelay(300);
-
-						// vTaskDelay(pdMS_TO_TICKS((1000)));
-
-						return 1;
-					}
-					else
-					{
-						// vTaskDelay(pdMS_TO_TICKS((300)));
-						sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-						EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-						// parseCHUP("AT+QHUP=27");
-
-						/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-						{ */
-						sdCard_Logs_struct logs_struct;
-						memset(&logs_struct, 0, sizeof(logs_struct));
-
-						sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-						sprintf(logs_struct.name, "%s", user_validateData.firstName);
-
-						sprintf(logs_struct.phone, "%s", user_validateData.phone);
-						sprintf(logs_struct.relay, "%s", "R1");
-						sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
-
-						sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-
-						sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_USER_NOT_PERMITION"));
-						sdCard_Write_LOGS(&logs_struct);
-						//}
-						// ////printf("\nuser not acess call\n");
-						return 0;
-					}
-				}
-				else if (user_validateData.permition == '1' || user_validateData.permition == '2')
-				{
-
-					if (label_Routine1_ON == 1)
-					{
-						if (user_validateData.permition == '2')
-						{
-							sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-							EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-							// parseCHUP(awnser_QHUP);
-							resetRele1();
-							label_Routine1_ON = 0;
-							save_INT8_Data_In_Storage(NVS_KEY_ROUTINE1_LABEL, 0, nvs_System_handle);
-							save_INT8_Data_In_Storage(NVS_KEY_ROUTINE1_TIME_ON, 0, nvs_System_handle);
-
-							/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-							{ */
-							sdCard_Logs_struct logs_struct;
-							memset(&logs_struct, 0, sizeof(logs_struct));
-
-							sprintf(logs_struct.type, "%s", "CALL");
-
-							sprintf(logs_struct.name, "%s", return_Json_SMS_Data("LOGS_DISABLE_ROUTINE"));
-							sprintf(logs_struct.phone, "%s", user_validateData.phone);
-							sprintf(logs_struct.relay, "%s", "R1");
-
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-
-							if (get_RTC_System_Time())
-							{
-								sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-							}
-							else
-							{
-								sprintf(logs_struct.date, "%s", "0,0");
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-							}
-
-							sdCard_Write_LOGS(&logs_struct);
-							//}
-
-							char rsp_notify[100] = {};
-							sprintf(rsp_notify, "%s %c %c %d", RELE1_ELEMENT, 'S', 'R', getRele1());
-
-							BLE_Broadcast_Notify(rsp_notify);
-							// ////printf("\nuser not acess call\n");
-							return 1;
-						}
-						else
-						{
-							sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-							EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-							// parseCHUP("AT+QHUP=27");
-
-							/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-							{ */
-							sdCard_Logs_struct logs_struct;
-							memset(&logs_struct, 0, sizeof(logs_struct));
-
-							sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-							sprintf(logs_struct.name, "%s", user_validateData.firstName);
-
-							sprintf(logs_struct.phone, "%s", user_validateData.phone);
-							sprintf(logs_struct.relay, "%s", "R1");
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
-
-							if (get_RTC_System_Time())
-							{
-								sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-							}
-							else
-							{
-								sprintf(logs_struct.date, "%s", "0;0");
-								sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-								strcat(logs_struct.error, "/\0");
-								strcat(logs_struct.error, return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-							}
-
-							sdCard_Write_LOGS(&logs_struct);
-							// }
-							// ////printf("\nuser not acess call\n");
-							return 0;
-						}
-					}
-
-					IncomingCALL_data.labelIncomingCall = 1;
-					// vTaskDelay(pdMS_TO_TICKS((300)));
-					//
-					sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-					EG91_send_AT_Command(awnser_QHUP, "OK", 500);
-					// parseCHUP(awnser_QHUP);
-					setReles(RELE1_NUMBER, NULL, NULL, NULL, NULL, &IncomingCALL_data, NULL);
-
-					if (fd_configurations.alarmMode.A == 1)
-					{
-						alarm_I1_Check_And_Save_Data(user_validateData.phone);
-					}
-					else if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
-					{
-						normal_Feedback_Check_And_Save_Data(user_validateData.phone, RELE1_NUMBER);
-					}
-					// alarm_I1_Check_And_Save_Data(user_validateData.phone);
-
-					/* if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
-					{ */
-					sdCard_Logs_struct logs_struct;
-					memset(&logs_struct, 0, sizeof(logs_struct));
-
-					sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-					sprintf(logs_struct.name, "%s", user_validateData.firstName);
-
-					sprintf(logs_struct.phone, "%s", user_validateData.phone);
-					sprintf(logs_struct.relay, "%s", "R1");
-
-					// ////printf("\nCALL label_MonoStableRelay1 %d\n", label_MonoStableRelay1);
-
-					rele1_Mode_Label = get_INT8_Data_From_Storage(NVS_RELAY1_MODE, nvs_System_handle);
-
-					if (rele1_Mode_Label == BIESTABLE_MODE_INDEX)
-					{
-						if (getRele1())
-						{
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("ON"));
-						}
-						else
-						{
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-						}
-					}
-					else
-					{
-						sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("PULSE"));
-					}
-
-					if (get_RTC_System_Time())
-					{
-						sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-					}
-					else
-					{
-						sprintf(logs_struct.date, "%s", "0;0");
-						sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-					}
-
-					sdCard_Write_LOGS(&logs_struct);
-					// }
-
-					char rsp_notify[100] = {};
-					sprintf(rsp_notify, "%s %c %c %d", RELE1_ELEMENT, 'S', 'R', getRele1());
-
-					BLE_Broadcast_Notify(rsp_notify);
-
-					return 1;
-				}
-				else
-				{
-					// vTaskDelay(pdMS_TO_TICKS((300)));
-					sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-					EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-					// parseCHUP("AT+QHUP=27");
-					//  EG91_send_AT_Command("AT+QHUP=27", "OK", 500);
-					// ////printf("\nuser not acess call 777722\n");
-					return 0;
-				}
-
-				// EG91_send_AT_Command("AT+QLTS=2", "QLTS", 1000);
-				//  EG91_send_AT_Command("AT+CCLK?", "OK", 500);
-			}
-			else
-			{
-
-				if (label_Routine1_ON == 0 && fd_configurations.alarmMode.A == 0)
-				{
-					if (sms_call_verifications == 2 || sms_call_verifications == 4)
-					{
-
-						setReles(RELE1_NUMBER, NULL, NULL, NULL, NULL, &IncomingCALL_data, NULL);
-
-						sdCard_Logs_struct logs_struct;
-						memset(&logs_struct, 0, sizeof(logs_struct));
-
-						sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-						sprintf(logs_struct.name, "%s", return_Json_SMS_Data("NO_NAME"));
-
-						sprintf(logs_struct.phone, "%s", cpy_phNumber);
-						sprintf(logs_struct.relay, "%s", "R1");
-
-						if (rele1_Mode_Label == BIESTABLE_MODE_INDEX)
-						{
-							if (getRele1())
-							{
-								sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("ON"));
-							}
-							else
-							{
-								sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-							}
-						}
-						else
-						{
-							sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("PULSE"));
-						}
-
-						if (get_RTC_System_Time())
-						{
-							sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-						}
-						else
-						{
-							sprintf(logs_struct.date, "%s", "0;0");
-							sprintf(logs_struct.error, "%s ", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-						}
-
-						sdCard_Write_LOGS(&logs_struct);
-					}
-					else
-					{
-						/* vTaskDelay(pdMS_TO_TICKS((300)));
-						sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-						EG91_send_AT_Command(awnser_QHUP, "OK", 1000); */
-						// parseCHUP("AT+QHUP=27");
-
-						sdCard_Logs_struct logs_struct;
-						memset(&logs_struct, 0, sizeof(logs_struct));
-
-						sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-						sprintf(logs_struct.name, "%s", return_Json_SMS_Data("NO_NAME"));
-
-						sprintf(logs_struct.phone, "%s", cpy_phNumber);
-						sprintf(logs_struct.relay, "%s", "R1");
-						sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
-
-						if (get_RTC_System_Time())
-						{
-							sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-						}
-						else
-						{
-							sprintf(logs_struct.date, "%s", "0;0");
-							sprintf(logs_struct.error, "%s ", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-						}
-
-						sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_USER_NOT_FOUND"));
-						sdCard_Write_LOGS(&logs_struct);
-
-						// EG91_send_AT_Command("AT+QHUP=27", "OK", 500);
-						// ////printf("\nuser not acess call\n");
-
-						/* return 0; */
-					}
-				}
-				else
-				{
-					sdCard_Logs_struct logs_struct;
-					memset(&logs_struct, 0, sizeof(logs_struct));
-
-					sprintf(logs_struct.type, "%s", return_Json_SMS_Data("CALL"));
-
-					sprintf(logs_struct.name, "%s", return_Json_SMS_Data("NO_NAME"));
-
-					sprintf(logs_struct.phone, "%s", cpy_phNumber);
-					sprintf(logs_struct.relay, "%s", "R1");
-					sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
-
-					if (get_RTC_System_Time())
-					{
-						sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-
-						if (label_Routine1_ON == 1)
-						{
-							sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-						}
-						else
-						{
-							sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_USER_NOT_PERMITION"));
-						}
-					}
-					else
-					{
-						sprintf(logs_struct.date, "%s", "0;0");
-						sprintf(logs_struct.error, "%s ", return_Json_SMS_Data("ERRO_LOGS_GET_TIME"));
-
-						if (label_Routine1_ON == 1)
-						{
-							sprintf(logs_struct.error, "%s", return_Json_SMS_Data("ERROR_LOGS_IS_RUNNING_ROUTINE_ON_RELAY"));
-						}
-						else
-						{
-							strcat(logs_struct.error, "/\0");
-							strcat(logs_struct.error, return_Json_SMS_Data("ERROR_LOGS_USER_NOT_PERMITION"));
-						}
-					}
-
-					sdCard_Write_LOGS(&logs_struct);
-				}
-			}
-			vTaskDelay(pdMS_TO_TICKS((300)));
-
-			sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-			EG91_send_AT_Command(awnser_QHUP, "OK", 1000);
-			// parseCHUP("AT+QHUP=27");
-			//  EG91_send_AT_Command("AT+QHUP=27", "OK", 500);
-			// ////printf("\nincoming call ph %s\n", phNumber);
-			return 0;
-		}
-		else if (callState == '0')
-		{
-			// ////printf("\n return call state = 0\n");
-			return 0;
-		}
-		else if (callState < '0' || callState > '5')
-		{
-			// ////printf("\n return call state = -1\n");
-			return -1;
-		}
-		else
-		{
-			////printf("\n return call state = %d\n", (callState - 48));
-			// system_stack_high_water_mark("parse call2");
-			return callState - 48;
-		}
-	}
-	else
-	{
-		return 0;
-	}
-	return 9;
-}
-
 uint8_t getFile_importUsers(char *DNS)
 {
 	/* char domain[300] = {};
@@ -3156,117 +2017,6 @@ uint8_t getFile_importUsers(char *DNS)
 	return 1;
 }
 
-void task_EG91_SendSMS(void *pvParameter)
-{
-
-	data_EG91_Send_SMS cpy_message;
-	queue_EG91_SendSMS = xQueueCreate(2, sizeof(data_EG91_Send_SMS));
-	rdySem_Control_SEND_SMS_Task = xSemaphoreCreateBinary();
-	xSemaphoreTake(rdySem_Control_SEND_SMS_Task, 0);
-	// xSemaphoreGive(rdySem_Control_SMS_Task);
-	for (;;)
-	{
-
-		if (xQueueReceive(queue_EG91_SendSMS, &(cpy_message), portMAX_DELAY))
-		{
-			xSemaphoreTake(rdySem_Control_SMS_UDP, pdMS_TO_TICKS(7000));
-			disableAlarm();
-			// vTaskSuspend(xHandle_Timer_VerSystem);
-			//  ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
-
-			// TODO: COMENTAR SE NAO FUNCIONAR
-			// vTaskSuspend(handle_UDP_TASK);
-
-			//  xSemaphoreGive(rdySem_Control_Send_AT_Command)
-
-			// TODO: VERIFICAR SE O TIMER E A TASK ESTAO A CORRER OU PARADA
-			/* if (label_Reset_Password_OR_System != 1)
-			{
-				////printf("\nsend sms %s\n", cpy_message.payload);
-				timer_pause(TIMER_GROUP_1, TIMER_0);
-				////printf("\nsend sms11 %s\n", cpy_message.payload);
-				////printf("\nsms\n");
-				//  disableAlarm();
-				vTaskSuspend(xHandle_Timer_VerSystem);
-				////printf("\nsend sms22 %s\n", cpy_message.payload);
-			} */
-			timer_pause(TIMER_GROUP_1, TIMER_0);
-			// vTaskSuspend(handle_SEND_SMS_TASK);
-
-			// TODO: UNNCOMMENT IF NOT WORK
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			// ////printf("\nsend sms33 %s\n", cpy_message.payload);
-
-			EG91_send_AT_Command("AT+QINDCFG=\"ring\",0,0", "OK", 1500);
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			// ////printf("\nsend sms phNumber %s\n", cpy_message.phoneNumber);
-			/*
-						////printf("\n\nsend sms after11\n\n");
-
-						//ESP_LOGI("TAG", "xPortGetFreeHeapSize  parseInputData1111: %d", xPortGetFreeHeapSize());
-						//ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
-						//ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-						//ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-
-						////printf("\n\nsend sms after22\n\n"); */
-
-			// ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
-			// ////printf("\n\n strlen SIM BALANCE 22 - %d\n\n", strlen(cpy_message.payload));
-
-			EG91_Send_SMS(cpy_message.phoneNumber, cpy_message.payload);
-
-			/* ESP_ERROR_CHECK(heap_trace_stop());
-			heap_trace_dump(); */
-
-			/*   ////printf("\n\nsend sms after 33\n\n");
-
-			  //ESP_LOGI("TAG", "xPortGetFreeHeapSize  parseInputData1111: %d", xPortGetFreeHeapSize());
-			  //ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
-			  //ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-			  //ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-
-			  ////printf("\n\nsend sms after44\n\n"); */
-
-			// TODO: UNNCOMMENT IF NOT WORK
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			EG91_send_AT_Command("AT+QINDCFG=\"ring\",1,0", "OK", 1500);
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			// vTaskResume(xHandle_Timer_VerSystem);
-			timer_start(TIMER_GROUP_1, TIMER_0);
-			enableAlarm();
-
-			if (label_Semaphore_Reset_System == 1)
-			{
-				label_Semaphore_Reset_System = 0;
-				give_rdySem_Reset_System();
-			}
-
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-			if (lost_SMS_addUser.flag_Lost_SMS_Add_User != 1)
-			{
-				// ////printf("\n\nxSemaphoreGive(rdySem_Control_SMS_UDP);\n\n");
-				xSemaphoreGive(rdySem_Control_SMS_UDP);
-			}
-			else
-			{
-				// ////printf("\n\n NOT NOT xSemaphoreGive(rdySem_Control_SMS_UDP);\n\n");
-			}
-
-			// xSemaphoreGive(rdySem_Lost_SMS);
-
-			// ESP_ERROR_CHECK(heap_trace_stop());
-			// heap_trace_dump();
-			//  vTaskResume(xHandle_Timer_VerSystem);
-			// xSemaphoreGive(rdySem_Control_SEND_SMS_Task);
-		}
-	}
-}
-
 uint8_t has_letters(const char *str)
 {
 
@@ -3281,408 +2031,18 @@ uint8_t has_letters(const char *str)
 	return 0; // A string não contém letras
 }
 
-uint8_t checkIF_operator_sms(data_EG91_Receive_SMS receive_SMS_data)
-{
-
-	data_EG91_Send_SMS sms_Data;
-	memset(&sms_Data, 0, sizeof(sms_Data));
-
-	if (has_letters(receive_SMS_data.phNumber))
-	{
-		uint8_t redirectSMS_value = get_INT8_Data_From_Storage(NVS_REDIRECT_SMS, nvs_System_handle);
-
-		if (redirectSMS_value == 255)
-		{
-			save_INT8_Data_In_Storage(NVS_REDIRECT_SMS, 0, nvs_System_handle);
-		}
-
-		if (redirectSMS_value == 1)
-		{
-
-			MyUser owner_Struct;
-			memset(&owner_Struct, 0, sizeof(owner_Struct));
-			char aux_Get_Data_User_str[200] = {};
-			size_t required_size = 0;
-
-			if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, NULL, &required_size) == ESP_OK)
-			{
-				// //printf("\nrequire size %d\n", required_size);
-				// //printf("\nGET USERS NAMESPACE\n");
-				if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, aux_Get_Data_User_str, &required_size) == ESP_OK)
-				{
-					// ////printf("\naux get str %s\n", aux_Get_Data_User_str);
-					parse_ValidateData_User(aux_Get_Data_User_str, &owner_Struct);
-					memset(sms_Data.phoneNumber, 0, sizeof(sms_Data.phoneNumber));
-					sprintf(sms_Data.phoneNumber, "%s", owner_Struct.phone);
-
-					sprintf(sms_Data.payload, "M200: %s\n%s", receive_SMS_data.phNumber, receive_SMS_data.receiveData);
-					// //printf("\n\nowner phone %s\n - %s\n - %s\n - %s \n\n", aux_Get_Data_User_str, owner_Struct.phone, sms_Data.phoneNumber, sms_Data.payload);
-					//  EG91_Send_SMS(sms_Data.phoneNumber, sms_Data.payload);
-					xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
-					// vTaskDelay(pdMS_TO_TICKS(1000));
-					xSemaphoreGive(rdySem_Control_SMS_Task);
-					// free(rsp);
-					//  ////printf("\n\n SMS RSP444\n\n");
-					// free(SMS_InputData);
-					// ESP_LOGI("TAG", "xPortGetFreeHeapSize  parseInputData2222: %d", xPortGetFreeHeapSize());
-					// ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
-					// ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-					// ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-					// verify_SMS_List();
-					//  }
-					return 1;
-				}
-			}
-		}
-	}
-
-	return 0;
-}
-
-uint8_t parse_SMS_Payload(char *payload)
-{
-	data_EG91_Send_SMS sms_Data;
-	data_EG91_Receive_SMS receive_SMS_data;
-
-	memset(&receive_SMS_data, 0, sizeof(receive_SMS_data));
-	memset(&sms_Data, 0, sizeof(sms_Data));
-
-	int strIndex = 0;
-	int count = 0;
-	char payload_phNumber[21];
-	char rsp[200];
-
-	char *cpy_payload;
-	char phNumber[21];
-	char strDate[50];
-	char strHour[50];
-	char year[20];
-	char month[3];
-	char day[3];
-	char hour[3];
-	char minute[3];
-	char payload1[200];
-	char SMS_Status[100];
-	// char receiveData[200];
-
-	memset(phNumber, 0, sizeof(phNumber));
-	memset(receive_SMS_data.receiveData, 0, strlen(receive_SMS_data.receiveData));
-	memset(receive_SMS_data.strDate, 0, sizeof(strDate));
-	memset(receive_SMS_data.strHour, 0, sizeof(strHour));
-	memset(year, 0, sizeof(year));
-	memset(month, 0, sizeof(month));
-	memset(day, 0, sizeof(day));
-	memset(hour, 0, sizeof(hour));
-
-	////printf("\n\nsms strlen(payload) %s - %d\n\n", payload, strlen(payload));
-
-	for (int i = 0; i < strlen(payload); i++)
-	{
-		if (payload[i] == '\n' || payload[i] == ',' || payload[i] == '\"')
-		{
-			count++;
-			strIndex = 0;
-		}
-		else
-		{
-			if (count == 2)
-			{
-				receive_SMS_data.SMS_Status[strIndex] = payload[i];
-				// ////printf("\nstrindex %d, %c , %c", strIndex, receive_SMS_data.SMS_Status[strIndex], payload[i]);
-				strIndex++;
-				receive_SMS_data.SMS_Status[strIndex] = 0;
-			}
-
-			if (count == 5)
-			{
-				if (strIndex < 20)
-				{
-				}
-				receive_SMS_data.phNumber[strIndex] = payload[i];
-				strIndex++;
-				receive_SMS_data.phNumber[strIndex] = 0;
-			}
-
-			if (count == 9)
-			{
-				receive_SMS_data.strDate[strIndex] = payload[i];
-				strIndex++;
-			}
-			if (count == 10)
-			{
-				receive_SMS_data.strHour[strIndex] = payload[i];
-				strIndex++;
-				receive_SMS_data.strHour[strIndex] = 0;
-			}
-			if (count == 21)
-			{
-				if (payload[i] == 13)
-				{
-					receive_SMS_data.receiveData[strIndex] = 0;
-					break;
-				}
-
-				receive_SMS_data.receiveData[strIndex] = payload[i];
-				// ////printf("\nstrindex %d, %c", strIndex, receiveData[strIndex]);
-				strIndex++;
-
-				receive_SMS_data.receiveData[strIndex] = 0;
-			}
-		}
-	}
-
-	// ////printf("\n\n phone number hex  %s \n\n", receive_SMS_data.phNumber);
-
-	char dst1[strlen(receive_SMS_data.phNumber)];
-	char dst2[5];
-	char dst3[strlen(receive_SMS_data.receiveData)];
-
-	if (strlen(receive_SMS_data.phNumber) > 6 && strlen(receive_SMS_data.receiveData) > 4)
-	{
-
-		for (int i = 0; i < strlen(receive_SMS_data.phNumber); i = i + 4)
-		{
-			char aux_UTF8[5] = {};
-			memset(aux_UTF8, 0, 4);
-
-			aux_UTF8[0] = receive_SMS_data.phNumber[i];
-			aux_UTF8[1] = receive_SMS_data.phNumber[i + 1];
-			aux_UTF8[2] = receive_SMS_data.phNumber[i + 2];
-			aux_UTF8[3] = receive_SMS_data.phNumber[i + 3];
-			aux_UTF8[4] = 0;
-			utf8decode((utf8chr_t *)aux_UTF8, &dst2);
-
-			if (i == 0)
-			{
-				strcpy(dst1, dst2);
-			}
-			else
-			{
-				strcat(dst1, dst2);
-			}
-		}
-
-		// ////printf("\n\n dst1 after hex  %s \n\n", dst1);
-		memset(receive_SMS_data.phNumber, 0, strlen(receive_SMS_data.phNumber));
-		sprintf(receive_SMS_data.phNumber, "%s", dst1);
-		// ////printf("\n\ndst1\n %s \n\n", receive_SMS_data.phNumber);
-
-		for (int i = 0; i < strlen(receive_SMS_data.receiveData); i = i + 4)
-		{
-			char aux_UTF8[5] = {};
-			memset(aux_UTF8, 0, 4);
-
-			aux_UTF8[0] = receive_SMS_data.receiveData[i];
-			aux_UTF8[1] = receive_SMS_data.receiveData[i + 1];
-			aux_UTF8[2] = receive_SMS_data.receiveData[i + 2];
-			aux_UTF8[3] = receive_SMS_data.receiveData[i + 3];
-			aux_UTF8[4] = 0;
-			utf8decode((utf8chr_t *)aux_UTF8, &dst2);
-
-			if (i == 0)
-			{
-				strcpy(dst3, dst2);
-			}
-			else
-			{
-				strcat(dst3, dst2);
-			}
-		}
-		////printf("\n\n dst3 after receiveData  %s \n\n", dst3);
-		// ////printf("\n\n dst1 after receiveData  %s \n\n", dst1);
-
-		memset(receive_SMS_data.receiveData, 0, strlen(receive_SMS_data.receiveData));
-		sprintf(receive_SMS_data.receiveData, "%s", dst3);
-		char input_First_ReceiveData[200] = {};
-		// memset(input_First_ReceiveData, 0, strlen(receive_SMS_data.receiveData));
-
-		if (checkIF_operator_sms(receive_SMS_data))
-		{
-			return 1;
-		}
-
-		for (size_t i = 0; i < strlen(receive_SMS_data.receiveData); i++)
-		{
-			if (receive_SMS_data.receiveData[i] == ' ')
-			{
-				break;
-			}
-
-			input_First_ReceiveData[i] = receive_SMS_data.receiveData[i];
-		}
-
-		// ////printf("\n\ndst3\n%s \n\n", receive_SMS_data.receiveData);
-		// ////printf("\n\nFIRST \n%s \n\n", input_First_ReceiveData);
-		// ////printf("\n\nabel_Reset_Password_OR_System - %d \n\n", label_Reset_Password_OR_System);
-
-		count = 0;
-		uint8_t stringIndex = 0;
-		char input_Payload[100] = {};
-
-		for (size_t i = 0; i < strlen(input_First_ReceiveData); i++)
-		{
-			input_First_ReceiveData[i] = toupper(input_First_ReceiveData[i]);
-		}
-
-		if (!strcmp("ME.S.O", input_First_ReceiveData))
-		{
-			// ////printf("\n\nadd owner sms\n\n");
-			char aux_phoneNumber[20] = {};
-			sprintf(sms_Data.phoneNumber, "%s", receive_SMS_data.phNumber);
-			sprintf(aux_phoneNumber, "%s", check_IF_haveCountryCode(receive_SMS_data.phNumber, 1));
-
-			sprintf(sms_Data.payload, "%s", MyUser_add_Owner(receive_SMS_data.receiveData, aux_phoneNumber, SMS_INDICATION));
-			xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
-			xSemaphoreGive(rdySem_Control_SMS_Task);
-
-			return "NTRSP";
-		}
-
-		if (!strcmp("ME.R.S", input_First_ReceiveData) && label_Reset_Password_OR_System == 1)
-		{
-			// printftf("\n\nENTER RESET SYSTEM \n\n");
-			//  example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
-			//  label_Reset_Password_OR_System = 2;
-			for (size_t i = 0; i < strlen(receive_SMS_data.receiveData); i++)
-			{
-				if (receive_SMS_data.receiveData[i] == ' ')
-				{
-					count++;
-					stringIndex = 0;
-				}
-				else
-				{
-
-					if (count == 1)
-					{
-						memcpy(input_Payload + stringIndex, receive_SMS_data.receiveData + i, 1);
-						stringIndex++;
-					}
-				}
-			}
-			// ////printf("\n\n\n sms receive_SMS_data.phNumber- %s\n\n", receive_SMS_data.phNumber);
-			sprintf(sms_Data.phoneNumber, "%s", receive_SMS_data.phNumber);
-			// ////printf("\n\n\n sms sms_Data.phoneNumber- %s\n\n", sms_Data.phoneNumber);
-			xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			system_Reset(input_Payload, sms_Data);
-
-			return "NTRSP";
-		}
-		else if (!strcmp("ME.R.K", input_First_ReceiveData))
-		{
-			// ////printf("\n\nENTER CHANGE OWNER PASSWORD\n\n");
-
-			for (size_t i = 0; i < strlen(receive_SMS_data.receiveData); i++)
-			{
-				if (receive_SMS_data.receiveData[i] == ' ')
-				{
-					count++;
-					stringIndex = 0;
-				}
-				else
-				{
-
-					if (count == 1)
-					{
-						memcpy(input_Payload + stringIndex, receive_SMS_data.receiveData + i, 1);
-						stringIndex++;
-					}
-				}
-			}
-			// system_stack_high_water_mark("parse sms 12");
-			//  ////printf("\n\n\n sms input payload - %s\n\n", input_Payload);
-			sprintf(sms_Data.phoneNumber, "%s", receive_SMS_data.phNumber);
-			xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			reset_Owner_password(input_Payload, &sms_Data);
-			xSemaphoreGive(rdySem_Control_SMS_Task);
-
-			return "NTRSP";
-		}
-
-		int codepoint;
-
-		if (lost_SMS_addUser.flag_Lost_SMS_Add_User == 1)
-		{
-			int dotCounter = 0;
-			// lost_SMS_addUser.flag_Lost_SMS_Add_User = 0;
-
-			char *pch;
-			char auxPH1[100] = {};
-			char auxPH2[100] = {};
-			// ////printf("\n\nsms HELLOO 2\n\n");
-			sprintf(auxPH1, "%s", check_IF_haveCountryCode(lost_SMS_addUser.phone, 0));
-			// ////printf("\n\nsms HELLOO 3 - %s\n\n", auxPH1);
-			sprintf(auxPH2, "%s", check_IF_haveCountryCode(receive_SMS_data.phNumber, 0));
-			// ////printf("\n\nsms HELLOO 4 - %s\n\n", auxPH2);
-			pch = strstr(auxPH1, auxPH2);
-
-			uint8_t confSMS = get_INT8_Data_From_Storage(NVS_SMS_CALL_VERIFICATION, nvs_System_handle);
-
-			if (confSMS == 255)
-			{
-				save_INT8_Data_In_Storage(NVS_SMS_CALL_VERIFICATION, 0, nvs_System_handle);
-				confSMS = 0;
-			};
-
-			// ////printf("\n\nsms HELLOO 5\n\n");
-			if (pch != NULL || confSMS == 1 || confSMS == 4)
-			{
-				strcat(lost_SMS_addUser.payload, dst3);
-				int dotCount = 0;
-				// ////printf("\n\nsms HELLOO 5\n\n");
-				// ////printf("\n\nsms HELLOO 6 - %s\n\n", lost_SMS_addUser.payload);
-				for (size_t i = 0; i < strlen(lost_SMS_addUser.payload); i++)
-				{
-					if (lost_SMS_addUser.payload[i] == '.')
-					{
-						dotCount++;
-					}
-
-					if (dotCount == 9)
-					{
-						lost_SMS_addUser.payload[i + 2] = 0;
-						break;
-					}
-				}
-
-				memset(dst2, 0, 5);
-				/* memset(receive_SMS_data.phNumber, 0, strlen(receive_SMS_data.phNumber));
-				sprintf(receive_SMS_data.phNumber, "%s", dst1); */
-				// ////printf("\n\ndst1111\n %s \n\n", receive_SMS_data.phNumber);
-
-				/* memset(receive_SMS_data.receiveData, 0, strlen(receive_SMS_data.receiveData));
-				sprintf(receive_SMS_data.receiveData, "%s", lost_SMS_addUser.payload); */
-				// ////printf("\n\ndst33333\n %s \n\n", receive_SMS_data.receiveData);
-				// ////printf("\n\n\nlost_SMS_addUser.payload %s \n\n", lost_SMS_addUser.payload);
-			}
-			// ////printf("\n\nsms HELLOO 8\n\n");
-		}
-
-		parse_SMS_data(&receive_SMS_data);
-		return 1;
-	}
-
-	xSemaphoreGive(rdySem_Control_SMS_Task);
-	// }
-
-	// free(payload_phNumber);
-	// free(receiveData);
-	return 1;
-}
-
 uint8_t parseQMTPUBEX(char *receiveData)
 {
-	// ////printf("\n\n PUBX12345 string %d\n\n", strlen(receiveData));
+	// printf("\n\n PUBX12345 string %d\n\n", strlen(receiveData));
 	//  uint8_t index_Found = strpos(receiveData, "+QMTPUBEX:");
-	//  ////printf("\n\n PUBX12345 indexfound - %d\n\n",index_Found);
+	//  printf("\n\n PUBX12345 indexfound - %d\n\n",index_Found);
 	uint8_t counter = 0;
 	char result = 0;
-	////printf("\n\npubx receive data\n");
+	printf("\n\npubx receive data\n");
 	for (size_t i = 0; i < strlen(receiveData); i++)
 	{
-		// //printf("\n\nPUBXID - %d\n\n", i);
-		// ////printf("%c", receiveData[i]);
+		// printf("\n\nPUBXID - %d\n\n", i);
+		// printf("%c", receiveData[i]);
 		if (receiveData[i] == ',')
 		{
 			counter++;
@@ -3695,12 +2055,12 @@ uint8_t parseQMTPUBEX(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\nPUBX54321\n\n");free heap memory
-	////printf("\n\n finish pubx receive data - %c\n", result);
-	ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
+	// printf("\n\nPUBX54321\n\n");free heap memory
+	printf("\n\n finish pubx receive data - %c\n", result);
+	/* ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
 	ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
 	ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-	ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
+	ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT)); */
 	if (result == '0' || result == '1')
 	{
 		return 1;
@@ -3724,7 +2084,7 @@ uint8_t EG91_parseGet_imsi(char *data)
 		}
 	}
 
-	////printf("\n\n imsi - %s\n\n", imsi);
+	printf("\n\n imsi - %s\n\n", imsi);
 	if (strIndex == 14 || strIndex == 15)
 	{
 		save_STR_Data_In_Storage(NVS_EG91_ICCID_VALUE, imsi, nvs_System_handle);
@@ -3738,11 +2098,11 @@ uint8_t parse_https_get(char *payload)
 {
 	char dtmp1[50] = {};
 
-	////printf("\n\n parse http get222\n\n");
+	printf("\n\n parse http get222\n\n");
 	/* if (strstr(payload,"OK") != NULL)
 	{ */
 	xQueueReceive(HTTPS_data_queue, &dtmp1, pdMS_TO_TICKS(10000));
-	////printf("\n\n parse http get\n\n");
+	printf("\n\n parse http get\n\n");
 	if (strstr(dtmp1, "+QHTTPGET:") != NULL)
 	{
 		char *token;
@@ -3758,13 +2118,13 @@ uint8_t parse_https_get(char *payload)
 		token = strtok(NULL, ","); // timestamp
 		EG915_readDataFile_struct.fileSize = atoi(token);
 
-		////printf("\n\n get https %d - %d - %d\n\n", x, EG915_readDataFile_struct.status, EG915_readDataFile_struct.fileSize);
+		printf("\n\n get https %d - %d - %d\n\n", x, EG915_readDataFile_struct.status, EG915_readDataFile_struct.fileSize);
 
 		return 1;
 	}
 	else
 	{
-		////printf("\n\n parse http get22\n\n");
+		printf("\n\n parse http get22\n\n");
 	}
 
 	return 0;
@@ -3779,20 +2139,20 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 	char phone[250] = {};
 	char text[1024] = {};
 
-	// ////printf("\nAT COMMAND 000  %s\n", data);
+	// printf("\nAT COMMAND 000  %s\n", data);
 
-	// ////printf("\nAT COMMAND = %s\n", data);
+	// printf("\nAT COMMAND = %s\n", data);
 
-	////printf("\nAT COMMAND\n");
+	printf("\nAT COMMAND\n");
 
 	xSemaphoreTake(rdySem_Control_Send_AT_Command, pdMS_TO_TICKS(15000));
-	////printf("\nAFTER TAKE SEND AT COMAND\n");
-	/* ////printf("\nAFTER TAKE SEND AT COMAND11\n");
-	//////printf("\nAFTER TAKE SEND AT COMAND22\n"); */
-	// //printf("\n\n at sender1 - %s\n\n", data);
+	printf("\nAFTER TAKE SEND AT COMAND\n");
+	/* printf("\nAFTER TAKE SEND AT COMAND11\n");
+	//printf("\nAFTER TAKE SEND AT COMAND22\n"); */
+	// printf("\n\n at sender1 - %s\n\n", data);
 	send_ATCommand_Label = 1;
 	// system_stack_high_water_mark("atsend1");
-	//  //printf("\nAFTER TAKE SEND AT COMAND111 %d\n", strlen(data));
+	//  printf("\nAFTER TAKE SEND AT COMAND111 %d\n", strlen(data));
 	if (!strcmp(rsp, "QMTPUBEX"))
 	{
 
@@ -3805,10 +2165,10 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 		char topic_mqtt[70] = {};
 		uint8_t count = 0;
 		int strIndex = 0;
-		////printf("\nAT COMMAND 445655\n");
+		printf("\nAT COMMAND 445655\n");
 
-		// //printf("\nAFTER TAKE SEND AT COMAND222 %d\n", (data != NULL) ? strlen(data) : 0);
-		// //printf("\nAFTER TAKE SEND AT COMAND222 %d\n", strlen(data));
+		// printf("\nAFTER TAKE SEND AT COMAND222 %d\n", (data != NULL) ? strlen(data) : 0);
+		// printf("\nAFTER TAKE SEND AT COMAND222 %d\n", strlen(data));
 		for (size_t i = 0; i < strlen(data); i++)
 		{
 			if (data[i] == '$')
@@ -3825,8 +2185,8 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 				topic_mqtt[strIndex++] = data[i];
 			}
 		}
-		////printf("\nAFTER TAKE SEND AT COMAND333\n");
-		// //printf("\n\n at sender2 - %s - %s\n\n", mqtt_Data, topic_mqtt);
+		printf("\nAFTER TAKE SEND AT COMAND333\n");
+		// printf("\n\n at sender2 - %s - %s\n\n", mqtt_Data, topic_mqtt);
 		/* if (strlen(topic_mqtt) > 0)
 		{ */
 		// printf("\nAFTER TAKE SEND AT COMAND444\n");
@@ -3853,13 +2213,13 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 		// sprintf(AT_Command, "%s%c", "AT", 13);
 		// uart_write_bytes(UART_NUM_1,AT_Command , strlen(AT_Command));
 		//  vTaskDelay(pdMS_TO_TICKS(500));
-		// ////printf("\n\n PUBX12345 - %s\n\n", data);
+		// printf("\n\n PUBX12345 - %s\n\n", data);
 		xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(time));
 		// printf("\n\n at sender4 - %s\n\n", data);
 
-		// ////printf("\n\n PUBX0000 - %s\n\n", dtmp1);
-		// ////printf("\n\n PUBX12345\n\n");
-		//  ////printf("\n\n PUBX: %s \n\n", dtmp1);
+		// printf("\n\n PUBX0000 - %s\n\n", dtmp1);
+		// printf("\n\n PUBX12345\n\n");
+		//  printf("\n\n PUBX: %s \n\n", dtmp1);
 		send_ATCommand_Label = 0;
 		// uint8_t ack_pubex =
 		if (parseQMTPUBEX(dtmp1))
@@ -3880,7 +2240,7 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 
 	if (!strcmp(rsp, "CMGS:"))
 	{
-		// ////printf("\n SMS SEND START1233 - %s\n", data);
+		// printf("\n SMS SEND START1233 - %s\n", data);
 		int strIndex = 0;
 		int count = 0;
 
@@ -3914,19 +2274,19 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 		ct[0] = 26;
 		ct[1] = 0;
 		strcat(text, ct);
-		// ////printf("\n rsp rsp11 - %s - %s\n\n", phone, text);
+		// printf("\n rsp rsp11 - %s - %s\n\n", phone, text);
 	}
 
-	// ////printf("\n SMS SEND START2112 -\n");
+	// printf("\n SMS SEND START2112 -\n");
 	// system_stack_high_water_mark("atsend11");
 	while (counterACK > 0)
 	{
 		memset(dtmp1, 0, sizeof(dtmp1));
-		// ////printf("\n SMS SEND START12 -\n");
+		// printf("\n SMS SEND START12 -\n");
 		if (!strcmp(rsp, "CMGS:"))
 		{
 
-			// ////printf("\n SMS - %s\n - %s\n", phone, text);
+			// printf("\n SMS - %s\n - %s\n", phone, text);
 			//   memset(rsp,0,sizeof(rsp));
 			//   strcpy(rsp,"OK");
 			//   uart_write_bytes(UART_NUM_1, "AT0", strlen(phone));
@@ -3934,13 +2294,13 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 			uart_write_bytes(UART_NUM_1, phone, strlen(phone));
 			xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(1500));
 
-			// ////printf("\ndtmp1 11 %s\n", dtmp1);
+			// printf("\ndtmp1 11 %s\n", dtmp1);
 			//   xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(time * 5));
 			memset(dtmp1, 0, sizeof(dtmp1));
 			uart_write_bytes(UART_NUM_1, text, sizeof(text) /* strlen(text) */);
 
 			xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(3000));
-			// ////printf("\ndtmp1 11 %s\n", dtmp1);
+			// printf("\ndtmp1 11 %s\n", dtmp1);
 			//   xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(time * 5));
 			memset(dtmp1, 0, sizeof(dtmp1));
 
@@ -3949,14 +2309,14 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 			// xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(time * 2));
 
 			// vTaskDelay(pdMS_TO_TICKS((500)));
-			// ////printf("\n SMS 1 - %s \n - %s\n", phone, text);
+			// printf("\n SMS 1 - %s \n - %s\n", phone, text);
 			xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(3000));
-			// ////printf("\ndtmp1 22 %s\n", dtmp1);
+			// printf("\ndtmp1 22 %s\n", dtmp1);
 		}
 		else
 		{
 			sprintf(AT_Command, "%s%c", data, 13);
-			// //printf("\nSEND AT COMMAND 11 = %s\n", AT_Command);
+			// printf("\nSEND AT COMMAND 11 = %s\n", AT_Command);
 
 			/* uart_wait_tx_done(UART_NUM_1, pdMS_TO_TICKS(1000));
 			uart_write_bytes_with_break(UART_NUM_1, AT_Command, strlen(AT_Command), pdMS_TO_TICKS(1000)); */
@@ -3965,17 +2325,17 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 
 			/* if (!strcmp("AT+CNUM",data))
 			{
-				////printf("\n parse data %d\n", 3);
+				printf("\n parse data %d\n", 3);
 				vTaskDelay(pdMS_TO_TICKS(300));
 			} */
 
 			xQueueReceive(AT_Command_Feedback_queue, &dtmp1, pdMS_TO_TICKS(time));
 
-			// //printf("\nSEND AT COMMAND 22 = %s\n", dtmp1);
+			// printf("\nSEND AT COMMAND 22 = %s\n", dtmp1);
 		}
-		// ////printf("\n SMS SEND START123 -\n");
+		// printf("\n SMS SEND START123 -\n");
 		//(TickType_t)(time / portTICK_PERIOD_MS)
-		//  ////printf("\nAT_Command_Feedback_queue = %s\n", dtmp1);
+		//  printf("\nAT_Command_Feedback_queue = %s\n", dtmp1);
 		// system_stack_high_water_mark("atsend22");
 		if (strlen(dtmp1) < 1 || strstr(dtmp1, "CME ERROR") != NULL || !strcmp(rsp, "SMS"))
 		{
@@ -3984,31 +2344,31 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 			uartEvent.size=200; */
 
 			memset(dtmp1, 0, sizeof(dtmp1));
-			// ////printf("\n parse data error %d\n", 3);
+			// printf("\n parse data error %d\n", 3);
 			memset(AT_Command, 0, sizeof(AT_Command));
 
 			xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			// ////printf("\n parse data %d\n", 1);
+			// printf("\n parse data %d\n", 1);
 			send_ATCommand_Label = 0;
 			return 0;
 		}
 
-		// ////printf("\n SMS SEND START124 -\n");
+		// printf("\n SMS SEND START124 -\n");
 		if (EG91_Parse_ReceiveData(dtmp1, rsp))
 		{
 			// free(rsp);
 			//  free(&dtmp1);
-			// ////printf("\n parse data %d\n", 1);
+			// printf("\n parse data %d\n", 1);
 
-			// ////printf("\n parse data %d\n", 2);
+			// printf("\n parse data %d\n", 2);
 			memset(dtmp1, 0, sizeof(dtmp1));
-			// ////printf("\n parse data %d\n", 3);
+			// printf("\n parse data %d\n", 3);
 			memset(AT_Command, 0, sizeof(AT_Command));
 
 			// free(dtmp1);
 			//  xQueueReset(AT_Command_Feedback_queue);
 			xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			// ////printf("\n parse data %d\n", 4);
+			// printf("\n parse data %d\n", 4);
 			send_ATCommand_Label = 0;
 			return 1;
 		}
@@ -4018,7 +2378,7 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 
 			memset(dtmp1, 0, sizeof(dtmp1));
 			counterACK--;
-			// ////printf("\n parse data %d\n", 5);
+			// printf("\n parse data %d\n", 5);
 			if (!strcmp(rsp, "CPIN"))
 			{
 				break;
@@ -4034,7 +2394,7 @@ uint8_t EG91_send_AT_Command(char *data, char *rsp, int time)
 	// free(rsp);
 	send_ATCommand_Label = 0;
 
-	// ////printf("\n parse data %d\n", 5);
+	// printf("\n parse data %d\n", 5);
 	//   memset(dtmp1, 0, sizeof(dtmp1));
 	xSemaphoreGive(rdySem_Control_Send_AT_Command);
 	return 0;
@@ -4066,7 +2426,7 @@ uint8_t EG91_parse_CNUM(char *receiveData)
 
 	save_STR_Data_In_Storage(NVS_KEY_OWN_NUMBER, ownNumber, nvs_System_handle);
 	free(ownNumber);
-	// ////printf("\n\n own number %s\n\n", ownNumber);
+	// printf("\n\n own number %s\n\n", ownNumber);
 
 	return 1;
 }
@@ -4089,7 +2449,7 @@ uint8_t parse_qmtsub(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\n subResult %c\n\n", result);
+	// printf("\n\n subResult %c\n\n", result);
 
 	if (result == '0')
 	{
@@ -4109,7 +2469,7 @@ uint8_t init_UDP_socket() /* 83.240.211.213 */
 	char imei[100] = {};
 	char *connectData;
 	uint8_t ack = 0;
-	// ////printf("\n\ntask_refresh_SystemTime 02\n\n");
+	// printf("\n\ntask_refresh_SystemTime 02\n\n");
 	EG91_get_IMEI();
 
 	get_STR_Data_In_Storage(NVS_KEY_EG91_IMEI, nvs_System_handle, &imei);
@@ -4140,15 +2500,15 @@ uint8_t init_UDP_socket() /* 83.240.211.213 */
 	// EG91_send_AT_Command(" AT+QMTCFG=\"will\",0,1,1,0,m200/,!", "OK", 1000);
 
 	EG91_send_AT_Command("AT+QMTOPEN?", "AT+QMTOPEN?", 5000);
-	// ////printf("\n\n OPEN VERIFY24352! - %d \n\n", mqtt_openLabel);
+	// printf("\n\n OPEN VERIFY24352! - %d \n\n", mqtt_openLabel);
 
 	if (!mqtt_openLabel)
 	{
-		// ////printf("\n\n OPEN VERIFY555! \n\n");
+		// printf("\n\n OPEN VERIFY555! \n\n");
 
 #ifndef CONFIG_SECURE_FLASH_ENCRYPTION_MODE_DEVELOPMENT
-		if (EG91_send_AT_Command("AT+QMTOPEN=0,\"api.portal.motorline.pt\",8883", "OK", 10000))
-		{
+		// if (EG91_send_AT_Command("AT+QMTOPEN=0,\"api.portal.motorline.pt\",8883", "OK", 10000))
+		// {
 
 #else
 
@@ -4159,61 +2519,56 @@ uint8_t init_UDP_socket() /* 83.240.211.213 */
 
 #endif // Seleção de DNS
 
-			uint8_t ACK_connect = 0;
-			// ////printf("\n\n OPEN VERIFY! \n\n");
-			while (ACK_connect < 10)
-			{
-				EG91_send_AT_Command("AT+QMTOPEN?", "AT+QMTOPEN?", 2000);
-				if (mqtt_openLabel)
-				{
-					ack++;
-					break;
-				}
-				ACK_connect++;
-				vTaskDelay(pdMS_TO_TICKS(1000));
-			}
-
+		uint8_t ACK_connect = 0;
+		// printf("\n\n OPEN VERIFY! \n\n");
+		while (ACK_connect < 10)
+		{
+			EG91_send_AT_Command("AT+QMTOPEN?", "AT+QMTOPEN?", 2000);
 			if (mqtt_openLabel)
 			{
-				ACK_connect = 0;
-				EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
+				ack++;
+				break;
+			}
+			ACK_connect++;
+			vTaskDelay(pdMS_TO_TICKS(1000));
+		}
 
-				if (!mqtt_connectLabel)
+		if (mqtt_openLabel)
+		{
+			ACK_connect = 0;
+			EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
+
+			if (!mqtt_connectLabel)
+			{
+
+				asprintf(&connectData, "AT+QMTCONN=0,\"%s\",\"%s\",\"%s\"", imei, imei, encrypImei);
+
+				if (EG91_send_AT_Command(connectData, "OK", 20000))
 				{
-
-					asprintf(&connectData, "AT+QMTCONN=0,\"%s\",\"%s\",\"%s\"", imei, imei, encrypImei);
-
-					if (EG91_send_AT_Command(connectData, "OK", 20000))
+					uint8_t ACK_connect = 0;
+					// printf("\n\n CONNECT VERIFY! \n\n");
+					while (ACK_connect < 10)
 					{
-						uint8_t ACK_connect = 0;
-						// ////printf("\n\n CONNECT VERIFY! \n\n");
-						while (ACK_connect < 10)
+						EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
+
+						if (mqtt_connectLabel)
 						{
-							EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
-
-							if (mqtt_connectLabel)
-							{
-								ack++;
-								break;
-							}
-							ACK_connect++;
-							vTaskDelay(pdMS_TO_TICKS(1000));
+							ack++;
+							break;
 						}
-					}
-					else
-					{
-						// TODO: IMPLENTAR MANTER O STAT
-						EG91_send_AT_Command("AT+QMTDISC=0", "OK", 30000);
+						ACK_connect++;
+						vTaskDelay(pdMS_TO_TICKS(1000));
 					}
 				}
 				else
 				{
-					ack++;
+					// TODO: IMPLENTAR MANTER O STAT
+					EG91_send_AT_Command("AT+QMTDISC=0", "OK", 30000);
 				}
 			}
 			else
 			{
-				// TODO: IMPLENTAR MANTER O STAT
+				ack++;
 			}
 		}
 		else
@@ -4223,56 +2578,61 @@ uint8_t init_UDP_socket() /* 83.240.211.213 */
 	}
 	else
 	{
-		// ////printf("\n\n OPEN VERIFy888888! \n\n");
-		ack++;
+		// TODO: IMPLENTAR MANTER O STAT
+	}
+}
+else
+{
+	// printf("\n\n OPEN VERIFy888888! \n\n");
+	ack++;
 
-		EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
+	EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
 
-		if (!mqtt_connectLabel)
+	if (!mqtt_connectLabel)
+	{
+
+		asprintf(&connectData, "AT+QMTCONN=0,\"%s\",\"%s\",\"%s\"", imei, imei, encrypImei);
+
+		if (EG91_send_AT_Command(connectData, "OK", 20000))
 		{
-
-			asprintf(&connectData, "AT+QMTCONN=0,\"%s\",\"%s\",\"%s\"", imei, imei, encrypImei);
-
-			if (EG91_send_AT_Command(connectData, "OK", 20000))
+			uint8_t ACK_connect = 0;
+			// printf("\n\n CONNECT VERIFY! \n\n");
+			while (ACK_connect < 10)
 			{
-				uint8_t ACK_connect = 0;
-				// ////printf("\n\n CONNECT VERIFY! \n\n");
-				while (ACK_connect < 10)
+				EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
+
+				if (mqtt_connectLabel)
 				{
-					EG91_send_AT_Command("AT+QMTCONN?", "AT+QMTCONN?", 1000);
-
-					if (mqtt_connectLabel)
-					{
-						ack++;
-						break;
-					}
-					ACK_connect++;
-					vTaskDelay(pdMS_TO_TICKS(1000));
+					ack++;
+					break;
 				}
-			}
-			else
-			{
-				// TODO: IMPLENTAR MANTER O STAT
-				EG91_send_AT_Command("AT+QMTDISC=0", "OK", 20000);
+				ACK_connect++;
+				vTaskDelay(pdMS_TO_TICKS(1000));
 			}
 		}
 		else
 		{
-			ack++;
+			// TODO: IMPLENTAR MANTER O STAT
+			EG91_send_AT_Command("AT+QMTDISC=0", "OK", 20000);
 		}
 	}
+	else
+	{
+		ack++;
+	}
+}
 
-	memset(connectData, 0, strlen(connectData));
-	asprintf(&connectData, "AT+QMTSUB=0,1,\"set/m200/%s/+\",1", imei);
-	EG91_send_AT_Command(connectData, "+QMTSUB:", 10000);
-	// printf("\n\n finish sub1\n\n");
-	//  EG91_send_AT_Command("AT+QICFG=\"send/auto\",2,5,\"Dados automáticos\"", "OK", 1000);
+memset(connectData, 0, strlen(connectData));
+asprintf(&connectData, "AT+QMTSUB=0,1,\"set/m200/%s/+\",1", imei);
+EG91_send_AT_Command(connectData, "+QMTSUB:", 10000);
+// printf("\n\n finish sub1\n\n");
+//  EG91_send_AT_Command("AT+QICFG=\"send/auto\",2,5,\"Dados automáticos\"", "OK", 1000);
 
-	free(connectData);
-	// printf("\n\n finish sub2\n\n");
-	free(encrypImei);
-	// printf("\n\n finish sub3\n\n");
-	return ack;
+free(connectData);
+// printf("\n\n finish sub2\n\n");
+free(encrypImei);
+// printf("\n\n finish sub3\n\n");
+return ack;
 }
 
 uint8_t parse_qmtconn(char *receiveData)
@@ -4288,7 +2648,7 @@ uint8_t parse_qmtconn(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\nconn_verify %c \n\n", conn_verify);
+	// printf("\n\nconn_verify %c \n\n", conn_verify);
 
 	if (conn_verify == '3')
 	{
@@ -4301,7 +2661,7 @@ uint8_t parse_qmtconn(char *receiveData)
 		save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 1, nvs_System_handle);
 	}
 
-	// ////printf("\n\nconn_verify2 %c \n\n", conn_verify);
+	// printf("\n\nconn_verify2 %c \n\n", conn_verify);
 	return 1;
 }
 char output_mqtt_data[300];
@@ -4322,7 +2682,7 @@ uint8_t send_UDP_Package(char *data, int size, char *topic)
 			// printf("\n\n send udp 2 \n\n");
 			strcat(UDP_send_command, data);
 			// printf("\n\n send udp 3 - %s\n\n", UDP_send_command);
-			//  ////printf("\nUDP_send_command:454546 %s\n", "base64_str");
+			//  printf("\nUDP_send_command:454546 %s\n", "base64_str");
 		}
 		else
 		{
@@ -4330,18 +2690,18 @@ uint8_t send_UDP_Package(char *data, int size, char *topic)
 
 			if (nvs_get_str(nvs_System_handle, NVS_KEY_EG91_IMEI, NULL, &required_size) == ESP_OK)
 			{
-				// ////printf("\n\n send udp 01 - %d \n\n", required_size);
+				// printf("\n\n send udp 01 - %d \n\n", required_size);
 
 				if (nvs_get_str(nvs_System_handle, NVS_KEY_EG91_IMEI, imei, &required_size) == ESP_OK)
 				{
 					sprintf(UDP_send_command, "%s ", imei);
-					// ////printf("\n\n send udp 2 \n\n");
+					// printf("\n\n send udp 2 \n\n");
 					strcat(UDP_send_command, data);
 				}
 			}
 			else
 			{
-				// ////printf("\n\nERROR 1\n\n");
+				// printf("\n\nERROR 1\n\n");
 				sprintf(UDP_send_command, "%s ", "ERROR");
 				strcat(UDP_send_command, data);
 			}
@@ -4353,19 +2713,19 @@ uint8_t send_UDP_Package(char *data, int size, char *topic)
 
 		if (nvs_get_str(nvs_System_handle, NVS_KEY_EG91_IMEI, NULL, &required_size) == ESP_OK)
 		{
-			// ////printf("\n\n send udp 01 - %d \n\n", required_size);
+			// printf("\n\n send udp 01 - %d \n\n", required_size);
 
 			if (nvs_get_str(nvs_System_handle, NVS_KEY_EG91_IMEI, imei, &required_size) == ESP_OK)
 			{
 				sprintf(UDP_send_command, "%s ", imei);
-				// ////printf("\n\n send udp 2 \n\n");
+				// printf("\n\n send udp 2 \n\n");
 				strcat(UDP_send_command, data);
-				// ////printf("\n\n send udp 3 \n\n");
+				// printf("\n\n send udp 3 \n\n");
 			}
 		}
 		else
 		{
-			// ////printf("\n\nERROR 1\n\n");
+			// printf("\n\nERROR 1\n\n");
 			sprintf(UDP_send_command, "%s ", "ERROR");
 			strcat(UDP_send_command, data);
 		}
@@ -4381,12 +2741,12 @@ uint8_t send_UDP_Package(char *data, int size, char *topic)
 
 	/*   if (base64_str != NULL)
 	  {
-		  // ////printf("\n\nbase64: %s\n\n", base64_str);
+		  // printf("\n\nbase64: %s\n\n", base64_str);
 		  //   Liberar a memória alocada para a string retornada
 	  }
 	  else
 	  {
-		  // ////printf("\n\nErro ao criptografar e codificar em base64.\n\n");
+		  // printf("\n\nErro ao criptografar e codificar em base64.\n\n");
 	  } */
 
 	// char *output_mqtt_data;
@@ -4404,7 +2764,7 @@ uint8_t send_UDP_Package(char *data, int size, char *topic)
 
 	// printf("\n\n send udp 66 %s - %d\n\n", output_mqtt_data, strlen(output_mqtt_data));
 	char fff[1000] = {}; //
-	// vTaskList(fff); vTaskGetRunTimeStats(fff); //printf("\n%s\n",fff);
+	// vTaskList(fff); vTaskGetRunTimeStats(fff); printf("\n%s\n",fff);
 	timer_pause(TIMER_GROUP_1, TIMER_0);
 	// printf("\n\n send udp 0101010 \n\n");
 	if (EG91_send_AT_Command(output_mqtt_data, "QMTPUBEX", 2000))
@@ -4438,7 +2798,7 @@ void register_UDP_Device()
 	if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, NULL, &required_size) == ESP_OK)
 	{
 		// printf("\nrequire size %d\n", required_size);
-		//  ////printf("\nGET OWNER NAMESPACE\n");
+		//  printf("\nGET OWNER NAMESPACE\n");
 		if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, owner_Data, &required_size) == ESP_OK)
 		{
 
@@ -4461,11 +2821,11 @@ void register_UDP_Device()
 			//  send_UDP_queue(data_register);
 			memset(input_data, 0, 100);
 
-			sprintf(input_data, "%s %s AL.G.*", user_validateData.phone, user_validateData.key);
+			/* sprintf(input_data, "%s %s AL.G.*", user_validateData.phone, user_validateData.key);
 			data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 			send_UDP_Send(data_register, "");
 			// send_UDP_queue(data_register);
-			memset(input_data, 0, 100);
+			memset(input_data, 0, 100); */
 
 			sprintf(input_data, "%s %s ME.G.M", user_validateData.phone, user_validateData.key);
 			data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
@@ -4476,99 +2836,99 @@ void register_UDP_Device()
 
 			// printf("\nrequire size44 aaa\n");
 
-			uint8_t label_UDP_fail_and_changed = get_INT8_Data_From_Storage(NVS_NETWORK_LOCAL_CHANGED, nvs_System_handle);
-			// ////printf("\n\nlabel_UDP_fail_and_changed trete %d\n\n", label_UDP_fail_and_changed);
-			if ((label_UDP_fail_and_changed & 1) || label_UDP_fail_and_changed == -1)
-			{
-				// printf("\nrequire size44 vvv\n");
-				sprintf(input_data, "%s %s RT.G.T", user_validateData.phone, user_validateData.key);
-				data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
-				send_UDP_Send(data_register, "");
-				// send_UDP_queue(data_register);
-				memset(input_data, 0, 100);
-				// ////printf("\n\nlabel_UDP_fail_and_changed trete 12122 %d\n\n", label_UDP_fail_and_changed);
+			// uint8_t label_UDP_fail_and_changed = get_INT8_Data_From_Storage(NVS_NETWORK_LOCAL_CHANGED, nvs_System_handle);
+			// // printf("\n\nlabel_UDP_fail_and_changed trete %d\n\n", label_UDP_fail_and_changed);
+			// if ((label_UDP_fail_and_changed & 1) || label_UDP_fail_and_changed == -1)
+			// {
+			// 	// printf("\nrequire size44 vvv\n");
+			// 	sprintf(input_data, "%s %s RT.G.T", user_validateData.phone, user_validateData.key);
+			// 	data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
+			// 	send_UDP_Send(data_register, "");
+			// 	// send_UDP_queue(data_register);
+			// 	memset(input_data, 0, 100);
+			// 	// printf("\n\nlabel_UDP_fail_and_changed trete 12122 %d\n\n", label_UDP_fail_and_changed);
 
-				send_UDP_Send("RT R R", "");
-				send_UDP_Send("RT R D", "");
+			// 	send_UDP_Send("RT R R", "");
+			// 	send_UDP_Send("RT R D", "");
 
-				sprintf(input_data, "%s %s RT.G.D", user_validateData.phone, user_validateData.key);
-				data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
-				send_UDP_Send(data_register, "");
-				// send_UDP_queue(data_register);
-				memset(input_data, 0, 100);
+			// 	sprintf(input_data, "%s %s RT.G.D", user_validateData.phone, user_validateData.key);
+			// 	data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
+			// 	send_UDP_Send(data_register, "");
+			// 	// send_UDP_queue(data_register);
+			// 	memset(input_data, 0, 100);
 
-				sprintf(input_data, "%s %s RT.G.H", user_validateData.phone, user_validateData.key);
-				data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
+			// 	sprintf(input_data, "%s %s RT.G.H", user_validateData.phone, user_validateData.key);
+			// 	data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 
-				send_UDP_Send(data_register, "");
-				// send_UDP_queue(data_register);
-				memset(input_data, 0, 100);
+			// 	send_UDP_Send(data_register, "");
+			// 	// send_UDP_queue(data_register);
+			// 	memset(input_data, 0, 100);
 
-				sprintf(input_data, "%s %s RT.G.F", user_validateData.phone, user_validateData.key);
-				data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
-				send_UDP_Send(data_register, "");
-				// send_UDP_queue(data_register);
-				memset(input_data, 0, 100);
-				// printf("\n\nlabel_UDP_fail_and_changed trete 12122 \n\n");
-				//  send_UDP_queue(data_register);
-				memset(input_data, 0, 100);
+			// 	sprintf(input_data, "%s %s RT.G.F", user_validateData.phone, user_validateData.key);
+			// 	data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
+			// 	send_UDP_Send(data_register, "");
+			// 	// send_UDP_queue(data_register);
+			// 	memset(input_data, 0, 100);
+			// 	// printf("\n\nlabel_UDP_fail_and_changed trete 12122 \n\n");
+			// 	//  send_UDP_queue(data_register);
+			// 	memset(input_data, 0, 100);
 
-				if (send_udp_routines_funtion())
-				{
-					label_UDP_fail_and_changed = label_UDP_fail_and_changed & 254;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-				}
-				else
-				{
-					label_UDP_fail_and_changed |= 1;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-				}
-			}
+			// 	if (send_udp_routines_funtion())
+			// 	{
+			// 		label_UDP_fail_and_changed = label_UDP_fail_and_changed & 254;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 	}
+			// 	else
+			// 	{
+			// 		label_UDP_fail_and_changed |= 1;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 	}
+			// }
 
 			// printf("\n\nlabel_UDP_fail_and_changed tqwe %d\n\n", label_UDP_fail_and_changed);
 			//  TODO: DESCOMENTAR
-			if (label_UDP_fail_and_changed & 2 || label_UDP_fail_and_changed == -1)
-			{
-				// printf("\nrequire size44 rrrr\n");
+			// if (label_UDP_fail_and_changed & 2 || label_UDP_fail_and_changed == -1)
+			// {
+			// 	// printf("\nrequire size44 rrrr\n");
 
-				if (!send_UDP_Send("*\0", ""))
-				{
-					// printf("\n\n\n send udp ççççç \n\n\n");
+			// 	if (!send_UDP_Send("*\0", ""))
+			// 	{
+			// 		// printf("\n\n\n send udp ççççç \n\n\n");
 
-					return 0;
-				}
+			// 		return 0;
+			// 	}
 
-				if (sendUDP_all_User_funtion())
-				{
-					label_UDP_fail_and_changed = label_UDP_fail_and_changed & 253;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-					free(data_register);
-				}
-				else
-				{
-					// printf("\nrequire size44 121212\n");
-					label_UDP_fail_and_changed |= 2;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-					free(data_register);
-				}
-			}
-			// printf("\nrequire size44 iiii\n");
-			if (label_UDP_fail_and_changed & 4 || label_UDP_fail_and_changed == -1)
-			{
-				memset(input_data, 0, 100);
-				sprintf(input_data, "ME R K %s;%s", user_validateData.phone, user_validateData.key);
-				// printf("\nrequire size44 767676\n");
-				if (send_UDP_Send(input_data, ""))
-				{
-					label_UDP_fail_and_changed = label_UDP_fail_and_changed & 251;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-				}
-				else
-				{
-					label_UDP_fail_and_changed |= 4;
-					save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
-				}
-			}
+			// 	if (sendUDP_all_User_funtion())
+			// 	{
+			// 		label_UDP_fail_and_changed = label_UDP_fail_and_changed & 253;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 		free(data_register);
+			// 	}
+			// 	else
+			// 	{
+			// 		// printf("\nrequire size44 121212\n");
+			// 		label_UDP_fail_and_changed |= 2;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 		free(data_register);
+			// 	}
+			// }
+			// // printf("\nrequire size44 iiii\n");
+			// if (label_UDP_fail_and_changed & 4 || label_UDP_fail_and_changed == -1)
+			// {
+			// 	memset(input_data, 0, 100);
+			// 	sprintf(input_data, "ME R K %s;%s", user_validateData.phone, user_validateData.key);
+			// 	// printf("\nrequire size44 767676\n");
+			// 	if (send_UDP_Send(input_data, ""))
+			// 	{
+			// 		label_UDP_fail_and_changed = label_UDP_fail_and_changed & 251;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 	}
+			// 	else
+			// 	{
+			// 		label_UDP_fail_and_changed |= 4;
+			// 		save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
+			// 	}
+			// }
 			// printf("\nrequire size44 65456\n");
 		}
 	}
@@ -4719,11 +3079,11 @@ uint8_t EG91_initNetwork()
 		EG91_send_AT_Command("AT+CGCONTRDP=1", "OK", 1000);
 		/* for (size_t i = 0; i < 15; i++)
 		{
-			//////printf("%X\n", registerDevice[i]);
+			//printf("%X\n", registerDevice[i]);
 			// returnData[i]
 		} */
 
-		// ////printf("\n\nIMEI\n%s\n", auxIMEI);
+		// printf("\n\nIMEI\n%s\n", auxIMEI);
 
 		if (EG91_send_AT_Command("AT+CSCS=\"UCS2\"", "OK", 1000))
 		{
@@ -4758,44 +3118,44 @@ uint8_t EG91_initNetwork()
 		// getFile_importUsers("char *DNS");
 		/*  EG91_send_AT_Command("AT+QFOTADL=\"http://static.home.motorline.pt/homes/Update_EG915UE.pack\"", "OK", 100000);  */
 
-		uint8_t label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
+		// uint8_t label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
 
-		if (label_network_portalRegister == 255)
-		{
-			label_network_portalRegister = 1;
-			save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
-		}
+		// /* if (label_network_portalRegister == 255)
+		// { */
+		// label_network_portalRegister = 1;
+		// save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
+		//}
 
-		if (label_network_portalRegister == 1)
+		/* if (label_network_portalRegister == 1)
+		{ */
+		if (init_UDP_socket() == 2)
 		{
-			if (init_UDP_socket() == 2)
+			ACK++;
+			// printf("\n\n finish sub99\n\n");
+			save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 0, nvs_System_handle);
+			// printf("\n\n finish sub443\n\n");
+			register_UDP_Device();
+			// printf("\n\n finish sub77\n\n");
+			if (EG91_send_AT_Command(AT_CSQ, "CSQ", 1000))
 			{
 				ACK++;
-				// printf("\n\n finish sub99\n\n");
-				save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 0, nvs_System_handle);
-				// printf("\n\n finish sub443\n\n");
-				register_UDP_Device();
-				// printf("\n\n finish sub77\n\n");
-				if (EG91_send_AT_Command(AT_CSQ, "CSQ", 1000))
-				{
-					ACK++;
-				}
-				// printf("\n\n init_UDP_socket OK \n\n");
 			}
-			else
-			{
-				mqtt_openLabel = 0;
-				mqtt_connectLabel = 0;
-				save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 1, nvs_System_handle);
-			}
+			// printf("\n\n init_UDP_socket OK \n\n");
 		}
+		else
+		{
+			mqtt_openLabel = 0;
+			mqtt_connectLabel = 0;
+			save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 1, nvs_System_handle);
+		}
+		/* }
 		else
 		{
 			if (EG91_send_AT_Command(AT_CSQ, "CSQ", 1000))
 			{
 				ACK++;
 			}
-		}
+		} */
 		// printf("\n\n finish sub88\n\n");
 
 		/*for (size_t i = 0; i < 5; i++)
@@ -4805,7 +3165,7 @@ uint8_t EG91_initNetwork()
 
 		char registerDevice[30] = {};
 
-		// ////printf("\n registerDevice\n");
+		// printf("\n registerDevice\n");
 
 		// sprintf(registerDevice, "%s %d", "081321069139715", RSSI_VALUE);
 
@@ -4814,9 +3174,9 @@ uint8_t EG91_initNetwork()
 
 		// EG91_send_AT_Command("AT&F0", "OK", 1000);
 
-		if (((label_network_portalRegister == 0) && ACK == 15) || ((label_network_portalRegister == 1) && (ACK == 16)))
+		if (ACK == 16)
 		{
-			// ////printf("\n registerDevice 22\n");
+			// printf("\n registerDevice 22\n");
 			return 1;
 		}
 	}
@@ -4840,12 +3200,12 @@ void give_rdySem_Control_Send_AT_Command()
 {
 	if (rdySem_Control_Send_AT_Command != NULL)
 	{
-		// ////printf("\rdySem_Control_Send_AT_Command != NULL\n");
+		// printf("\rdySem_Control_Send_AT_Command != NULL\n");
 		xSemaphoreGive(rdySem_Control_Send_AT_Command);
 	}
 	else
 	{
-		// ////printf("\rdySem_Control_Send_AT_Command = NULL\n");
+		// printf("\rdySem_Control_Send_AT_Command = NULL\n");
 	}
 }
 
@@ -4853,64 +3213,12 @@ void give_rdySem_Feedback_Call()
 {
 	if (rdySem_Feedback_Call != NULL)
 	{
-		// ////printf("\nrdySem_Feedback_Call != NULL\n");
+		// printf("\nrdySem_Feedback_Call != NULL\n");
 		xSemaphoreGive(rdySem_Feedback_Call);
 	}
 	else
 	{
-		// ////printf("\nrdySem_Feedback_Call = NULL\n");
-	}
-}
-
-void task_EG91_Record_Feedback_Call(void *pvParameter)
-{
-	char AT_Command[300];
-	uint8_t counterACK = 25;
-	char dtmp1[BUFF_SIZE];
-	uint8_t ACK = 9;
-	rdySem_Feedback_Call = xSemaphoreCreateBinary();
-
-	for (;;)
-	{
-		xSemaphoreTake(rdySem_Feedback_Call, portMAX_DELAY);
-		// EG91_writeFile("Y.txt", "motorline");
-		EG91_send_AT_Command("AT+QFDEL=\"UFS:RECORD_SOUND.wav\"", "OK", 1000);
-		EG91_send_AT_Command("ATD917269448", "OK", 1000); /* 918712872 */ /* HELDER 918712872*/
-
-		sprintf(AT_Command, "%s%c", "AT+CLCC", 13);
-
-		// ////printf("\nAT COMMAND parse_IncomingCall = %s\n", AT_Command);
-		//   esp_task_wdt_init(10, true);
-		while (counterACK > 0)
-		{
-			memset(dtmp1, 0, sizeof(dtmp1));
-			uart_write_bytes(UART_NUM_1, AT_Command, strlen(AT_Command));
-			xQueueReceive(EG91_CALL_CLCC_UART_queue, dtmp1, pdMS_TO_TICKS(1500)); //(TickType_t)(time / portTICK_PERIOD_MS)
-			// ////printf("\nAT_Command_Feedback_queue_CLCC = %s\n", dtmp1);
-			ACK = parse_IncomingCall_Payload(&dtmp1);
-			if (ACK == 0)
-			{
-				// free(rsp);
-				//  free(&dtmp1);
-				// ////printf("\n call accept %d\n", 1);
-
-				memset(dtmp1, 0, sizeof(dtmp1));
-				vTaskDelay(pdMS_TO_TICKS((750)));
-				EG91_send_AT_Command("AT+QPSND=1,\"UFS:beepInicial.wav\",0,1,0", "OK", 3000);
-				EG91_send_AT_Command("AT+QAUDRD=1,\"UFS:RECORD_SOUND.wav\",13,1", "OK", 1000);
-
-				// xQueueReset(AT_Command_Feedback_queue);
-				// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-				break;
-			}
-			else
-			{
-				memset(dtmp1, 0, sizeof(dtmp1));
-			}
-			counterACK--;
-			memset(dtmp1, 0, sizeof(dtmp1));
-			vTaskDelay(pdMS_TO_TICKS((1000)));
-		}
+		// printf("\nrdySem_Feedback_Call = NULL\n");
 	}
 }
 
@@ -4921,856 +3229,9 @@ void receive_NoCarrie_queue()
 	// xQueueReceive(NO_CARRIER_Call_queue, &dtmp1, pdMS_TO_TICKS(15000));
 }
 
-void record_Feedback_Sound()
-{
-	// ////printf("\n ENTER RECORD SOUND %d\n", 1);
-	uint8_t counterACK = 18;
-	char dtmp1[BUFF_SIZE];
-	xQueueReset(NO_CARRIER_Call_queue);
-	call_label = 1;
-	uint8_t ACK = 9;
-
-	if (incomingCall_Label == 1)
-	{
-		EG91_Send_SMS("917269448", "THE SYSTEM IS RECEIVING ANOTHER CALL AT THIS TIME. PLEASE TRY AGAIN");
-	}
-	else
-	{
-
-		// timer_pause(1, 0);
-		//  timer_pause(0, 0);
-
-		// vTaskSuspend(xHandle_Timer_VerSystem);
-		//  EG91_writeFile("Y.txt", "motorline");
-		//  EG91_send_AT_Command("AT+QDAI=1,1,1,4,0,0,1,1", "OK", 1000);AT+QTTS=1,"6B228FCE4F7F752879FB8FDC6A215757"
-
-		EG91_send_AT_Command("AT+CLVL?", "OK", 1000);
-		// EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-		EG91_send_AT_Command("ATD917269448", "OK", 1000); /* 918712872 936356241 */
-		//
-		counterACK = 33;
-
-		while (counterACK > 0)
-		{
-
-			ACK = parse_Call(CALL_STATE);
-
-			if (ACK == 0)
-			{
-				EG91_send_AT_Command("AT+QFDEL=\"UFS:RECORD_SOUND.wav\"", "OK", 1000);
-				// EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-				// ////printf("\n call accept %d\n", 1);
-
-				memset(dtmp1, 0, sizeof(dtmp1));
-				// vTaskDelay(pdMS_TO_TICKS(500));
-
-				EG91_send_AT_Command("AT+QPSND=1,\"UFS:beepInicial.wav\",0,1,0", "OK", 3000);
-				// EG91_send_AT_Command("AT+QPSND=1,\"UFS:RECORD_SOUND.wav\",0,1,0", "OK", 3000);
-				xSemaphoreTake(rdySem_QPSND, pdMS_TO_TICKS(3000));
-				EG91_send_AT_Command("AT+QAUDRD=1,\"UFS:RECORD_SOUND.wav\",13,1", "OK", 1000);
-				// ////printf("\n call accept before queue\n");
-				vTaskDelay(pdMS_TO_TICKS((2500)));
-				xQueueReceive(NO_CARRIER_Call_queue, dtmp1, pdMS_TO_TICKS(10000));
-				// xQueueReset(NO_CARRIER_Call_queue);
-				// ////printf("\n call accept after queue\n");
-				if (strstr(dtmp1, "NO CARRIER") != NULL)
-				{
-					// ////printf("\n call accept NO CARRIER\n");
-					EG91_send_AT_Command("AT+QAUDRD=0", "OK", 1000);
-					vTaskDelay(pdMS_TO_TICKS(300));
-					EG91_send_AT_Command("ATH", "OK", 1000);
-				}
-				else
-				{
-					// ////printf("\n call accept NOT NOT CARRIER\n");
-					EG91_send_AT_Command("AT+QAUDRD=0", "OK", 1000);
-					vTaskDelay(pdMS_TO_TICKS((100)));
-					EG91_send_AT_Command("AT+QPSND=1,\"UFS:beepFinal.wav\",0,1,0", "OK", 3000);
-					xSemaphoreTake(rdySem_QPSND, pdMS_TO_TICKS(4000));
-
-					EG91_send_AT_Command("ATH", "OK", 1000);
-				}
-
-				break;
-			}
-			else if (ACK == 255)
-			{
-				memset(dtmp1, 0, sizeof(dtmp1));
-				break;
-			}
-			else
-			{
-				memset(dtmp1, 0, sizeof(dtmp1));
-			}
-
-			counterACK--;
-
-			if (counterACK == 0)
-			{
-				EG91_send_AT_Command("ATH", "OK", 1000);
-				memset(dtmp1, 0, sizeof(dtmp1));
-				break;
-			}
-
-			memset(dtmp1, 0, sizeof(dtmp1));
-			vTaskDelay(pdMS_TO_TICKS((500)));
-		}
-		// EG91_send_AT_Command("ATH", "OK", 1000);
-		call_label = 0;
-		// vTaskResume(xHandle_Timer_VerSystem);
-		// timer_start(1, 0);
-	}
-}
-
-void play_Feedback_Sound()
-{
-
-	// ////printf("\n ENTER RECORD SOUND %d\n", 1);
-	uint8_t counterACK = 18;
-	MyUser MyUser_Feedback_Call;
-
-	char dtmp1[600];
-	char AT_Command[100];
-	char owner_info[200] = {};
-	char ownerNumber[30] = {};
-	size_t required_size = 0;
-	xQueueReset(NO_CARRIER_Call_queue);
-	call_label = 1;
-	int8_t ACK = 9;
-
-	memset(&MyUser_Feedback_Call, 0, sizeof(MyUser_Feedback_Call));
-
-	if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, NULL, &required_size) == ESP_OK)
-	{
-		// ////printf("\nrequire size %d\n", required_size);
-		// ////printf("\nGET USERS NAMESPACE\n");
-		if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, owner_info, &required_size) == ESP_OK)
-		{
-
-			parse_ValidateData_User(owner_info, &MyUser_Feedback_Call);
-
-			if (incomingCall_Label == 1)
-			{
-				EG91_Send_SMS(MyUser_Feedback_Call.phone, return_Json_SMS_Data("THE_SYSTEM_IS_RECEIVING_ANOTHER_CALL"));
-			}
-			else
-			{
-
-				// timer_pause(1, 0);
-				//  timer_pause(0, 0);
-
-				// vTaskSuspend(xHandle_Timer_VerSystem);
-				//  EG91_writeFile("Y.txt", "motorline");
-				//  EG91_send_AT_Command("AT+QDAI=1,1,1,4,0,0,1,1", "OK", 1000);
-				// EG91_send_AT_Command("AT+CLVL?", "OK", 1000);
-				// EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-				ACK = EG91_send_AT_Command("AT+QFOPEN=\"RECORD_SOUND.wav\"", "QFOPEN", 5000);
-
-				int idFile = atoi(fileID);
-				//////printf("\nfile id %d - %s", idFile, fileID);
-				if (ACK)
-				{
-
-					sprintf(AT_Command, "UFS:AT+QFCLOSE=%d", idFile);
-					EG91_send_AT_Command(AT_Command, "OK", 1000);
-				}
-				else
-				{
-					EG91_Send_SMS("917269448", "THE SYSTEM DOES NOT CONTAIN A RECORDED AUDIO FILE. PLEASE RECORD A NEW AUDIO");
-					return;
-				}
-
-				// EG91_send_AT_Command("AT+QFLST=\"*\"", "OK", 1000);
-				EG91_send_AT_Command("ATS7=0", "OK", 1500);
-				sprintf(AT_Command, "ATD%s", MyUser_Feedback_Call.phone);
-				EG91_send_AT_Command(AT_Command, "OK", 1000); /* 918712872 936356241 935531736 */
-				//
-				counterACK = 18;
-
-				while (counterACK > 0)
-				{
-					timer_pause(TIMER_GROUP_1, TIMER_0);
-					// ////printf("\nsms\n");
-					disableAlarm();
-					vTaskSuspend(xHandle_Timer_VerSystem);
-					vTaskSuspend(handle_SEND_SMS_TASK);
-
-					ACK = parse_Call(CALL_STATE);
-					// ////printf("\n after parse_Call \n");
-					if (ACK == 0)
-					{
-
-						// ////printf("\n call accept %d\n", 1);
-
-						memset(dtmp1, 0, sizeof(dtmp1));
-						vTaskDelay(pdMS_TO_TICKS(750));
-						char *sound_AT_Command_file_Name;
-						uint8_t soundValue = get_INT8_Data_From_Storage(NVS_KEY_FEEDBACK_SOUND_INDEX, nvs_System_handle);
-
-						if (soundValue >= 1 && soundValue <= 8)
-						{
-							asprintf(&sound_AT_Command_file_Name, "AT+QPSND=1,\"UFS:sound_%d.wav\",0,1,0", soundValue);
-						}
-						else
-						{
-							asprintf(&sound_AT_Command_file_Name, "%s", "AT+QPSND=1,\"UFS:sound_1.wav\",0,1,0");
-						}
-
-						// ////printf("\n\nsound_AT_Command_file_Name\n%s\n\n", sound_AT_Command_file_Name);
-						EG91_send_AT_Command(sound_AT_Command_file_Name, "OK", 3000);
-						/* EG91_send_AT_Command("AT+QPSND=1,\"UFS:RECORD_SOUND.wav\",0,1,0", "OK", 3000); */
-						xSemaphoreTake(rdySem_QPSND, pdMS_TO_TICKS(15000));
-						free(sound_AT_Command_file_Name);
-						break;
-					}
-					else if (ACK == 255)
-					{
-						memset(dtmp1, 0, sizeof(dtmp1));
-
-						break;
-					}
-					else
-					{
-						memset(dtmp1, 0, sizeof(dtmp1));
-					}
-
-					counterACK--;
-					memset(dtmp1, 0, sizeof(dtmp1));
-					vTaskDelay(pdMS_TO_TICKS((1000)));
-				}
-				// ////printf("\nsms receive 123\n");
-				vTaskResume(handle_SEND_SMS_TASK);
-				vTaskResume(xHandle_Timer_VerSystem);
-				timer_start(TIMER_GROUP_1, TIMER_0);
-				EG91_send_AT_Command("ATS7=3", "OK", 1500);
-				EG91_send_AT_Command("ATH", "OK", 1000);
-				enableAlarm();
-			}
-		}
-		else
-		{
-			return;
-		}
-	}
-	else
-	{
-		return;
-	}
-}
-
-void task_EG91_Feedback_Call(void *pvParameter)
-{
-	char AT_Command[300];
-
-	char dtmp1[BUFF_SIZE];
-	uint8_t ACK = 9;
-	uint8_t typeCall_index = 0;
-
-	rdySem_Feedback_Call = xSemaphoreCreateBinary();
-	xSemaphoreGive(rdySem_Feedback_Call);
-
-	for (;;)
-	{
-		xQueueReceive(Type_Call_queue, &typeCall_index, portMAX_DELAY);
-		xSemaphoreTake(rdySem_Feedback_Call, portMAX_DELAY);
-
-		// EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",1", "OK", 3000);
-
-		if (typeCall_index == RECORD_SOUND_STATE)
-		{
-			record_Feedback_Sound();
-		}
-		else if (typeCall_index == PLAY_RECORD_SOUND_STATE)
-		{
-			play_Feedback_Sound();
-		}
-
-		// EG91_send_AT_Command("AT+QCFG=\"nwscanmode\",0", "OK", 3000);
-		xSemaphoreGive(rdySem_Feedback_Call);
-	}
-}
-
-void task_EG91_Run_IncomingCall(void *pvParameter)
-{
-
-	incomingCall_Label = 1;
-	uint8_t ACK = 0;
-
-	// ////printf("\nincoming call before suspend! 1\n");
-
-	if (label_initSystem_CALL != 0)
-	{
-
-		timer_pause(TIMER_GROUP_1, TIMER_0);
-		// ////printf("\nsms or call %s\n", atcmd);
-		vTaskSuspend(xHandle_Timer_VerSystem);
-		// ////printf("\nincoming call before suspend! 2\n");
-		vTaskSuspend(handle_SEND_SMS_TASK);
-		// ////printf("\nincoming call before suspend! 3\n");
-	}
-
-	// TODO: ALTERAÇÃO NESTE GIVE
-
-	// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-	// EG91_send_AT_Command("AT+QHUP=88,1", "OK", 1000);
-
-	// if (rele1_Mode_Label == BIESTABLE_MODE_INDEX)
-	// {
-	/* if (label_MonoStableRelay1 != 1)
-	{ */
-	// ////printf("\ncall receive\n");
-	// ////printf("\nincoming call before suspend! 4\n");
-	// ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
-	parse_Call(INCOMING_CALL_STATE);
-	/*   }
-	  else
-	  {
-		  // vTaskDelay(pdMS_TO_TICKS((300)));
-		  // sprintf(awnser_QHUP, "%s,%s", "AT+QHUP=17", id);
-		  EG91_send_AT_Command("AT+QHUP=27", "OK", 1000);
-		  // EG91_send_AT_Command("AT+QHUP=27", "OK", 500);
-	  } */
-	/*   }
-	  else
-	  {
-		  //////printf("\ncall receive\n");
-		  parse_Call(INCOMING_CALL_STATE);
-	  } */
-
-	aux_label_inCall = 0;
-	incomingCall_Label = 0;
-
-	if (label_initSystem_CALL != 0)
-	{
-		vTaskResume(xHandle_Timer_VerSystem);
-		vTaskResume(handle_SEND_SMS_TASK);
-		timer_start(TIMER_GROUP_1, TIMER_0);
-	}
-
-	xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-	vTaskDelete(NULL);
-}
-
-void task_EG91_Run_SMS(void *pvParameter)
-{
-
-	char atcmd[BUFF_SIZE] = {}; //= (char *)pvParameter; //[BUFF_SIZE];
-	// ////printf("\nsms param receive %s\n", atcmd);
-	char rsp[30];
-
-	// incomingCall_Label = 0;
-	uint8_t ACK = 0;
-
-	xSemaphoreGive(rdySem_Control_SMS_Task);
-
-	for (;;)
-	{
-		xQueueReceive(EG91_CALL_SMS_UART_queue, &atcmd, portMAX_DELAY);
-		// ////printf("\nsms kakakak\n");
-
-		if ((strstr(atcmd, "CMTI")) != NULL)
-		{
-			xSemaphoreTake(rdySem_Control_SMS_Task, pdMS_TO_TICKS(2000));
-			// ////printf("\n\nsms HELLOO 1\n\n");
-			/* timer_pause(TIMER_GROUP_1, TIMER_0);
-			 //////printf("\n\nsms HELLOO 1\n\n");
-			disableAlarm();
-			vTaskSuspend(xHandle_Timer_VerSystem);
-			vTaskSuspend(handle_SEND_SMS_TASK);
-			xSemaphoreGive(rdySem_Control_Send_AT_Command); */
-			// ////printf("\nsms receive\n %s\n", atcmd);
-			//    vTaskDelay(pdMS_TO_TICKS(2000));
-			//    xSemaphoreTake(rdySem_Control_SEND_SMS_Task, pdMS_TO_TICKS(10000));
-			// system_stack_high_water_mark("parse sms1");
-			parse_SMS(atcmd);
-			// verify_SMS_List();
-			// ////printf("\nsms receive 123\n");
-			// ////printf("\n\nsms HELLOO 2\n\n");
-			/* vTaskResume(handle_SEND_SMS_TASK);
-			vTaskResume(xHandle_Timer_VerSystem);
-			timer_start(TIMER_GROUP_1, TIMER_0);
-			enableAlarm();*/
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			memset(atcmd, 0, BUFF_SIZE);
-			// xSemaphoreGive(rdySem_Control_SMS_Task);
-		}
-
-		// ////printf("\nsms receive 124\n");
-	}
-	handle_SMS_TASK = NULL;
-	vTaskDelete(NULL);
-	// return 0;
-}
-
-uint8_t parse_SMS_data(data_EG91_Receive_SMS *receive_SMS_data)
-{
-
-	data_EG91_Send_SMS sms_Data;
-
-	// if (!strcmp(receive_SMS_data->SMS_Status, "REC UNREAD"))
-	// {
-	/* code */
-
-	int strIndex = 0;
-	int count = 0;
-	char payload_phNumber[21];
-
-	char strDate[50];
-	char strHour[20];
-	char year[20];
-	char month[3];
-	char day[3];
-	char hour[3];
-	char minute[3];
-	char payload1[200];
-	char SMS_Status[100];
-
-	char aux_STR_Date[30] = {};
-	char aux_STR_Time[5] = {};
-	memset(aux_STR_Date, 0, sizeof(aux_STR_Date));
-	memset(aux_STR_Time, 0, sizeof(aux_STR_Time));
-	memset(strDate, 0, sizeof(strDate));
-	memset(strHour, 0, sizeof(strHour));
-	memset(year, 0, sizeof(year));
-	memset(month, 0, sizeof(month));
-	memset(day, 0, sizeof(day));
-	memset(hour, 0, sizeof(hour));
-	memset(minute, 0, sizeof(minute));
-	memset(payload1, 0, sizeof(payload1));
-	memset(SMS_Status, 0, sizeof(SMS_Status));
-
-	int aux_year;
-
-	// ////printf("\nSMS_Status1 - %s - %d\n", receive_SMS_data->SMS_Status, strlen(receive_SMS_data->SMS_Status));
-	strIndex = 0;
-
-	for (int i = strlen(receive_SMS_data->receiveData) - 1; i >= 0; i--)
-	{
-		if (receive_SMS_data->receiveData[i] == ' ')
-		{
-			receive_SMS_data->receiveData[i] = 0;
-		}
-		else
-		{
-			break;
-		}
-	}
-	// printf("\n aux_STR_Data ww %s\n", receive_SMS_data->receiveData);
-	//  ////printf("\nstrlen receivedata %d\n", strlen(receive_SMS_data->receiveData));
-	for (int i = 0; i < strlen(receive_SMS_data->receiveData); i++)
-	{
-		if (receive_SMS_data->receiveData[i] == ' ' || i > 20)
-		{
-			payload_phNumber[i] = 0;
-			break;
-		}
-
-		payload_phNumber[i] = receive_SMS_data->receiveData[i];
-		// payload_phNumber[i] = 0;
-	}
-	// ////printf("\nSMS_Status2 - %s - %d\n", receive_SMS_data->SMS_Status, strlen(receive_SMS_data->SMS_Status));
-	count = 0;
-	strIndex = 0;
-
-	for (int i = 0; i < strlen(receive_SMS_data->strDate); i++)
-	{
-		if (receive_SMS_data->strDate[i] == '/')
-		{
-			count++;
-			strIndex = 0;
-		}
-		else
-		{
-			if (count == 0)
-			{
-
-				year[strIndex] = receive_SMS_data->strDate[i];
-				strIndex++;
-				year[strIndex] = 0;
-			}
-			if (count == 1)
-			{
-				if (strIndex < 2)
-				{
-					month[strIndex] = receive_SMS_data->strDate[i];
-					strIndex++;
-					month[strIndex] = 0;
-				}
-			}
-			if (count == 2)
-			{
-				if (strIndex < 2)
-				{
-					day[strIndex] = receive_SMS_data->strDate[i];
-					strIndex++;
-					day[strIndex] = 0;
-				}
-			}
-		}
-		// payload_phNumber[i] = payload1[i];
-	}
-
-	// SMS_Status[strlen(SMS_Status)]=0;
-	// ////printf("\nSMS_Status3 - %s - %d\n", receive_SMS_data->SMS_Status, strlen(receive_SMS_data->SMS_Status));
-
-	year[5] = 0;
-	month[2] = 0;
-	day[2] = 0;
-
-	count = 0;
-	strIndex = 0;
-
-	for (int i = 0; i < strlen(receive_SMS_data->strHour); i++)
-	{
-		if (receive_SMS_data->strHour[i] == ':')
-		{
-			count++;
-			strIndex = 0;
-		}
-		else
-		{
-			if (count == 0)
-			{
-				hour[strIndex] = receive_SMS_data->strHour[i];
-				strIndex++;
-			}
-			if (count == 1)
-			{
-				minute[strIndex] = receive_SMS_data->strHour[i];
-				strIndex++;
-			}
-			if (count == 2)
-			{
-				break;
-			}
-		}
-	}
-
-	if (atoi(year) > 99)
-	{
-		aux_year = atoi(year) - 2000;
-		sprintf(aux_STR_Date, "%d%s%s", aux_year, month, day);
-	}
-	else
-	{
-		sprintf(aux_STR_Date, "%s%s%s", year, month, day);
-	}
-
-	sprintf(aux_STR_Time, "%s%s", hour, minute);
-	// printf("\n aux_STR_Data %s\n", receive_SMS_data->receiveData);
-	//  //printf("\n aux_STR_Time %s\n", receive_SMS_data->SMS_Status);
-
-	hour[2] = 0;
-	minute[2] = 0;
-
-	uint8_t zeroNumber_label = 0;
-
-	// TODO: METER VERIFICAÇÃO DA HORA COM A INTEGRAÇÃO DO RTC
-
-	char *rsp = NULL;
-	char *SMS_InputData = NULL;
-
-	if (/* abs(atoi(aux_STR_Time) - nowTime.time) < 2 && (atoi(aux_STR_Date) == nowTime.date) */ /*  &&*/ (!strcmp(SMS_UNREAD, receive_SMS_data->SMS_Status) || lost_SMS_addUser.flag_Lost_SMS_Add_User == 1))
-	{
-		char SMS_number[100] = {};
-		sprintf(SMS_number, "%s", receive_SMS_data->phNumber);
-
-		// printf("\n\nowner phone22 %s\n - %s\n - \n\n", receive_SMS_data->phNumber, receive_SMS_data->receiveData);
-
-		sprintf(receive_SMS_data->phNumber, "%s", check_IF_haveCountryCode(receive_SMS_data->phNumber, 0));
-
-		// //printf("phNumber %s\n", receive_SMS_data->phNumber);
-		sprintf(payload_phNumber, "%s", check_IF_haveCountryCode(payload_phNumber, 0));
-
-		uint8_t verification_SMS_CALL = get_INT8_Data_From_Storage(NVS_SMS_CALL_VERIFICATION, nvs_System_handle);
-
-		if (verification_SMS_CALL == 255)
-		{
-			save_INT8_Data_In_Storage(NVS_SMS_CALL_VERIFICATION, 0, nvs_System_handle);
-			verification_SMS_CALL = 0;
-		}
-
-		if (strlen(receive_SMS_data->receiveData) > 1)
-		{
-
-			if (!strcmp(receive_SMS_data->phNumber, payload_phNumber) || lost_SMS_addUser.flag_Lost_SMS_Add_User == 1 || verification_SMS_CALL == 1 || verification_SMS_CALL == 4)
-			{
-				// //printf("\n  payload phnumber sms 999 %s \n", lost_SMS_addUser.phone);
-				// //printf("\nreceiveData[strlen = %c\n", receive_SMS_data->receiveData[strlen(receive_SMS_data->receiveData) - 2]);
-				sms_Data.labelRsp = 0;
-
-				for (size_t i = strlen(receive_SMS_data->receiveData) - 1; i > 0; i--)
-				{
-					if (receive_SMS_data->receiveData[i] == '.')
-					{
-						break;
-					}
-
-					if (receive_SMS_data->receiveData[i] == '?')
-					{
-						receive_SMS_data->receiveData[i] = 0;
-						sms_Data.labelRsp = 1;
-
-						for (size_t j = strlen(receive_SMS_data->receiveData) - 1; j > 0; j--)
-						{
-							if (receive_SMS_data->receiveData[j] == ' ')
-							{
-								receive_SMS_data->receiveData[j] = 0;
-							}
-							else
-							{
-								break;
-							}
-						}
-
-						break;
-					}
-				}
-
-				// TODO: DESCOMENTAR SE NAO FUNCIONAR
-				sprintf(sms_Data.phoneNumber, "%s", SMS_number);
-
-				if (lost_SMS_addUser.flag_Lost_SMS_Add_User == 1)
-				{
-					if ((lost_SMS_addUser.phone[0] == '0') && lost_SMS_addUser.phone[1] != '0')
-					{
-
-						// //printf("\n  payload phnumber sms 33 %s \n", lost_SMS_addUser.phone);
-						for (size_t i = 1; i < strlen(lost_SMS_addUser.phone); i++)
-						{
-							lost_SMS_addUser.phone[i - 1] = lost_SMS_addUser.phone[i];
-						}
-
-						lost_SMS_addUser.phone[strlen(lost_SMS_addUser.phone) - 1] = 0;
-					}
-
-					sprintf(lost_SMS_addUser.phone, "%s", check_IF_haveCountryCode(lost_SMS_addUser.phone, 0));
-					// //printf("receive data 12 lost %s - %s\n", lost_SMS_addUser.phone, receive_SMS_data->phNumber);
-					//  ////printf("\n323232 phnumber sms %s \n", receive_SMS_data->phNumber);
-					//  TODO: ALTERAR NO CODIGO DO 4G
-					if (!strcmp(receive_SMS_data->phNumber /* sms_Data.phoneNumber */, lost_SMS_addUser.phone) || verification_SMS_CALL == 1 || verification_SMS_CALL == 4)
-					{
-						// //printf("receive data 155 LOSTlost %s\n", lost_SMS_addUser.phone);
-						asprintf(&SMS_InputData, "%s", lost_SMS_addUser.payload);
-						// ////printf("\n\n lost_SMS_addUser.phone %s\n\n", lost_SMS_addUser.phone);
-						sprintf(sms_Data.phoneNumber, "%s", SMS_number /* lost_SMS_addUser.phone */);
-					}
-
-					lost_SMS_addUser.flag_Lost_SMS_Add_User = 0;
-
-					// //printf("\n\n lost_SMS_addUser.phone sms_Data %s\n\n", SMS_InputData);
-				}
-				else
-				{
-
-					asprintf(&SMS_InputData, "%s", receive_SMS_data->receiveData);
-					sprintf(sms_Data.phoneNumber, "%s", SMS_number /* receive_SMS_data->phNumber */);
-				}
-
-				/*memset(&rsp, 0, sizeof(rsp));*/
-				// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-				// //printf("receive data 155 LOSTlost 4132 %s\n", SMS_InputData);
-				mqtt_information mqttInfo;
-				rsp = parseInputData((uint8_t *)SMS_InputData, SMS_INDICATION, NULL, NULL, NULL, &sms_Data, &mqttInfo);
-
-				// ////printf("\n\n SMS SMS_InputData %s\n\n", SMS_InputData);
-				// ////printf("\n\n rsp rsp %s\n\n", rsp);
-				//   //////printf("\n\n SMS RSP %s\n\n",rsp);
-
-				// //printf("\n\n SMS RSP11 %s\n\n", rsp);
-
-				if (sms_Data.labelRsp == 1 && strcmp(rsp, "NTRSP") /*&&  !strcmp(receive_SMS_data->SMS_Status, "REC UNREAD") */)
-				{
-					sprintf(sms_Data.payload, "%s", rsp);
-					xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
-				}
-				else
-				{
-					// ////printf("\n\n SMS RSP777\n\n");
-					if (strcmp(rsp, "NTRSP"))
-					{
-						// ////printf("\n\n rsp verify_SMS_List 11\n\n");
-						xSemaphoreGive(rdySem_Control_Send_AT_Command);
-						xSemaphoreGive(rdySem_Control_SMS_Task);
-						// verify_SMS_List();
-					}
-					else
-					{
-						xSemaphoreGive(rdySem_Control_SMS_Task);
-					}
-
-					// xSemaphoreGive(rdySem_Lost_SMS);
-					// xSemaphoreGive(rdySem_Control_SMS_Task);
-				}
-			}
-			else
-			{
-				xSemaphoreGive(rdySem_Control_SMS_Task);
-			}
-		}
-	}
-
-	// //printf("\n\n SMS RSP333\n\n");
-	/*
-
-
-
-	 //////printf("\n\n SMS RSP222\n\n");
-	 free(rsp);
-
-	 free(SMS_InputData);*/
-	// //printf("\n\n SMS RSP444\n\n");
-	xSemaphoreGive(rdySem_Control_SMS_Task);
-	free(rsp);
-	// //printf("\n\n SMS RSP444\n\n");
-	free(SMS_InputData);
-	// ESP_LOGI("TAG", "xPortGetFreeHeapSize  parseInputData2222: %d", xPortGetFreeHeapSize());
-	// ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
-	// ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-	// ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-	//  }
-	return 1;
-}
-
 void give_rdySem_Control_SMS_Task()
 {
 	xSemaphoreGive(rdySem_Control_SMS_Task);
-}
-
-uint8_t parse_SMS(char *payload)
-{
-	char atCommand[50];
-
-	char *str = strtok(payload, (const char *)",");
-	str = strtok((char *)NULL, (const char *)"\r");
-	uint8_t msgCounter = atoi(str);
-
-	/*     ////printf("\n\nstrtok sms after11\n\n");
-
-		//ESP_LOGI("TAG", "xPortGetFreeHeapSize  parseInputData1111: %d", xPortGetFreeHeapSize());
-		//ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
-		//ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
-		//ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-
-		//////printf("\n\nstrtok sms after22\n\n"); */
-
-	// while (msgCounter >= 0)
-	// {
-	// xSemaphoreTake(rdySem_Control_SMS_Task, pdMS_TO_TICKS(60000));
-	// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	// EG91_send_AT_Command("ATE1", "OK", 1000);
-
-	get_RTC_System_Time();
-	// ////printf("parse_SMS number %d", atoi(str));
-
-	// EG91_send_AT_Command("ATE1", "OK", 1500);
-	EG91_send_AT_Command("AT+CSCS=\"UCS2\"", "OK", 1000);
-
-	EG91_send_AT_Command("AT+CMGF=1", "OK", 1000);
-	// EG91_send_AT_Command("AT+CSDH=1", "OK", 1000);
-
-	// vTaskSuspend(handle_SEND_SMS_TASK);
-
-	sprintf(atCommand, "%s%d", "AT+CMGR=", msgCounter);
-	EG91_send_AT_Command(atCommand, "+CMGR", 1000);
-	// ////printf("\nafter CMGR\n");
-	memset(atCommand, 0, sizeof(atCommand));
-	// ////printf("\n\nCMGD == 22\n\n");
-	sprintf(atCommand, "%s%d,0", "AT+CMGD=", msgCounter);
-
-	EG91_send_AT_Command(atCommand, "OK", 1000);
-
-	// TODO: UNCOMMENT IF NOT WORK
-	xSemaphoreGive(rdySem_Control_Send_AT_Command);
-
-	if (msgCounter > 25)
-	{
-		EG91_send_AT_Command("AT+CMGD=1,4", "OK", 1000);
-		EG91_send_AT_Command("AT+CMGD=4", "OK", 1000);
-	}
-	// ////printf("\nparse_SMS number 13\n");
-	//   verify_SMS_List();
-	//  free(str);
-	//  xSemaphoreGive(rdySem_Control_SMS_Task);
-	return 1;
-}
-
-int8_t parse_Call(uint8_t state)
-{
-
-	char AT_Command[100];
-	uint8_t counterACK = 3;
-	char dtmp1[BUFF_SIZE];
-	int8_t ACK = 0;
-	sprintf(AT_Command, "%s%c", "AT+CLCC", 13);
-
-	// ////printf("\nAT COMMAND parse_Call = %s\n", AT_Command);
-	//   esp_task_wdt_init(10, true);
-
-	if (state == INCOMING_CALL_STATE)
-	{
-		// ////printf("\nAT COMMAND parse_Call = %s\n", AT_Command);
-		while (counterACK > 0)
-		{
-
-			memset(dtmp1, 0, sizeof(dtmp1));
-			// EG91_send_AT_Command(AT_Command, "CLCC", 1500);
-			uart_write_bytes(UART_NUM_1, AT_Command, strlen(AT_Command));
-			// EG91_send_AT_Command(AT_Command, "CLCC", 1000);
-			xQueueReceive(EG91_CALL_CLCC_UART_queue, dtmp1, pdMS_TO_TICKS(1500)); //(TickType_t)(time /  portTICK_PERIOD_MS)
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			// ////printf("\nAT_Command_Feedback_queue_CLCC = %s\n", dtmp1);
-			// system_stack_high_water_mark("parse call1");
-			ACK = parse_IncomingCall_Payload(&dtmp1);
-			if (ACK == 1)
-			{
-				// free(rsp);
-				//  free(&dtmp1);
-				// ////printf("\n parse data %d\n", 1);
-
-				// ////printf("\n parse data %d\n", 2);
-				memset(dtmp1, 0, sizeof(dtmp1));
-
-				// xQueueReset(AT_Command_Feedback_queue);
-				// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-				// vTaskResume(handle_SEND_SMS_TASK);
-				return 1;
-			}
-			else if (ACK == 255)
-			{
-				// vTaskResume(handle_SMS_TASK);
-				break;
-			}
-
-			else
-			{
-				memset(dtmp1, 0, sizeof(dtmp1));
-				counterACK--;
-			}
-			memset(dtmp1, 0, sizeof(dtmp1));
-			vTaskDelay(pdMS_TO_TICKS((1000)));
-		}
-
-		// EG91_send_AT_Command("AT+CLCC", "CLCC", 5000);
-
-		// EG91_send_AT_Command("AT+QHUP=16", "OK", 500);
-		// incomingCall_Label = 0;
-		// vTaskResume(handle_SEND_SMS_TASK);
-		return 0;
-	}
-
-	if (state == CALL_STATE)
-	{
-		memset(dtmp1, 0, sizeof(dtmp1));
-		uart_write_bytes(UART_NUM_1, AT_Command, strlen(AT_Command));
-		xQueueReceive(EG91_CALL_CLCC_UART_queue, dtmp1, pdMS_TO_TICKS(1500)); //(TickType_t)(time / portTICK_PERIOD_MS)
-		// ////printf("\nAT_Command_Feedback_queue_CLCC = %s\n", dtmp1);
-		return parse_IncomingCall_Payload(&dtmp1);
-	}
-
-	return -1;
 }
 
 void giveSem_CtrIncomingCall()
@@ -5778,73 +3239,10 @@ void giveSem_CtrIncomingCall()
 	xSemaphoreGive(rdySem_Control_IncomingCALL);
 }
 
-uint8_t parseCHUP(char *payload)
-{
-	char AT_Command[300];
-	uint8_t counterACK = 3;
-	char dtmp1[BUFF_SIZE];
-	sprintf(AT_Command, "%s%c", payload, 13);
-
-	// ////printf("\nAT COMMAND parse_IncomingCall = %s\n", AT_Command);
-	//   vTaskDelay(pdMS_TO_TICKS(1000));
-	while (counterACK > 0)
-	{
-		memset(dtmp1, 0, sizeof(dtmp1));
-
-		// if (rele1_Mode_Label == 0)
-		// {
-
-		//     xSemaphoreTake(rdySem_Control_IncomingCALL, (portTickType)portMAX_DELAY);
-		// }
-
-		uart_write_bytes(UART_NUM_1, AT_Command, strlen(AT_Command));
-		xQueueReceive(EG91_CALL_CHUP_UART_queue, dtmp1, pdMS_TO_TICKS(1500)); //(TickType_t)(time / portTICK_PERIOD_MS)
-		// ////printf("\nAT_Command_Feedback_queue_CLCC = %s\n", dtmp1);
-
-		if (EG91_Parse_ReceiveData(dtmp1, "OK"))
-		{
-			// free(rsp);
-			//  free(&dtmp1);
-			// ////printf("\n parse data %d\n", 1);
-
-			// ////printf("\n parse data %d\n", 2);
-			memset(dtmp1, 0, sizeof(dtmp1));
-			// xQueueReset(AT_Command_Feedback_queue);
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			return 1;
-		}
-		else
-		{
-			memset(dtmp1, 0, sizeof(dtmp1));
-			counterACK--;
-		}
-		memset(dtmp1, 0, sizeof(dtmp1));
-		vTaskDelay(pdMS_TO_TICKS((1000)));
-	}
-	return 0;
-}
-
-uint8_t EG91_Call_PHONE(char *phNumber)
-{
-
-	char AT_CMD[BUFF_SIZE];
-
-	sprintf(AT_CMD, "%s%s", ATD, phNumber);
-
-	EG91_send_AT_Command(AT_CMD, "OK", 500);
-	vTaskDelay(pdMS_TO_TICKS((20000)));
-	EG91_send_AT_Command("AT+CLCC", "CLCC", 500);
-	vTaskDelay(pdMS_TO_TICKS((6000)));
-	EG91_send_AT_Command("AT+QHUP=21", "OK", 500);
-	vTaskDelay(pdMS_TO_TICKS((2000)));
-
-	return 1;
-}
-
 int u8_wc_toutf8(char *dest, u_int32_t ch)
 {
 
-	// ////printf("\n\n ch - %d - %x", ch, ch);
+	// printf("\n\n ch - %d - %x", ch, ch);
 	if (ch < 0x80)
 	{
 		dest[0] = (char)ch;
@@ -5881,7 +3279,7 @@ int u8_wc_toutf8(char *dest, u_int32_t ch)
 int conv_utf8_to_ucs2(const char *src, size_t len)
 {
 	iconv_t cb = iconv_open("UTF-16", "UTF-8");
-	// ////printf("inRemains outRemains\n");
+	// printf("inRemains outRemains\n");
 	if (cb == (iconv_t)(-1))
 		return 0;
 
@@ -5890,20 +3288,20 @@ int conv_utf8_to_ucs2(const char *src, size_t len)
 	size_t inRemains = len;
 	size_t outRemains = len * sizeof(uint16_t);
 
-	// ////printf("inRemains:%d outRemains:%d\n", (int)inRemains, (int)outRemains);
+	// printf("inRemains:%d outRemains:%d\n", (int)inRemains, (int)outRemains);
 
 	size_t cvtlen = iconv(cb, (char **)&src, (size_t *)&inRemains, (char **)&pout, (size_t *)&outRemains);
 	if (cvtlen == (size_t)-1)
 	{
-		// ////printf("error:%s, %d\n", strerror(errno), errno);
+		// printf("error:%s, %d\n", strerror(errno), errno);
 		goto out;
 	}
 	*pout = 0;
 
-	// ////printf("inRemains:%d outRemains:%d cvtlen:%d\n", (int)inRemains, (int)outRemains, (int)cvtlen);
+	// printf("inRemains:%d outRemains:%d cvtlen:%d\n", (int)inRemains, (int)outRemains, (int)cvtlen);
 
 	/*   for (int i = 0; (i < len) && outBuff[i]; i++)
-		  ////printf("0x%04x\n", (int)outBuff[i]); */
+		  printf("0x%04x\n", (int)outBuff[i]); */
 
 out:
 	// if(outBuff)
@@ -5911,163 +3309,6 @@ out:
 	iconv_close(cb);
 
 	return 0;
-}
-
-uint8_t EG91_Send_SMS(char *phNumber, char *text)
-{
-	char SMS_text[BUFF_SIZE] = {};
-	char SMS_phoneNumber[100] = {};
-	uint8_t TimeOut = 5;
-
-	char buffer[4];
-
-	// ////printf("\n\n , hex = %0x\n\n", ',');
-
-	utf8_encode(&buffer, (rune_t)'‚');
-
-	char *line, *u8s;
-	unsigned int *wcs;
-	int len;
-	char x[strlen(phNumber) * 4];
-	char y[strlen(text) * 4];
-
-	memset(x, 0, strlen(phNumber) * 4);
-
-	int length = 0;
-	int length_aux = utf8_string_length((utf8_string)phNumber);
-	utf16_string utf16_phNumber = utf8_to_utf16((utf16_string)phNumber);
-
-	length = 0;
-
-	int count = 0;
-	while (1)
-	{
-
-		if (utf16_phNumber[count] == '\0')
-		{
-			break;
-		}
-
-		length += sprintf(x + length, "%04X", (utf16_phNumber[count++]));
-	}
-
-	for (size_t i = 0; i < length; ++i)
-	{
-		// ////printf("%04x", (int)x[i]);
-	}
-
-	sprintf(SMS_phoneNumber, "%s%s%c%c", "AT+CMGS=\"", x, '\"', 13);
-
-	length = 0;
-
-	len = strlen(text);
-
-	length_aux = utf8_string_length((utf8_string)text);
-	utf16_string utf16_text = utf8_to_utf16((utf16_string)text);
-	// ////printf("encode utf8 string codes: \n");
-	// ////printf("\n\nX send sms number:\n%s\n\n", x);
-	utf16_t x1[300];
-
-	length = 0;
-	// length_aux = utf8_string_length((utf8_string)utf16_text);
-
-	/* if ((u_int32_t)(text[i]) < 128)
-	{ */
-	count = 0;
-	while (1)
-	{
-
-		if (utf16_text[count] == '\0')
-		{
-			break;
-		}
-
-		length += sprintf(y + length, "%04X", utf16_text[count++]);
-	}
-
-	// utf8_to_utf16((utf8_t)y, strlen(y), x1, 300);
-
-	sprintf(SMS_text, "%s", y);
-
-	// ////printf("\n\n strlen SIM BALANCE 33 - %d\n\n", (strlen(y) - (strlen("AT+CMGS=\"") * 4) - 4));
-	strcat(SMS_text, "$\0");
-
-	strcat(SMS_text, SMS_phoneNumber);
-
-	EG91_send_AT_Command("AT+CMGF=1", "OK", 1500);
-	// vTaskDelay(pdMS_TO_TICKS((1000)));
-
-	// vTaskDelay(pdMS_TO_TICKS((1000)));
-	// EG91_send_AT_Command("AT+CSCS=\"UCS2\"", "OK", 1000);
-
-	EG91_send_AT_Command("AT+CSMP=49,167,0,25", "OK", 1000);
-
-	// timer_pause(TIMER_GROUP_1, TIMER_0);
-	// vTaskSuspend(xHandle_Timer_VerSystem);
-
-	// TODO: COMENTAR O GIVE EM BAIXO SE NAO FUNCIONAR!!
-
-	xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	if (EG91_send_AT_Command(SMS_text, "CMGS:" /* "+CMGS:" */, 10000))
-	{
-
-		// ////printf("\n\n rsp verify_SMS_List 22\n\n");
-		EG91_send_AT_Command("ATE1", "OK", 1000);
-		// ////printf("\n\n rsp verify_SMS_List 22\n\n");
-		//  xSemaphoreGive(rdySem_Control_Send_AT_Command);
-		// verify_SMS_List();
-		free(utf16_text);
-		free(utf16_phNumber);
-		/* vTaskResume(xHandle_Timer_VerSystem);
-		timer_start(TIMER_GROUP_1, TIMER_0); */
-		// EG91_send_AT_Command("ATS7=0", "OK", 1500);
-		//  EG91_send_AT_Command("ATS7=0", "OK", 10000);
-		//  xSemaphoreGive(rdySem_Lost_SMS);
-		return 1;
-	}
-	else
-	{
-		// ////printf("\n SMS SEND FAIL\n");
-		TimeOut--;
-		// vTaskDelay(pdMS_TO_TICKS(2000));
-	}
-	// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-	free(utf16_phNumber);
-	free(utf16_text);
-	// verify_SMS_List();
-	//  EG91_send_AT_Command("ATS7=0", "OK", 1500);
-	// vTaskResume(xHandle_Timer_VerSystem);
-	// timer_start(TIMER_GROUP_1, TIMER_0);
-	/* }
-	else
-	{
-		TimeOut--;
-		vTaskDelay(pdMS_TO_TICKS(500));
-	} */
-	//}
-	//  vTaskDelay(pdMS_TO_TICKS((700)));
-
-	// uart_write_bytes(UART_NUM_1, SMS_text, strlen(SMS_text));
-	// EG91_send_AT_Command("ATE1", "OK", 1000);
-	// EG91_send_AT_Command("ATS7=0", "OK", 1000);
-	return 0;
-}
-
-void task_EG91_Verify_Unread_SMS(void *pvParameter)
-{
-	char dtmp[BUF_SIZE];
-	for (;;)
-	{
-		if (xQueueReceive(Lost_SMS_queue, &dtmp, portMAX_DELAY))
-		{
-
-			// ////printf("\ntask_Verify_Unread_SMS - %s\n", dtmp);
-			//  xSemaphoreTake(rdySem_Lost_SMS, pdMS_TO_TICKS(40000));
-			//  xSemaphoreGive(rdySem_Control_Send_AT_Command);
-			parse_SMS_List(dtmp);
-			// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-		}
-	}
 }
 
 static const char *TAG = "uart_events";
@@ -6081,14 +3322,14 @@ uint8_t parse_Incoming_UDP_data(char *mqtt_data)
 	uint8_t aux_count = 0;
 	int strIndex = 0;
 
-	// ////printf("\n\n sizeof(mqtt_data) -%s -> %d\n\n", mqtt_data, strlen(mqtt_data));
+	printf("\n\n sizeof(mqtt_data) -%s -> %d\n\n", mqtt_data, strlen(mqtt_data));
 	for (size_t i = 0; i < strlen(mqtt_data); i++)
 	{
 		if (mqtt_data[i] == '"')
 		{
 			count++;
 			strIndex = 0;
-			// ////printf("\n\n incoming data count - %d\n\n", count);
+			// printf("\n\n incoming data count - %d\n\n", count);
 		}
 		else if (count == 1)
 		{
@@ -6114,7 +3355,7 @@ uint8_t parse_Incoming_UDP_data(char *mqtt_data)
 		length++;
 	} */
 
-	// printf("\n\n receive_UDP_data 1234 - %s -> %s\n\n", mqtt_topic, receive_UDP_data);
+	printf("\n\n receive_UDP_data 1234 - %s -> %s\n\n", mqtt_topic, receive_UDP_data);
 
 	// receive_UDP_data[strlen(receive_UDP_data) - 1] = 0;
 
@@ -6131,14 +3372,49 @@ uint8_t parse_Incoming_UDP_data(char *mqtt_data)
 
 		remove_padding(decrypted, strlen((char *)decrypted));
 
-		// ////printf("Dados descriptografados: %s - %d\n", decrypted, strlen((char *)decrypted));
+		// printf("Dados descriptografados: %s - %d\n", decrypted, strlen((char *)decrypted));
 		mqtt_information mqttInfo;
 		sprintf(mqttInfo.topic, "%s", mqtt_topic);
+
+		uint8_t stringIndex = 0;
+		uint8_t count = 0;
+		char input_Payload[200] = {};
+
+		/* if (!strcmp("ME.R.K", decrypted))
+		{
+			// ////printf("\n\nENTER CHANGE OWNER PASSWORD\n\n");
+
+			for (size_t i = 0; i < strlen(decrypted); i++)
+			{
+				if (decrypted[i] == ' ')
+				{
+					count++;
+					stringIndex = 0;
+				}
+				else
+				{
+
+					if (count == 1)
+					{
+						memcpy(input_Payload + stringIndex, decrypted + i, 1);
+						stringIndex++;
+					}
+				}
+			}
+			// system_stack_high_water_mark("parse sms 12");
+			//  ////printf("\n\n\n sms input payload - %s\n\n", input_Payload);
+
+			xSemaphoreGive(rdySem_Control_Send_AT_Command);
+			//reset_Owner_password(input_Payload, &sms_Data);
+			xSemaphoreGive(rdySem_Control_SMS_Task);
+
+			return "NTRSP";
+		} */
 
 		// printf("\n\n receive_UDP_data 9876 - %s -> %s\n\n", mqtt_topic, decrypted);
 		output_Data = parseInputData(decrypted, UDP_INDICATION, NULL, NULL, NULL, NULL, &mqttInfo);
 
-		// printf("\n\noutput_Data UDP - %s\n\n", output_Data);
+		printf("\n\noutput_Data UDP - %s\n\n", output_Data);
 
 		if (strstr("NTRSP", output_Data) == NULL)
 		{
@@ -6151,9 +3427,9 @@ uint8_t parse_Incoming_UDP_data(char *mqtt_data)
 		free(output_Data);
 	}
 
-	// sprintf(receive_UDP_AT, "%s%d", "AT+QIRD=", connectionID);
+	// //sprintf(receive_UDP_AT, "%s%d", "AT+QIRD=", connectionID);
 
-	// ////printf("\n\n AT+QIRD - %s\n\n", receive_UDP_data);
+	// printf("\n\n AT+QIRD - %s\n\n", receive_UDP_data);
 	//  EG91_send_AT_Command(receive_UDP_AT, "+QIRD", 3000);
 
 	return 1;
@@ -6181,7 +3457,7 @@ uint8_t parse_qmtstat(char *stat_receiveData)
 		updateSystemTimer(SYSTEM_TIMER_ALARM_STATE);
 	}
 
-	// ////printf("\n\n erro_qmtstat = %d\n\n", erro_qmtstat);
+	// printf("\n\n erro_qmtstat = %d\n\n", erro_qmtstat);
 
 	return erro_qmtstat;
 }
@@ -6212,7 +3488,7 @@ int encontrarSubstring(const char *str, const char *subStr)
 
 void task_EG91_Receive_UDP(void *pvParameter)
 {
-	char mqtt_receiveData[1024];
+	char mqtt_receiveData[1024] = {};
 	char connectID[2] = {};
 	char mqttData[200] = {};
 	int count = 0;
@@ -6225,7 +3501,7 @@ void task_EG91_Receive_UDP(void *pvParameter)
 		{
 			/* timer_pause(TIMER_GROUP_1, TIMER_0);
 			 vTaskSuspend(xHandle_Timer_VerSystem);
-	xSemaphoreGive(rdySem_Control_Send_AT_Command); */
+			xSemaphoreGive(rdySem_Control_Send_AT_Command); */
 			save_INT8_Data_In_Storage(NVS_QMT_LARGE_DATA_TIMER_LABEL, 1, nvs_System_handle);
 			memset(connectID, 0, sizeof(connectID));
 			memset(mqttData, 0, sizeof(mqttData));
@@ -6234,10 +3510,10 @@ void task_EG91_Receive_UDP(void *pvParameter)
 			{
 				if (encontrarSubstring(mqtt_receiveData, "+QMTSTAT:") != -1 /* && !strstr("QIURC", mqtt_receiveData) */)
 				{
-					// ////printf("\n\n QMTSTAT:\n\n");
+					// printf("\n\n QMTSTAT:\n\n");
 					/* if (label_Reset_Password_OR_System == 2)
 					{ */
-					// ////printf("\n\n qmtstat -> %d\n\n", get_INT8_Data_From_Storage(NVS_QMTSTAT_LABEL, nvs_System_handle));
+					// printf("\n\n qmtstat -> %d\n\n", get_INT8_Data_From_Storage(NVS_QMTSTAT_LABEL, nvs_System_handle));
 					save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, parse_qmtstat(mqtt_receiveData), nvs_System_handle);
 					/* } */
 				}
@@ -6248,7 +3524,7 @@ void task_EG91_Receive_UDP(void *pvParameter)
 
 			if (encontrarSubstring(mqtt_receiveData, "RECV") != -1)
 			{
-				// ////printf("\n\nreceive UDP 2222 - %s\n\n", mqttData);
+				// printf("\n\nreceive UDP 2222 - %s\n\n", mqttData);
 				xSemaphoreGive(rdySem_Control_Send_AT_Command);
 				parse_Incoming_UDP_data(mqtt_receiveData);
 			}
@@ -6256,7 +3532,7 @@ void task_EG91_Receive_UDP(void *pvParameter)
 			{
 				if (gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
 				{
-					if (label_Reset_Password_OR_System == 2)
+					if (label_Reset_Password_OR_System == 5)
 					{
 						activateUDP_network();
 					}
@@ -6296,7 +3572,7 @@ uint8_t parse_verify_mqtt_conection(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\n ret_code = %c / result = %c / data - %s\n\n", ret_code, result, receiveData);
+	// printf("\n\n ret_code = %c / result = %c / data - %s\n\n", ret_code, result, receiveData);
 
 	if (ret_code == '0' && result == '0')
 	{
@@ -6325,7 +3601,7 @@ uint8_t parse_verify_mqtt_open(char *receiveData)
 		}
 	}
 
-	// ////printf("\n\nopen_verify %c \n\n", open_verify);
+	// printf("\n\nopen_verify %c \n\n", open_verify);
 
 	if ((open_verify == '0' || open_verify == '2') && counter != 0)
 	{
@@ -6361,7 +3637,7 @@ static void uart_event_task(void *pvParameters)
 		if (xQueueReceive(uart0_queue, (void *)&event, portMAX_DELAY))
 		{
 			// xSemaphoreTake(rdySem_UART_CTR, 500 / portTICK_RATE_MS);
-			// ////printf("\n!!!!!! read rsp bb !!!!!\n");
+			//printf("\n!!!!!! read rsp bb !!!!!\n");
 
 			bzero(dtmp, 600);
 			//  //ESP_LOGI(TAG, "uart[%d] event:", UART_NUM_1);
@@ -6377,37 +3653,18 @@ static void uart_event_task(void *pvParameters)
 				vTaskDelay(100 / portTICK_PERIOD_MS); // 10 msec sleep
 				memset(dtmp, 0, sizeof(dtmp));
 				uart_get_buffered_data_len(UART_NUM_1, (size_t *)&ring_buff_len);
-				// ////printf("\nread rsp aa %d\n", ring_buff_len);
+				// printf("\nread rsp aa %d\n", ring_buff_len);
 				len = uart_read_bytes(UART_NUM_1, dtmp, /* 1024 */ ring_buff_len, 0);
 
 				// xQueueReset(uart0_queue);
-				//    ////printf("\nring_buff_len %d - len %d\n", ring_buff_len,len);
-				//printf("\nBUFFER UART : %s\n", dtmp);
+				printf("\nring_buff_len %d - len %d\n", ring_buff_len, len);
+				printf("\nBUFFER UART : %s\n", dtmp);
 				//  xQueueOverwrite(AT_Command_Feedback_queue,&dtmp);
-				// //printf("\n%s\n", dtmp);
+				// printf("\n%s\n", dtmp);
 				if (/* ring_buff_len > */ 1)
 				{
-					if ((strstr(dtmp, "RING")) != NULL)
-					{
-						// ////printf("\nBUFFER UART RING 11: %s\n", dtmp);
-						//  eTaskState incomingCall__task_status;
 
-						if (aux_label_inCall == 0)
-						{
-							aux_label_inCall = 1;
-							//printf("\nBUFFER UART RING 22: %s\n", dtmp);
-							//   vTaskSuspend(handle_SMS_TASK);
-							//   vTaskSuspend(handle_SEND_SMS_TASK);
-							//  ////printf("\ndtmp ring\n%s\n", dtmp);
-							xTaskCreate(task_EG91_Run_IncomingCall, "task_EG91_Run_IncomingCall", 10 * 1024, NULL, 25, &handle_INCOMING_CALL_TASK);
-							// incomingCall_Label++;
-						}
-
-						break;
-						//}AT_CUSD_Command
-					}
-
-					else if (strstr(dtmp, "CLCC") || (strstr(dtmp, "CMTI")) || /* strstr(dtmp, "AT") || */ /* strstr(dtmp, "+CMGS:") */ /* || */ strstr(dtmp, "CUSD:") || strstr(dtmp, "CME ERROR") || strstr(dtmp, "+QMTRECV:") || send_ATCommand_Label == 1 || strstr(dtmp, "+QHTTPGET:"))
+					if (strstr(dtmp, "CLCC") || (strstr(dtmp, "CMTI")) || /* strstr(dtmp, "AT") || */ /* strstr(dtmp, "+CMGS:") */ /* || */ strstr(dtmp, "CUSD:") || strstr(dtmp, "CME ERROR") || strstr(dtmp, "+QMTRECV:") || send_ATCommand_Label == 1 || strstr(dtmp, "+QHTTPGET:"))
 					{
 
 						if (AT_Command_Feedback_queue != NULL)
@@ -6433,13 +3690,13 @@ static void uart_event_task(void *pvParameters)
 									CLCC_Data[strIndex++] = dtmp[i];
 								}
 
-								// ////printf("\ndtmp CLCC\n%s\n", CLCC_Data);
+								// printf("\ndtmp CLCC\n%s\n", CLCC_Data);
 
 								if (xQueueSendFromISR(EG91_CALL_CLCC_UART_queue,
 													  (void *)&CLCC_Data,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
-									// ////printf("\n after LOG UART11 FAIL \n");
+									// printf("\n after LOG UART11 FAIL \n");
 								}
 
 								if (xHigherPriorityTaskWoken)
@@ -6457,10 +3714,10 @@ static void uart_event_task(void *pvParameters)
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
 									// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-									// ////printf("\n after LOG UART11 sms FAIL \n");
+									// printf("\n after LOG UART11 sms FAIL \n");
 								}
 
-								// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+								// printf("\n after LOG UART11 sms FAIL 11 \n");
 								if (xHigherPriorityTaskWoken)
 								{
 									/* Actual macro used here is port specific. */
@@ -6470,17 +3727,17 @@ static void uart_event_task(void *pvParameters)
 							else if (strstr(dtmp, "AT+QMTOPEN?") != NULL || strstr(dtmp, "AT+QMTCONN?") != NULL)
 							{
 
-								// ////printf("\n qmtlog uart 2222 \n");
+								// printf("\n qmtlog uart 2222 \n");
 
 								if (xQueueSendFromISR(AT_Command_Feedback_queue,
 													  (void *)&dtmp,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
 									// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-									// ////printf("\n after LOG UART11 sms FAIL \n");
+									// printf("\n after LOG UART11 sms FAIL \n");
 								}
 
-								// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+								// printf("\n after LOG UART11 sms FAIL 11 \n");
 								if (xHigherPriorityTaskWoken)
 								{
 									/* Actual macro used here is port specific. */
@@ -6489,23 +3746,23 @@ static void uart_event_task(void *pvParameters)
 							}
 							else if (/* (strstr(dtmp, "AT+QMTOPEN")) || strstr(dtmp, "AT+QMTCONN") ||  */ strstr(dtmp, "AT+QMTPUBEX") || strstr(dtmp, "AT+QMTSUB"))
 							{
-								// ////printf("\n\n +++QMT+++\n\n");
+								// printf("\n\n +++QMT+++\n\n");
 
 								if (strstr(dtmp, "+QMTPUBEX:"))
 								{
 									uint8_t UDP_data_count = 0;
 									int index_Found = -1;
 									uint8_t strIndex = 0;
-									// ////printf("\n UDP_data_count - %d \n", UDP_data_count);
+									// printf("\n UDP_data_count - %d \n", UDP_data_count);
 									index_Found = strpos(dtmp, "+QMTPUBEX:");
 									memset(mqtt_data, 0, sizeof(mqtt_data));
-									// ////printf("\n\n +QMT5555+++\n\n");
+									// printf("\n\n +QMT5555+++\n\n");
 									for (size_t i = index_Found; i < strlen(dtmp); i++)
 									{
 
 										if (dtmp[i] == '\r' || dtmp[i] == '\n')
 										{
-											// ////printf("\n +QMTPUBEX: %d \n", UDP_data_count);
+											// printf("\n +QMTPUBEX: %d \n", UDP_data_count);
 											UDP_data_count++;
 										}
 
@@ -6517,22 +3774,22 @@ static void uart_event_task(void *pvParameters)
 										mqtt_data[strIndex++] = dtmp[i];
 									}
 
-									// ////printf("\n\nUDP DATA qmtcon - %s\n\n", mqtt_data);
+									// printf("\n\nUDP DATA qmtcon - %s\n\n", mqtt_data);
 									if (xQueueSendFromISR(AT_Command_Feedback_queue,
 														  (void *)&mqtt_data,
 														  xHigherPriorityTaskWoken) != pdPASS)
 									{
 										// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-										// ////printf("\n after LOG UART11 sms FAIL \n");
+										// printf("\n after LOG UART11 sms FAIL \n");
 									}
 
-									// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+									// printf("\n after LOG UART11 sms FAIL 11 \n");
 									if (xHigherPriorityTaskWoken)
 									{
 										/* Actual macro used here is port specific. */
 										portYIELD_FROM_ISR();
 									}
-									// ////printf("\n after LOG UART11 sms FAIL 22 \n");
+									// printf("\n after LOG UART11 sms FAIL 22 \n");
 								}
 
 								// continue;
@@ -6544,7 +3801,7 @@ static void uart_event_task(void *pvParameters)
 													  (void *)&dtmp,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
-									// ////printf("\n after LOG UART11 FAIL \n");
+									// printf("\n after LOG UART11 FAIL \n");
 								}
 
 								if (xHigherPriorityTaskWoken)
@@ -6560,12 +3817,12 @@ static void uart_event_task(void *pvParameters)
 							else if (send_ATCommand_Label == 1)
 							{
 
-								// ////printf("\ndtmp AT\n%s\n", dtmp);
+								// printf("\ndtmp AT\n%s\n", dtmp);
 								if (xQueueSendFromISR(AT_Command_Feedback_queue,
 													  (void *)&dtmp,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
-									// ////printf("\n after LOG UART11 FAIL \n");
+									// printf("\n after LOG UART11 FAIL \n");
 								}
 								// xSemaphoreGiveFromISR(rdySem_Control_Send_AT_Command, xHigherPriorityTaskWoken);
 								if (xHigherPriorityTaskWoken)
@@ -6582,15 +3839,16 @@ static void uart_event_task(void *pvParameters)
 								int position[10] = {};
 								uint8_t UDP_data_count = 0;
 								int index_Found = -1;
-								uint8_t strIndex = 0;
+								printf("Erro: A substring.\n");
+								int strIndex = 0;
 								char substring[] = "+QMTRECV:";
 
 								int tamanhoString = strlen(dtmp);
 								int tamanhoSubstring = strlen(substring);
-
+								printf("\nsubstring. %d - %d\n\n",tamanhoString ,tamanhoSubstring);
 								if (tamanhoString < tamanhoSubstring)
 								{
-									// ////printf("Erro: A substring é maior que a string principal.\n");
+									printf("Erro: A substring é maior que a string principal.\n");
 									return;
 								}
 
@@ -6609,10 +3867,10 @@ static void uart_event_task(void *pvParameters)
 									if (j == tamanhoSubstring)
 									{
 										position[subStr_counter++] = i;
-										// ////printf("\n\nposition %d\n\n ", i);
+										// printf("\n\nposition %d\n\n ", i);
 									}
 								}
-
+								printf("\nsubstring. %d - %d\n\n",tamanhoString ,tamanhoSubstring);
 								/* index_Found = strpos(dtmp, "+QMTRECV:");
 								memset(mqtt_data, 0, sizeof(mqtt_data)); */
 
@@ -6623,10 +3881,10 @@ static void uart_event_task(void *pvParameters)
 
 									for (size_t i = position[j]; i < tamanhoString; i++)
 									{
-										// ////printf("\n\nposition1 %d\n\n ", position[j]);
+										// printf("\n\nposition1 %d\n\n ", position[j]);
 										if (dtmp[i] == '\r' || dtmp[i] == '\n')
 										{
-											// ////printf("\n UDP_data_count - %c \n", dtmp[i]);
+											// printf("\n UDP_data_count - %c \n", dtmp[i]);
 											//  UDP_data_count++;
 											break;
 										}
@@ -6640,28 +3898,28 @@ static void uart_event_task(void *pvParameters)
 									}
 
 									mqtt_data[strIndex + 1] = 0;
-									// ////printf("\n UDP_data_count - %s - %d \n", mqtt_data, strIndex);
+									printf("\n UDP_data_count - %s - %d \n", mqtt_data, strIndex);
 
-									// ////printf("\n\nUDP DATA - %s\n\n", mqtt_data);
+									printf("\n\nUDP DATA - %s\n\n", mqtt_data);
 									if (xQueueSendFromISR(receive_mqtt_queue,
 														  (void *)&mqtt_data,
 														  xHigherPriorityTaskWoken) != pdPASS)
 									{
 										// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-										// ////printf("\n after LOG UART11 sms FAIL \n");
+										printf("\n after LOG UART11 sms FAIL \n");
 									}
 								}
 
-								// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+								printf("\n after LOG UART11 sms FAIL 11 \n");
 								if (xHigherPriorityTaskWoken)
 								{
 									/* Actual macro used here is port specific. */
 									portYIELD_FROM_ISR();
 								}
-								// ////printf("\n after LOG UART11 sms FAIL 22 \n");
+								// printf("\n after LOG UART11 sms FAIL 22 \n");
 							}
 
-							// ////printf("\n\n ***QMT*** - %s \n\n", dtmp);
+							// printf("\n\n ***QMT*** - %s \n\n", dtmp);
 
 							if (strstr(dtmp, "+QMTSUB:") != NULL)
 							{
@@ -6669,7 +3927,7 @@ static void uart_event_task(void *pvParameters)
 								uint8_t UDP_data_count = 0;
 								int index_Found = -1;
 								uint8_t strIndex = 0;
-								// ////printf("\n UDP_data_count - %d \n", UDP_data_count);
+								// printf("\n UDP_data_count - %d \n", UDP_data_count);
 								index_Found = strpos(dtmp, "+QMTSUB:");
 								memset(mqtt_data, 0, sizeof(mqtt_data));
 
@@ -6678,7 +3936,7 @@ static void uart_event_task(void *pvParameters)
 
 									if (dtmp[i] == '\r' || dtmp[i] == '\n')
 									{
-										// ////printf("\n QMTSUB data - %d \n", UDP_data_count);
+										// printf("\n QMTSUB data - %d \n", UDP_data_count);
 										UDP_data_count++;
 									}
 
@@ -6690,22 +3948,22 @@ static void uart_event_task(void *pvParameters)
 									mqtt_data[strIndex++] = dtmp[i];
 								}
 
-								// ////printf("\n\nUDP DATA qmtcon - %s\n\n", mqtt_data);
+								// printf("\n\nUDP DATA qmtcon - %s\n\n", mqtt_data);
 								if (xQueueSendFromISR(AT_Command_Feedback_queue,
 													  (void *)&mqtt_data,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
 									// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-									// ////printf("\n after LOG UART11 sms FAIL \n");
+									// printf("\n after LOG UART11 sms FAIL \n");
 								}
 
-								// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+								// printf("\n after LOG UART11 sms FAIL 11 \n");
 								if (xHigherPriorityTaskWoken)
 								{
 									/* Actual macro used here is port specific. */
 									portYIELD_FROM_ISR();
 								}
-								// ////printf("\n after LOG UART11 sms FAIL 22 \n");
+								// printf("\n after LOG UART11 sms FAIL 22 \n");
 							}
 							if (strstr(dtmp, "+QMTSTAT:") != NULL)
 							{
@@ -6722,7 +3980,7 @@ static void uart_event_task(void *pvParameters)
 
 									if (dtmp[i] == '\r' || dtmp[i] == '\n')
 									{
-										// ////printf("\n UDP_data_count - %d \n", UDP_data_count);
+										// printf("\n UDP_data_count - %d \n", UDP_data_count);
 										UDP_data_count++;
 									}
 
@@ -6735,31 +3993,31 @@ static void uart_event_task(void *pvParameters)
 									mqtt_data[strIndex++] = dtmp[i];
 								}
 
-								// ////printf("\n\nUDP DATA - %s\n\n", mqtt_data);
+								// printf("\n\nUDP DATA - %s\n\n", mqtt_data);
 								if (xQueueSendFromISR(receive_mqtt_queue,
 													  (void *)&mqtt_data,
 													  xHigherPriorityTaskWoken) != pdPASS)
 								{
 									// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-									// ////printf("\n after LOG UART11 sms FAIL \n");
+									// printf("\n after LOG UART11 sms FAIL \n");
 								}
 
-								// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+								// printf("\n after LOG UART11 sms FAIL 11 \n");
 								if (xHigherPriorityTaskWoken)
 								{
 									/* Actual macro used here is port specific. */
 									portYIELD_FROM_ISR();
 								}
-								// ////printf("\n after LOG UART11 sms FAIL 22 \n");
+								// printf("\n after LOG UART11 sms FAIL 22 \n");
 							}
-							// ////printf("\n\n ***QMT4*** - %s \n\n", dtmp);
+							// printf("\n\n ***QMT4*** - %s \n\n", dtmp);
 							if ((strstr(dtmp, "CMTI")))
 							{
 								// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-								// ////printf("\n receive sms11111\n");
+								// printf("\n receive sms11111\n");
 								if (EG91_CALL_SMS_UART_queue != NULL)
 								{
-									// ////printf("\ndtmp sms\n%s\n", dtmp);
+									// printf("\ndtmp sms\n%s\n", dtmp);
 									int index_Found = -1;
 									uint8_t strIndex = 0;
 
@@ -6777,50 +4035,50 @@ static void uart_event_task(void *pvParameters)
 										SMS_Data[strIndex++] = dtmp[i];
 									}
 
-									// ////printf("\n\n receive sms - %s\n\n", SMS_Data);
+									// printf("\n\n receive sms - %s\n\n", SMS_Data);
 									//   xTaskCreate(task_EG91_Run_SMS, "task_EG91_Run_SMS", 20 * 1024, (void *)dtmp, 20, &handle_SMS_TASK);
 									unsigned int q_size = uxQueueMessagesWaiting(EG91_CALL_SMS_UART_queue);
 									// print_shit();
 									unsigned int q_size1 = uxQueueMessagesWaiting(AT_Command_Feedback_queue);
 
-									// ////printf("\n\n AT_Command_Feedback_queue size - %d\n\n", q_size1);
+									// printf("\n\n AT_Command_Feedback_queue size - %d\n\n", q_size1);
 
-									// ////printf("\n\n q_size sms - %d\n\n", q_size);
+									// printf("\n\n q_size sms - %d\n\n", q_size);
 
 									// if (q_size1 == 3/* AT_QUEUE_SIZE - 1 */)
 									// {
 									//     xQueueReset(AT_Command_Feedback_queue);
 									// }
 
-									// ////printf("\nsms receive\n");
+									// printf("\nsms receive\n");
 									if (xQueueSendFromISR(EG91_CALL_SMS_UART_queue,
 														  (void *)&SMS_Data,
 														  (TickType_t)0) != pdPASS)
 									{
-										// ////printf("\nsms receive rreeww\n");
+										// printf("\nsms receive rreeww\n");
 										//  xSemaphoreGive(rdySem_Control_Send_AT_Command);
-										//  ////printf("\n after LOG UART11 sms FAIL \n");
+										//  printf("\n after LOG UART11 sms FAIL \n");
 									}
 									// xSemaphoreGive(rdySem_Control_Send_AT_Command);
 								}
 								// break;
 							}
-							// ////printf("\n\n ***QMT5*** - %s \n\n", dtmp);
+							// printf("\n\n ***QMT5*** - %s \n\n", dtmp);
 						}
 					}
-					// ////printf("\n\n ***QMT6*** - %s \n\n", dtmp);
+					// printf("\n\n ***QMT6*** - %s \n\n", dtmp);
 					/* else if (strstr(dtmp, "+CUSD:"))
 					{
-						//////printf("\n CUSD ISR\n");
+						//printf("\n CUSD ISR\n");
 						if (xQueueSendFromISR(EG91_GET_SIM_BALANCE_queue,
 											  (void *)&dtmp,
 											  xHigherPriorityTaskWoken) != pdPASS)
 						{
-							//////printf("\n after LOG UART11 FAIL \n");
+							//printf("\n after LOG UART11 FAIL \n");
 						}
 						else
 						{
-							//////printf("\n UART CUSD ISR SEND\n");
+							//printf("\n UART CUSD ISR SEND\n");
 						}
 
 						if (xHigherPriorityTaskWoken)
@@ -6832,16 +4090,16 @@ static void uart_event_task(void *pvParameters)
 					} */
 					else if (strstr(dtmp, "NO CARRIER"))
 					{
-						// ////printf("\n UART NO CARRIER\n");
+						// printf("\n UART NO CARRIER\n");
 						if (xQueueSendFromISR(NO_CARRIER_Call_queue,
 											  (void *)&dtmp,
 											  xHigherPriorityTaskWoken) != pdPASS)
 						{
-							// ////printf("\n after LOG UART11 FAIL \n");
+							// printf("\n after LOG UART11 FAIL \n");
 						}
 						else
 						{
-							// ////printf("\n UART NO CARRIER SEND\n");
+							// printf("\n UART NO CARRIER SEND\n");
 						}
 
 						if (xHigherPriorityTaskWoken)
@@ -6853,7 +4111,7 @@ static void uart_event_task(void *pvParameters)
 					}
 					else if (strstr(dtmp, "+QPSND: 0"))
 					{
-						// ////printf("\n rdySem_QPSND give\n");
+						// printf("\n rdySem_QPSND give\n");
 						xSemaphoreGive(rdySem_QPSND);
 						break;
 					}
@@ -6861,19 +4119,19 @@ static void uart_event_task(void *pvParameters)
 					{
 						if (EG91_CALL_SMS_UART_queue != NULL)
 						{
-							// ////printf("\ndtmp sms\n%s\n", dtmp);
+							// printf("\ndtmp sms\n%s\n", dtmp);
 
 							if (EG91_WRITE_FILE_queue != NULL)
 							{
-								// ////printf("\nEG91_WRITE_FILE_queue != NULL\n");
+								// printf("\nEG91_WRITE_FILE_queue != NULL\n");
 								if (xQueueSendFromISR(EG91_WRITE_FILE_queue, (void *)&dtmp, xHigherPriorityTaskWoken) != pdPASS)
 								{
-									// ////printf("\n EG91_WRITE_FILE_queue \n");
+									// printf("\n EG91_WRITE_FILE_queue \n");
 								}
 							}
 							else
 							{
-								// ////printf("\nEG91_WRITE_FILE_queue == NULL\n");
+								// printf("\nEG91_WRITE_FILE_queue == NULL\n");
 							}
 						}
 						break;
@@ -6895,7 +4153,7 @@ static void uart_event_task(void *pvParameters)
 
 						if (dtmp[i] == '\r' || dtmp[i] == '\n')
 						{
-							// ////printf("\n UDP_data_count - %d \n", UDP_data_count);
+							// printf("\n UDP_data_count - %d \n", UDP_data_count);
 							UDP_data_count++;
 						}
 
@@ -6907,22 +4165,22 @@ static void uart_event_task(void *pvParameters)
 						mqtt_data[strIndex++] = dtmp[i];
 					}
 
-					// ////printf("\n\nUDP DATA - %s\n\n", mqtt_data);
+					// printf("\n\nUDP DATA - %s\n\n", mqtt_data);
 					if (xQueueSendFromISR(receive_mqtt_queue,
 										  (void *)&mqtt_data,
 										  xHigherPriorityTaskWoken) != pdPASS)
 					{
 						// xSemaphoreGive(rdySem_Control_Send_AT_Command);
-						// ////printf("\n after LOG UART11 sms FAIL \n");
+						// printf("\n after LOG UART11 sms FAIL \n");
 					}
 
-					// ////printf("\n after LOG UART11 sms FAIL 11 \n");
+					// printf("\n after LOG UART11 sms FAIL 11 \n");
 					if (xHigherPriorityTaskWoken)
 					{
 						/* Actual macro used here is port specific. */
 						portYIELD_FROM_ISR();
 					}
-					// ////printf("\n after LOG UART11 sms FAIL 22 \n");
+					// printf("\n after LOG UART11 sms FAIL 22 \n");
 				}
 
 				if (strstr(dtmp, "+QMTPING:") != NULL)
@@ -6930,7 +4188,7 @@ static void uart_event_task(void *pvParameters)
 					save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 1, nvs_System_handle);
 				}
 
-				// ////printf("\n\n ***QMT6*** - %s \n\n", dtmp);
+				// printf("\n\n ***QMT6*** - %s \n\n", dtmp);
 				break;
 			// Event of HW FIFO overflow detected
 			case UART_FIFO_OVF:
@@ -7038,7 +4296,7 @@ uint8_t EG91_get_IMEI(/* char *IMEI */)
 		return 0;
 	}
 
-	// ////printf("\n\n\nEG91_get_IMEI - %s\n\n\n", EG91_IMEI);
+	// printf("\n\n\nEG91_get_IMEI - %s\n\n\n", EG91_IMEI);
 	//   sprintf(IMEI, "%s", EG91_IMEI);
 	save_STR_Data_In_Storage(NVS_KEY_EG91_IMEI, EG91_IMEI, nvs_System_handle);
 
@@ -7058,16 +4316,16 @@ uint8_t EG91_UDP_Ping()
 	// } */
 
 	// char data[100] = {};
-	// // ////printf("\n\ntask_refresh_SystemTime 02\n\n");
+	// // printf("\n\ntask_refresh_SystemTime 02\n\n");
 	// get_STR_Data_In_Storage(NVS_KEY_EG91_IMEI, nvs_System_handle, &data);
-	// // ////printf("\n\ntask_refresh_SystemTime 03\n\n");
+	// // printf("\n\ntask_refresh_SystemTime 03\n\n");
 
 	// sprintf(data, "%s", "$ ");
 	// // strcat(data," $ ");
-	// // ////printf("\n\ntask_refresh_SystemTime 04\n\n");
+	// // printf("\n\ntask_refresh_SystemTime 04\n\n");
 	// sprintf(rssi, "%d", RSSI_VALUE);
 	// strcat(data, rssi);
-	// // ////printf("\n\ntask_refresh_SystemTime 05\n\n");
+	// // printf("\n\ntask_refresh_SystemTime 05\n\n");
 
 	// label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
 
@@ -7087,7 +4345,7 @@ uint8_t EG91_UDP_Ping()
 
 	/* if (xHandle_Timer_VerSystem != NULL)
 	{
-		//////printf("\n\ntask_refresh_SystemTime 06\n\n");
+		//printf("\n\ntask_refresh_SystemTime 06\n\n");
 		vTaskResume(xHandle_Timer_VerSystem);
 		timer_start(TIMER_GROUP_1, TIMER_0);
 	} */
@@ -7100,7 +4358,7 @@ uint8_t EG91_Check_IF_Have_PIN()
 	SIM_CARD_PIN_status = 0;
 	EG91_send_AT_Command("AT+CPIN?", "CPIN", 5000);
 
-	// ////printf("\n\n SIM CARD PIN = %d\n\n", SIM_CARD_PIN_status);
+	// printf("\n\n SIM CARD PIN = %d\n\n", SIM_CARD_PIN_status);
 	return SIM_CARD_PIN_status;
 }
 

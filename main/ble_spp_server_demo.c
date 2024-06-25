@@ -898,11 +898,11 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
 
         if (nvs_get_str(nvs_System_handle, key, NULL, &required_size) == ESP_OK)
         {
-            //////printf("\nrequire size %d\n", required_size);
-            //////printf("\nGET USERS NAMESPACE\n");
+            //printf("\nrequire size %d\n", required_size);
+            //printf("\nGET USERS NAMESPACE\n");
             if (nvs_get_str(nvs_System_handle, NVS_KEY_BLE_NAME, BLE_Device_Name, &required_size) == ESP_OK)
             {
-                //////printf("\naux get str feedback %s\n", aux_Get_Feedback_User_str);
+                //printf("\naux get str feedback %s\n", aux_Get_Feedback_User_str);
             }
             else
             {
@@ -914,7 +914,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
             sprintf(BLE_Device_Name, "%s", "MOTORLINE M200");
         } */
 
-        // ////printf("\n\n device name - %s, %d\n\n", ble_Name, gatts_if);
+        // printf("\n\n device name - %s, %d\n\n", ble_Name, gatts_if);
 
         // esp_ble_gap_set_device_name("MOTORLINE");
         char data[100] = {};
@@ -972,17 +972,17 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         // 
         esp_err_t err;
         CountBLEWrite++;
-        // ////printf("\n\nCountBLEWrite %d\n\n", CountBLEWrite);
-        //   //////printf("aram->write.handle %d\n", param->write.handle);
-        //   //////printf("spp_handle_table[SPP_IDX_SVC] %d\n", spp_handle_table[SPP_IDX_SVC]);
-        //   //////printf("spp_handle_table[SPP_IDX_NB - 1] %d\n", spp_handle_table[SPP_IDX_NB - 1]);
+        // printf("\n\nCountBLEWrite %d\n\n", CountBLEWrite);
+        //   //printf("aram->write.handle %d\n", param->write.handle);
+        //   //printf("spp_handle_table[SPP_IDX_SVC] %d\n", spp_handle_table[SPP_IDX_SVC]);
+        //   //printf("spp_handle_table[SPP_IDX_NB - 1] %d\n", spp_handle_table[SPP_IDX_NB - 1]);
         //ESP_LOGI(GATTS_TABLE_TAG, "GATT_WRITE_EVT, handle = %d, value len = %d, value :", param->write.handle, param->write.len);
         // //ESP_LOGI(GATTS_TABLE_TAG, "spp_handle_table[SPP_USERLIST_SVC] %d, spp_handle_table[SPP_USERLIST_NB] = %d, value :", spp_handle_table[SPP_IDX_SVC], spp_handle_table[SPP_IDX_NB]);
         // //ESP_LOGI(GATTS_TABLE_TAG, "spp_UserList_handle_table[SPP_ROUTINES_SVC] %d, spp_UserList_handle_table[SPP_ROUTINES_NB] = %d, value :", spp_Routines_handle_table[SPP_ROUTINES_SVC], spp_Routines_handle_table[SPP_ROUTINES_NB]);
 
         if (param->write.handle >= heart_rate_handle_table[IDX_SVC] && param->write.handle <= heart_rate_handle_table[HRS_IDX_NB - 1])
         {
-            // ////printf("after output data999 %s \n", (char *)p_data->write.value);
+            // printf("after output data999 %s \n", (char *)p_data->write.value);
             if (!param->write.is_prep)
             {
                 // the data length of gattc write  must be less than GATTS_DEMO_CHAR_VAL_LEN_MAX.
@@ -1057,7 +1057,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                 /* send response when param->write.need_rsp is true*/
                 if (param->write.need_rsp)
                 {
-                    // ////printf("\nota send rsp 1\n");
+                    // printf("\nota send rsp 1\n");
                     esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
                 }
             }
@@ -1070,13 +1070,13 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         else if (param->write.handle >= spp_UserList_handle_table[SPP_USERLIST_SVC] && param->write.handle <= (spp_UserList_handle_table[SPP_USERLIST_SVC] + (SPP_USERLIST_NB - 1)))
         {
 
-            // ////printf("p_data->write.value user list %s len=%d\n", p_data->write.value, p_data->write.len);
-            // ////printf("spp_gatts_if %d - p_data->write.conn_id %d\n", spp_gatts_if, p_data->write.conn_id);
+            // printf("p_data->write.value user list %s len=%d\n", p_data->write.value, p_data->write.len);
+            // printf("spp_gatts_if %d - p_data->write.conn_id %d\n", spp_gatts_if, p_data->write.conn_id);
             //   char *x1;
 
-            // ////printf("after output data %s \n", (char *)p_data->write.value);
+            // printf("after output data %s \n", (char *)p_data->write.value);
             //   asprintf(&x1, "%s", p_data->write.value);
-            // ////printf("after output data22 %s \n", (char *)p_data->write.value);
+            // printf("after output data22 %s \n", (char *)p_data->write.value);
             //  //  parseInputData(x1,BLE_INDICATION);
             //  //  readAllUser_Label = 0;
             //   if (strlen((char *)p_data->write.value) > 2)
@@ -1089,26 +1089,26 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                 output_Data = parseInputData(p_data->write.value, BLE_INDICATION, spp_gatts_if, p_data->write.conn_id, spp_UserList_handle_table[SPP_USERLIST_SPP_DATA_NTY_VAL], NULL,NULL);
 
                 // free(x1);
-                // ////printf("after output data33x \n");
+                // printf("after output data33x \n");
 
                 if (strstr(output_Data, "NTRSP") == NULL && strlen(output_Data) > 5)
                 {
-                    // ////printf("\nmemcpy SPP_USERLIST_SPP_DATA_NTY_VAL 11212 %s\n", output_Data);
+                    // printf("\nmemcpy SPP_USERLIST_SPP_DATA_NTY_VAL 11212 %s\n", output_Data);
                     esp_ble_gatts_send_indicate(spp_gatts_if, p_data->write.conn_id, spp_handle_table[SPP_USERLIST_SPP_DATA_NTY_VAL], strlen(output_Data), (uint8_t *)output_Data, false);
-                    // ////printf("\nmemcpy SPP_USERLIST_SPP_DATA_NTY_VAL 32332323 %s\n", output_Data);
+                    // printf("\nmemcpy SPP_USERLIST_SPP_DATA_NTY_VAL 32332323 %s\n", output_Data);
                 }
                 free(output_Data);
             }
 
             // res = find_char_and_desr_index(p_data->write.handle);
 
-            // ////printf("esp 00 nn\n");
+            // printf("esp 00 nn\n");
             //   free(x1);
-            // ////printf("esp 11 nn\n");
+            // printf("esp 11 nn\n");
 
             // free(p_data->write.value);
 
-            // ////printf("esp 12 nn\n");
+            // printf("esp 12 nn\n");
             //   free(x1);
             //     }
             //   }
@@ -1119,12 +1119,12 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         {
 
             char *output_Data;
-            // ////printf("after output data %s \n", (char *)p_data->write.value);
+            // printf("after output data %s \n", (char *)p_data->write.value);
             //   asprintf(&x1, "%s", p_data->write.value);
-            // ////printf("after output data22 %s \n", (char *)p_data->write.value);
+            // printf("after output data22 %s \n", (char *)p_data->write.value);
             //   //  parseInputData(x1,BLE_INDICATION);
             //   //  readAllUser_Label = 0;
-            // ////printf("after output BLE FILES %s \n", (char *)p_data->write.value);
+            // printf("after output BLE FILES %s \n", (char *)p_data->write.value);
             if (strlen((char *)p_data->write.value) > 2)
             {
                 /* code */
@@ -1142,9 +1142,9 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         {
 
             char *output_Data;
-            // ////printf("after output data %s \n", (char *)p_data->write.value);
+            // printf("after output data %s \n", (char *)p_data->write.value);
             //   asprintf(&x1, "%s", p_data->write.value);
-            // ////printf("after output data22 %s \n", (char *)p_data->write.value);
+            // printf("after output data22 %s \n", (char *)p_data->write.value);
             //   //  parseInputData(x1,BLE_INDICATION);
             //   //  readAllUser_Label = 0;
             if (strlen((char *)p_data->write.value) > 2)
@@ -1163,9 +1163,9 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
 
                 res = find_char_and_desr_index(p_data->write.handle);
 
-                // ////printf("esp 00 nn\n");
+                // printf("esp 00 nn\n");
                 //   free(x1);
-                // ////printf("esp 11 nn\n");
+                // printf("esp 11 nn\n");
                 //   free(p_data->write.value);
                 free(output_Data);
             }
@@ -1175,7 +1175,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         {
             //     if (param->write.handle >= spp_handle_table[SPP_IDX_SVC] && param->write.handle <= spp_handle_table[SPP_IDX_NB - 1])
             // {
-            // ////printf("p_data->write NORMAL\n");
+            // printf("p_data->write NORMAL\n");
             if (!p_data->write.is_prep)
             {
 
@@ -1184,13 +1184,13 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                 if (strlen((char *)p_data->write.value) > 6)
                 {
 
-                    ////printf("\n write len11 %s - %d\n", (char *)p_data->write.value, strlen((char *)p_data->write.value));
+                    printf("\n write len11 %s - %d\n", (char *)p_data->write.value, strlen((char *)p_data->write.value));
                     //   ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
                     output_Data = parseInputData(p_data->write.value, BLE_INDICATION, spp_gatts_if, p_data->write.conn_id, spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL], NULL,NULL);
 
                     if (strstr(output_Data, "NTRSP") == NULL)
                     {
-                        // ////printf("\nmemcpy output 11212 %s\n", output_Data);
+                        // printf("\nmemcpy output 11212 %s\n", output_Data);
                         esp_ble_gatts_send_indicate(spp_gatts_if, p_data->write.conn_id, spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL], strlen(output_Data), (uint8_t *)output_Data, false);
 
                        
@@ -1201,11 +1201,11 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                             sprintf(mqttInfo.data,"%s",output_Data);
                             sprintf(mqttInfo.topic,"%s","");
                             send_UDP_queue(&mqttInfo);
-                            //////printf("\nmemcpy output 32332323 %s\n", output_Data);
+                            //printf("\nmemcpy output 32332323 %s\n", output_Data);
                         }
 
                         label_BLE_UDP_send = 1;
-                        // ////printf("\nmemcpy output 32332323 %s\n", output_Data);
+                        // printf("\nmemcpy output 32332323 %s\n", output_Data);
                     }
                     else
                     {
@@ -1219,7 +1219,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                     // example_prepare_write_event_env(gatts_if, &prepare_write_env, p_data);
                     // xSemaphoreTake(rdySem_BLE_SPP,pdMS_TO_TICKS(30000));
                     // free(x1);
-                    // ////printf("esp 14555 nn\n");
+                    // printf("esp 14555 nn\n");
                     free(output_Data);
 
                     //    heap_trace_stop();
@@ -1235,10 +1235,10 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
 
                     // free(p_data->write.value);
 
-                    // ////printf("esp 12 nn\n");
+                    // printf("esp 12 nn\n");
                 }
 
-                // ////printf("esp HHHH nn\n");
+                // printf("esp HHHH nn\n");
             }
             else
             {
@@ -1258,12 +1258,12 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
             //ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
             //ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
-            // ////printf("esp YYYY\n");
+            // printf("esp YYYY\n");
 
             break;
         }
 
-        // ////printf("esp NNNN\n");
+        // printf("esp NNNN\n");
         break;
         // }
         // break;
@@ -1285,61 +1285,61 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         break;
     case ESP_GATTS_CONF_EVT:
 
-        // ////printf("\np_data->conf.handle:%d - %d\n", spp_Files_handle_table[SPP_FILES_SPP_DATA_NTY_VAL], p_data->conf.handle);
+        // printf("\np_data->conf.handle:%d - %d\n", spp_Files_handle_table[SPP_FILES_SPP_DATA_NTY_VAL], p_data->conf.handle);
         if (spp_UserList_handle_table[SPP_USERLIST_SPP_DATA_NTY_VAL] == p_data->conf.handle)
         {
-            // ////printf("\n relay sem 111 nn\n");
+            // printf("\n relay sem 111 nn\n");
             xSemaphoreGive(rdySem);
-            // ////printf("\n relay sem 112 nn\n");
+            // printf("\n relay sem 112 nn\n");
         }
         else if (spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL] == p_data->conf.handle && label_MonoStableRelay1 == 1)
         {
-            // ////printf("\n relay sem 2222 nn\n");
+            // printf("\n relay sem 2222 nn\n");
 
             giveMonoSt_semaphore();
             // xSemaphoreGive(rdySem_RelayMonoInicial);
-            // ////printf("\n relay sem 2223 nn\n");
+            // printf("\n relay sem 2223 nn\n");
             // label_MonoStableRelay1 = 0;
         }
         else if (spp_Files_handle_table[SPP_FILES_SPP_DATA_NTY_VAL] == p_data->conf.handle)
         {
-            // ////printf("\n relay sem 55 nn\n");
+            // printf("\n relay sem 55 nn\n");
             // give_LOG_Files_Semph();
             // xSemaphoreGive(rdySem_Send_LOGS_Files);
-            // ////printf("\n relay sem 56 nn\n");
+            // printf("\n relay sem 56 nn\n");
         }
         else if (spp_Routines_handle_table[SPP_ROUTINES_SPP_DATA_NTY_VAL] == p_data->conf.handle)
         {
-            // ////printf("\n spp_routines_handle_table\n");
+            // printf("\n spp_routines_handle_table\n");
             xSemaphoreGive(rdySem_Send_Routines);
-            // ////printf("\n spp_routines_handle_table\n");
+            // printf("\n spp_routines_handle_table\n");
         }
         else if (spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL] == p_data->conf.handle || label_MonoStableRelay1 == 0)
         {
-            // ////printf("\n relay sem 57 nn\n");
+            // printf("\n relay sem 57 nn\n");
             xSemaphoreGive(rdySem_BLE_SPP);
-            // ////printf("\n relay sem 58 nn\n");
+            // printf("\n relay sem 58 nn\n");
         }
 
         break;
     case ESP_GATTS_UNREG_EVT:
-        // ////printf("\n ESP_GATTS_UNREG_EVT \n");
+        // printf("\n ESP_GATTS_UNREG_EVT \n");
         break;
     case ESP_GATTS_DELETE_EVT:
-        // ////printf("\n ESP_GATTS_DELETE_EVT \n");
+        // printf("\n ESP_GATTS_DELETE_EVT \n");
         break;
     case ESP_GATTS_START_EVT:
-        // ////printf("\n ESP_GATTS_START_EVT \n");
+        // printf("\n ESP_GATTS_START_EVT \n");
         break;
     case ESP_GATTS_STOP_EVT:
-        // ////printf("\n ESP_GATTS_STOP_EVT \n");
+        // printf("\n ESP_GATTS_STOP_EVT \n");
         break;
     case ESP_GATTS_CONNECT_EVT:
         spp_conn_id = p_data->connect.conn_id;
 
         if (spp_conn_id < 7)
         {
-            // ////printf("\n conect conn id %d\n", spp_conn_id);
+            // printf("\n conect conn id %d\n", spp_conn_id);
             active_BLE_conn[spp_conn_id] = 1;
             spp_gatts_if = gatts_if;
             is_connected = true;
@@ -1349,9 +1349,9 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
             // TODO: DESCOMENTAR LINHA A BAIXO
             // esp_ble_gap_config_adv_data(&spp_adv_config);
 
-            // ////printf("\n\nstart_advertising 4\n\n");
+            // printf("\n\nstart_advertising 4\n\n");
             esp_ble_gap_start_advertising(&spp_adv_params);
-            // ////printf("\n\nstart_advertising 5\n\n");
+            // printf("\n\nstart_advertising 5\n\n");
 
             // esp_ble_gap_start_advertising(&spp_adv_params);
         }
@@ -1363,33 +1363,33 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         break;
     case ESP_GATTS_DISCONNECT_EVT:
         active_BLE_conn[p_data->disconnect.conn_id] = 0;
-        // ////printf("\n disconect conn id %d\n", p_data->disconnect.conn_id);
+        // printf("\n disconect conn id %d\n", p_data->disconnect.conn_id);
         is_connected = false;
         enable_data_ntf = false;
-        // ////printf("\n\nstart_advertising 3\n\n");
+        // printf("\n\nstart_advertising 3\n\n");
         // esp_bt_controller_get_status()
         // TODO: DESCOMENTAR LINHA A BAIXO
         // esp_ble_gap_config_adv_data(&spp_adv_config);
 
-        // ////printf("\n\nstart_advertising 4\n\n");
+        // printf("\n\nstart_advertising 4\n\n");
         esp_ble_gap_start_advertising(&spp_adv_params);
-        // ////printf("\n\nstart_advertising 5\n\n");
+        // printf("\n\nstart_advertising 5\n\n");
         //   esp_ble_gap_start_advertising(&spp_adv_params);
         break;
     case ESP_GATTS_OPEN_EVT:
-        // ////printf("\n\nESP_GATTS_OPEN_EVT \n\n");
+        // printf("\n\nESP_GATTS_OPEN_EVT \n\n");
         break;
     case ESP_GATTS_CANCEL_OPEN_EVT:
-        // ////printf("\n\n ESP_GATTS_CANCEL_OPEN_EVT \n\n");
+        // printf("\n\n ESP_GATTS_CANCEL_OPEN_EVT \n\n");
         break;
     case ESP_GATTS_CLOSE_EVT:
-        // ////printf("\n\n ESP_GATTS_CLOSE_EVT \n\n");
+        // printf("\n\n ESP_GATTS_CLOSE_EVT \n\n");
         break;
     case ESP_GATTS_LISTEN_EVT:
-        // ////printf("\n\nESP_GATTS_LISTEN_EVT\n\n");
+        // printf("\n\nESP_GATTS_LISTEN_EVT\n\n");
         break;
     case ESP_GATTS_CONGEST_EVT:
-        // ////printf("\n\nCONGEST EVENT\n\n");
+        // printf("\n\nCONGEST EVENT\n\n");
         break;
     case ESP_GATTS_CREAT_ATTR_TAB_EVT:
     {
@@ -1400,7 +1400,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         }
         else
         {
-            // ////printf("param->add_attr_tab.svc_uuid.uuid.uuid16 %d\n", param->add_attr_tab.svc_uuid.uuid.uuid16);
+            // printf("param->add_attr_tab.svc_uuid.uuid.uuid16 %d\n", param->add_attr_tab.svc_uuid.uuid.uuid16);
             switch (param->add_attr_tab.svc_uuid.uuid.uuid16)
             {
 
@@ -1489,7 +1489,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
     }
     }
 
-    // ////printf("esp END 1124567\n");
+    // printf("esp END 1124567\n");
 }
 
 static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
@@ -1540,7 +1540,7 @@ char text[] = "char* data";
 // void vTimer_ADV_Callback(TimerHandle_t xTimer)
 // {
 
-//     ////printf("\n\nTIMER ADV00\n\n");
+//     printf("\n\nTIMER ADV00\n\n");
 
 //     esp_bt_controller_status_t status = esp_bt_controller_get_status();
 //     // xQueueSendToBack(UDP_Send_queue, (void *)&text, pdMS_TO_TICKS(1000));
@@ -1550,18 +1550,18 @@ char text[] = "char* data";
 //     //      esp_restart();
 //     //      // O controlador Bluetooth está ativado
 //     //  }
-//     //  ////printf("\n\nstart_advertising 4\n\n");
+//     //  printf("\n\nstart_advertising 4\n\n");
 
-//     // ////printf("\n\nTIMER ADV11\n\n");
+//     // printf("\n\nTIMER ADV11\n\n");
 // }
 
 void print_hex(const unsigned char *data, size_t len)
 {
     for (size_t i = 0; i < len; i++)
     {
-        //////printf("%02x ", data[i]);
+        //printf("%02x ", data[i]);
     }
-    //////printf("\n");
+    //printf("\n");
 }
 
 void encrypt_aes_cbc1(const unsigned char *input, size_t input_len, unsigned char *output, const unsigned char *key, const unsigned char *iv)
@@ -1600,7 +1600,7 @@ void encrypt_aes_cbc1(const unsigned char *input, size_t input_len, unsigned cha
 void app_main(void)
 {
     esp_err_t ret;
-    vTaskDelay(pdMS_TO_TICKS(5000));
+    vTaskDelay(pdMS_TO_TICKS(1000));
     // Initialize NVS
     ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -1667,7 +1667,7 @@ void app_main(void)
     // save_STR_Data_In_Storage(NVS_KEY_HW_VERSION,"1.0.1", nvs_System_handle);
 
     vTaskDelay(pdMS_TO_TICKS(1000));
-    //////printf("\n\n akakak 888-111\n\n");
+    //printf("\n\n akakak 888-111\n\n");
      esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
 
     //esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
@@ -1780,7 +1780,7 @@ void BLE_Broadcast_Notify(char *data)
     {
         if (active_BLE_conn[i] == 1)
         {
-            //////printf("\nnotify conn id %d\n", i);
+            //printf("\nnotify conn id %d\n", i);
             esp_ble_gatts_send_indicate(spp_gatts_if, i, spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL], strlen(data), (uint8_t *)data, false);
         }
     }

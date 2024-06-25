@@ -101,13 +101,11 @@ typedef struct StructUser
     char relayPermition;
     char ble_security;
     char erase_User_After_Date;
-
-    #if CONFIG_WIEGAND_CODE == 1
  
     char wiegand_code[MYUSER_PHONE_SIZE];
     char wiegand_rele_permition;
     
-    #endif // DEBUG
+   
 
 } MyUser;
 

@@ -66,24 +66,24 @@ char *MyUser_change_USER_To_ADMIN(uint8_t BLE_SMS_INDICATION, char *payload, mqt
 {
     char rsp_Data[300] = {};
     MyUser myUser;
-    // ////printf("\nchange user to admin 11 \n");
+    // printf("\nchange user to admin 11 \n");
     memset(&myUser, 0, sizeof(myUser));
-    // ////printf("\nchange user to admin 22 \n");
+    // printf("\nchange user to admin 22 \n");
     memset(file_contents, 0, sizeof(file_contents));
     if (MyUser_Search_User(payload, file_contents) == ESP_OK)
     {
-        // ////printf("\nendHour  filecontents11 %s\n", file_contents);
+        // printf("\nendHour  filecontents11 %s\n", file_contents);
         parse_ValidateData_User(file_contents, &myUser);
-        // ////printf("\nendHour  filecontents22 %s\n", file_contents);
-        // ////printf("\nchange user to admin 55 \n");
+        // printf("\nendHour  filecontents22 %s\n", file_contents);
+        // printf("\nchange user to admin 55 \n");
         //   myUser.permition = '0';
-        // ////printf("\nchange user to admin 555 \n");
+        // printf("\nchange user to admin 555 \n");
         if (myUser.permition == '0')
         {
-            // ////printf("\nchange user to admin 33 \n");
+            // printf("\nchange user to admin 33 \n");
             if (Myuser_deleteUser(&myUser) == ESP_OK)
             {
-                // //printf("\nchange user to admin 44 - %s \n", myUser.phone);
+                // printf("\nchange user to admin 44 - %s \n", myUser.phone);
                 myUser.permition = '1';
                 uint16_t ACK_Add_User = MyUser_Add(&myUser);
                 if (ACK_Add_User == ESP_OK)
@@ -95,7 +95,7 @@ char *MyUser_change_USER_To_ADMIN(uint8_t BLE_SMS_INDICATION, char *payload, mqt
 
                     MyUser_Search_User(myUser.phone, rsp_Data);
                     memset(aux_FileContens_Admin, 0, sizeof(aux_FileContens_Admin));
-                    // ////printf("file contents USER_To_ADMIN %s\n", rsp_Data);
+                    // printf("file contents USER_To_ADMIN %s\n", rsp_Data);
                     /*memset(&rsp, 0, sizeof(rsp));*/
                     erase_Password_For_Rsp(rsp_Data, aux_FileContens_Admin);
 
@@ -119,14 +119,14 @@ char *MyUser_change_USER_To_ADMIN(uint8_t BLE_SMS_INDICATION, char *payload, mqt
                     }
                     else
                     {
-                        // ////printf("\nchange user to admin 44 \n");
+                        // printf("\nchange user to admin 44 \n");
 
                         return return_Json_SMS_Data("ERROR_INPUT_DATA");
                     }
                 }
                 else
                 {
-                    // ////printf("\nchange user to admin 57 \n");
+                    // printf("\nchange user to admin 57 \n");
 
                     return return_Json_SMS_Data("ERROR_INPUT_DATA");
                 }
@@ -140,7 +140,7 @@ char *MyUser_change_USER_To_ADMIN(uint8_t BLE_SMS_INDICATION, char *payload, mqt
             return return_Json_SMS_Data("ERROR_USER_NOT_FOUND");
         }
 
-        // ////printf("\nchange user to admin 58 \n");
+        // printf("\nchange user to admin 58 \n");
         return ERROR_USER_NOT_FOUND;
     }
 
@@ -150,26 +150,26 @@ char *MyUser_change_ADMIN_To_USER(uint8_t BLE_SMS_INDICATION, char *payload, mqt
 {
     char rsp_Data[300] = {};
     MyUser myUser;
-    // ////printf("\nchange user to admin 11 \n");
+    // printf("\nchange user to admin 11 \n");
     memset(&myUser, 0, sizeof(myUser));
-    // ////printf("\nchange user to admin 22 \n");
+    // printf("\nchange user to admin 22 \n");
     memset(file_contents, 0, sizeof(file_contents));
 
     if (MyUser_Search_User(payload, file_contents) == ESP_OK)
     {
-        // ////printf("\nendHour  filecontents11 %s\n", file_contents);
+        // printf("\nendHour  filecontents11 %s\n", file_contents);
         parse_ValidateData_User(file_contents, &myUser);
-        // ////printf("\nendHour  filecontents22 %s\n", file_contents);
-        // ////printf("\nchange user to admin 55 \n");
+        // printf("\nendHour  filecontents22 %s\n", file_contents);
+        // printf("\nchange user to admin 55 \n");
         //   myUser.permition = '0';
-        // ////printf("\nchange user to admin 555 \n");
+        // printf("\nchange user to admin 555 \n");
         if (myUser.permition == '1')
         {
-            // ////printf("\nchange user to admin 33 \n");
+            // printf("\nchange user to admin 33 \n");
 
             if (Myuser_deleteUser(&myUser) == ESP_OK)
             {
-                // ////printf("\nchange user to admin 44 \n");
+                // printf("\nchange user to admin 44 \n");
                 myUser.permition = '0';
                 if (MyUser_Add(&myUser) == ESP_OK)
                 {
@@ -210,7 +210,7 @@ char *MyUser_change_ADMIN_To_USER(uint8_t BLE_SMS_INDICATION, char *payload, mqt
                     }
                     else
                     {
-                        // ////printf("\nchange user to admin 44 \n");
+                        // printf("\nchange user to admin 44 \n");
 
                         return return_Json_SMS_Data("ERROR_INPUT_DATA");
                     }
@@ -249,7 +249,7 @@ char *return_Start_BLE_Data()
     memset(file_contents, 0, sizeof(file_contents));
     // GuestCountNumbers =
     sprintf(file_contents, "R1-%d R2-%d T1-%d T2-%d M1-%d M2-%d I1-%d I2-%d B-%d C-%d U-%d AL-%d", getRele1(), getRele2(), rele1_Bistate_Time, rele2_Bistate_Time, rele1_Mode_Label, rele2_Mode_Label, read_Input1(), read_Input2(), rele1_Restriction, get_User_Counter_From_Storage(), GuestCountNumbers, fd_configurations.alarmMode.A);
-    // ////printf("\nreturn_Start_BLE_Data - %s\n", file_contents);
+    // printf("\nreturn_Start_BLE_Data - %s\n", file_contents);
     return file_contents;
 }
 
@@ -286,7 +286,7 @@ char *set_System_Clock(char *payload)
     // gpio_set_level(GPIO_OUTPUT_IO_0, 0);
     label_MonoStableRelay1 = 0;
     label_MonoStableRelay2 = 0;
-    // ////printf("\nset_System_Clock payload - %s\n", payload);
+    // printf("\nset_System_Clock payload - %s\n", payload);
 
     for (int i = 0; i < strlen(payload); i++)
     {
@@ -324,16 +324,16 @@ char *set_System_Clock(char *payload)
 
     time_t auxEpoch = epoch_Calculator(&timeinfo1);
 
-    // ////printf("\n\n aux epoch %ld\n\n",auxEpoch);
+    // printf("\n\n aux epoch %ld\n\n",auxEpoch);
     //  struct timeval *tv = &epoch;
 
     if (!settimeofday(&epoch, NULL))
     {
-        // ////printf("\tzset 2\n");
+        // printf("\tzset 2\n");
         if (!setenv("TZ", timeZone, 1))
         {
-            // ////printf("\n\n\n getenv - %s", getenv("TZ"));
-            // ////printf("\tzset 3\n");
+            // printf("\n\n\n getenv - %s", getenv("TZ"));
+            // printf("\tzset 3\n");
             save_STR_Data_In_Storage(NVS_TIMEZONE, timeZone, nvs_System_handle);
             tzset();
         }
@@ -347,9 +347,9 @@ char *set_System_Clock(char *payload)
         return "ERROR SET NEW TIME";
     }
 
-    /* //////printf("\nERASE 34222\n");
+    /* //printf("\nERASE 34222\n");
     free(tv);
-    //////printf("\nERASE 34333\n"); */
+    //printf("\nERASE 34333\n"); */
     time_t now;
 
     char buffer[256];
@@ -361,17 +361,17 @@ char *set_System_Clock(char *payload)
     localtime_r(&now, &timeinfo);
     memset(file_contents, 0, sizeof(file_contents));
     strftime(file_contents, buffer_len, "%c", &timeinfo);
-    // ////printf("\nERASE 1 - %s\n", file_contents);
+    // printf("\nERASE 1 - %s\n", file_contents);
 
-    // ////printf("\n\ntime time 111\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo.tm_year + 1900), timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_wday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+    // printf("\n\ntime time 111\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo.tm_year + 1900), timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_wday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 
     uint8_t data[7];
 
     get_RTC_System_Time();
 
-    // ////printf("\nERASE 2\n");
+    // printf("\nERASE 2\n");
     /* list_destroy(&routine_list);
-    //////printf("\nERASE 3\n");
+    //printf("\nERASE 3\n");
     routine_list = (list_node *)malloc(sizeof(list_node));
     memset(&routine_list, 0, sizeof(routine_list));
  */
@@ -404,7 +404,7 @@ uint8_t start_Download_Sound_File()
 
     if (EG91_send_AT_Command(atCommand, "QFOPEN", 1000))
     {
-        // ////printf("\n\n file ID Download %s\n\n\n", fileID);
+        // printf("\n\n file ID Download %s\n\n\n", fileID);
         label_SoundFile_Open = 1;
         return 1;
     }
@@ -420,7 +420,7 @@ char *parse_Start_Download_File(char *payload)
 {
 
     timer_pause(TIMER_GROUP_1, TIMER_0);
-    // ////printf("\nsms\n");
+    // printf("\nsms\n");
     vTaskSuspend(xHandle_Timer_VerSystem);
     // disableAlarm();
 
@@ -486,15 +486,15 @@ char *save_Language_TranslateFile(char *payload)
     FILE *f1 = NULL;
     char fileName[50];
 
-    // ////printf("\n\n\nfile translate 5\n\n\n");
+    // printf("\n\n\nfile translate 5\n\n\n");
     //  sprintf(fileName, "/sdcard/%s", "lang.txt");
-    // ////printf("\n\n\nfile translate 6\n\n\n");
+    // printf("\n\n\nfile translate 6\n\n\n");
 
-    // ////printf("\n\n\nfile translate 1\n\n\n");
+    // printf("\n\n\nfile translate 1\n\n\n");
     if (label_Block_Feedback_SMS == 0)
     {
 
-        // ////printf("\n\n\nfile translate 2\n\n\n");
+        // printf("\n\n\nfile translate 2\n\n\n");
         f = fopen("/spiffs/aux_language.json", "w");
 
         crc32_Language_file = 0;
@@ -505,36 +505,36 @@ char *save_Language_TranslateFile(char *payload)
 
         if (f == NULL)
         {
-            // ////printf("\n\n\nfile translate 211\n\n\n");
+            // printf("\n\n\nfile translate 211\n\n\n");
         }
 
         f1 = fopen(fileName, "w");
 
         /* if (f1 == NULL)
         {
-            //////printf("\n\n\nfile translate 2222\n\n\n");
+            //printf("\n\n\nfile translate 2222\n\n\n");
         } */
         label_Block_Feedback_SMS = 1;
     }
     else
     {
-        // ////printf("\n\n\nfile translate 3\n\n\n");
+        // printf("\n\n\nfile translate 3\n\n\n");
         f = fopen("/spiffs/aux_language.json", "a");
         f1 = fopen(fileName, "a");
         crc32_Language_file = esp_rom_crc32_le(crc32_Language_file, (uint8_t *)payload, strlen(payload));
     }
 
-    // ////printf("\n\n\nfile translate 4\n\n\n");
+    // printf("\n\n\nfile translate 4\n\n\n");
     fprintf(f, "%s", payload);
 
-    // ////printf("\n\n\nfile translate 7\n\n\n");
+    // printf("\n\n\nfile translate 7\n\n\n");
     //  fprintf(f1, "%s", payload);
-    // ////printf("\n\n\nfile translate 8\n\n\n");
+    // printf("\n\n\nfile translate 8\n\n\n");
 
     fclose(f);
-    // ////printf("\n\n\nfile translate 9\n\n\n");
+    // printf("\n\n\nfile translate 9\n\n\n");
     //  fclose(f1);
-    // ////printf("\n\n\nfile translate 10\n\n\n");
+    // printf("\n\n\nfile translate 10\n\n\n");
 
     /*     for (int i = 0; i < filesize; i++)
        {
@@ -549,9 +549,9 @@ char *save_Language_TranslateFile(char *payload)
 
 int jsonCounterTranslate = 0;
 
-uint8_t system_Reset(char *payload, data_EG91_Send_SMS data_SMS)
+uint8_t system_Reset()
 {
-    // ////printf("\n\n\n SYSTEM RESET DOING\n\n");
+    // printf("\n\n\n SYSTEM RESET DOING\n\n");
     //  timer_pause(TIMER_GROUP_0, TIMER_0);
     label_ResetSystem = 1;
     label_Semaphore_Reset_System = 1;
@@ -571,8 +571,8 @@ uint8_t system_Reset(char *payload, data_EG91_Send_SMS data_SMS)
     size_t required_size = 0;
     if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
-        // ////printf("\nGET USERS NAMESPACE\n");
+        // printf("\nrequire size %d\n", required_size);
+        // printf("\nGET USERS NAMESPACE\n");
         if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, HW_Version, &required_size) == ESP_OK)
         {
         }
@@ -596,36 +596,30 @@ uint8_t system_Reset(char *payload, data_EG91_Send_SMS data_SMS)
 
     uint8_t owner_Label1 = get_INT8_Data_From_Storage(NVS_KEY_OWNER_LABEL, nvs_System_handle);
 
-    // ////printf("\n\n owner label reset %d\n\n", owner_Label1);
-    sprintf(data_SMS.payload, "%s", return_Json_SMS_Data("SYSTEM_RESET_HAS_BEEN_EXECUTED"));
-    // ////printf("\n\n owner label reset11 %d\n\n", owner_Label1);
+    // printf("\n\n owner label reset %d\n\n", owner_Label1);
+    
+    // printf("\n\n owner label reset11 %d\n\n", owner_Label1);
 
     save_NVS_Last_Month(lastMonth);
-    // ////printf("\n\n owner label reset22 %d\n\n", owner_Label1);
+    // printf("\n\n owner label reset22 %d\n\n", owner_Label1);
     save_STR_Data_In_Storage(NVS_KEY_HW_VERSION, HW_Version, nvs_System_handle);
 
     // save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, 0, nvs_System_handle);
     // send_UDP_Send("ME R O");
     desactivateUDP_network();
-    // ////printf("\n\n owner label reset33 %d\n\n", owner_Label1);
+    // printf("\n\n owner label reset33 %d\n\n", owner_Label1);
 
-    xQueueSendToBack(queue_EG91_SendSMS, (void *)&data_SMS, pdMS_TO_TICKS(1000));
+    
 
-    // ////printf("\n\n owner label reset44 %d\n\n", owner_Label1);
+    // printf("\n\n owner label reset44 %d\n\n", owner_Label1);
 
-    xSemaphoreTake(rdySem_Reset_System, pdMS_TO_TICKS(20000));
-    // //////printf("\n\n\n IMEI -%s / payload -%s\n\n\n",IMEI,payload);
+    
+    // //printf("\n\n\n IMEI -%s / payload -%s\n\n\n",IMEI,payload);
 
-    FILE *f = fopen("/spiffs/language.json", "r");
-
-    if (f != NULL)
-    {
-        remove("/spiffs/language.json");
-        fclose(f);
-    }
+ 
 
     esp_restart();
-    // ////printf("\n\nlabel_ResetSystem == 4\n\n");
+    // printf("\n\nlabel_ResetSystem == 4\n\n");
     //  example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
     //  EG91_send_AT_Command(AT_CSQ, "CSQ", 1000);
     //  timer_start(TIMER_GROUP_1, TIMER_0);
@@ -654,10 +648,10 @@ uint8_t check_IF_System_Have_SIM_and_PIN()
     {
 
         result++;
-        // ////printf("\n\n cpin 1 \n\n");
+        // printf("\n\n cpin 1 \n\n");
         if (EG91_Check_IF_Have_PIN())
         {
-            // ////printf("\n\n cpin 2 \n\n");
+            // printf("\n\n cpin 2 \n\n");
             result++;
         }
     }
@@ -714,7 +708,7 @@ char *UDP_activate_desativate_logs(uint8_t log_action)
 {
     if (save_INT8_Data_In_Storage(NVS_NETWORK_LABEL_SEND_LOGS, log_action, nvs_System_handle) == ESP_OK)
     {
-        // ////printf("\n\n LOGS LABEL %d\n\n", log_action);
+        // printf("\n\n LOGS LABEL %d\n\n", log_action);
         UDP_logs_label = log_action;
         return "OK";
     }
@@ -780,9 +774,9 @@ uint8_t MyUser_add_Admin_multi(uint8_t BLE_SMS_INDICATION, char *payload)
         }
     }
 
-    // ////printf("phone add admin %s\n", phNumber);
-    // ////printf("first name add admin %s\n", frsName);
-    // ////printf("surname name add admin %s\n", surName);
+    // printf("phone add admin %s\n", phNumber);
+    // printf("first name add admin %s\n", frsName);
+    // printf("surname name add admin %s\n", surName);
 
     if (strlen(phNumber) < 20 && strlen(phNumber) > 1)
     {
@@ -819,7 +813,7 @@ uint8_t MyUser_add_Admin_multi(uint8_t BLE_SMS_INDICATION, char *payload)
         user_validateData.ble_security = '0';
         user_validateData.erase_User_After_Date = '0';
 
-        // ////printf("new user bff 1313 %s\n", file_contents);
+        // printf("new user bff 1313 %s\n", file_contents);
 
         char auxfileContents[200];
 
@@ -831,7 +825,7 @@ uint8_t MyUser_add_Admin_multi(uint8_t BLE_SMS_INDICATION, char *payload)
         memset(file_contents, 0, sizeof(file_contents));
         if (MyUser_Search_User(user_validateData.phone, auxfileContents) != ESP_OK)
         {
-            // ////printf("\n\nuser_validateData.phone add admin %s\n\n", user_validateData.phone);
+            // printf("\n\nuser_validateData.phone add admin %s\n\n", user_validateData.phone);
             uint16_t ACK_Add_User = MyUser_Add(&user_validateData);
             if (ACK_Add_User == ESP_OK)
             {
@@ -886,8 +880,8 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
     char *rsp;
     /*memset(&rsp, 0, sizeof(rsp));*/
 
-    // ////printf("\n\n cmd system %c\n", cmd);
-    // ////printf("\n\n param system %c\n", param);
+    // printf("\n\n cmd system %c\n", cmd);
+    // printf("\n\n param system %c\n", param);
 
     if (cmd == SET_CMD)
     {
@@ -907,7 +901,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                         {
 
                             asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, rsp_BLE_Name);
-                            // ////printf("rsp %s\n", rsp);
+                            // printf("rsp %s\n", rsp);
                             return rsp;
                         }
                         else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -934,7 +928,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
 
@@ -963,7 +957,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             }
             else
             {
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -981,7 +975,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                 else
                 {
 
-                    // //////printf(ERROR_USER_NOT_PERMITION);
+                    // //printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -990,7 +984,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
         {
             if (user_validateData->permition == '2')
             {
-                // //printf("\n\n sms verify444 %d\n\n", atoi(payload));
+                // printf("\n\n sms verify444 %d\n\n", atoi(payload));
                 if (atoi(payload) < 0 || atoi(payload) > 4)
                 {
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_INPUT_DATA"));
@@ -1005,7 +999,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // //////printf(ERROR_USER_NOT_PERMITION);
+                // //printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1032,7 +1026,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // //////printf(ERROR_USER_NOT_PERMITION);
+                // //printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1068,7 +1062,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             }
             else
             {
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1080,12 +1074,12 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
                     asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, set_System_Clock(payload));
-                    // ////printf("rsp %s\n", rsp);
+                    // printf("rsp %s\n", rsp);
                     return rsp;
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -1098,15 +1092,15 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                 if (user_validateData->permition == '2')
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
-                    // ////printf("\n\n\n receive translate \n\n\n");
+                    // printf("\n\n\n receive translate \n\n\n");
                     label_BLE_UDP_send = 0;
                     asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, save_Language_TranslateFile(payload));
-                    // ////printf("rsp %s\n", rsp);
+                    // printf("rsp %s\n", rsp);
                     return rsp;
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -1122,7 +1116,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1136,7 +1130,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1151,7 +1145,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1228,7 +1222,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1266,7 +1260,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // //////printf(ERROR_USER_NOT_PERMITION);
+                // //printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1304,7 +1298,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // //////printf(ERROR_USER_NOT_PERMITION);
+                // //printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1380,8 +1374,8 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                     size_t required_size = 0;
                     if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, NULL, &required_size) == ESP_OK)
                     {
-                        // ////printf("\nrequire size %d\n", required_size);
-                        // ////printf("\nGET USERS NAMESPACE\n");
+                        // printf("\nrequire size %d\n", required_size);
+                        // printf("\nGET USERS NAMESPACE\n");
                         if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, HW_Version, &required_size) != ESP_OK)
                         {
                             return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
@@ -1401,7 +1395,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                           save_INT8_Data_In_Storage(NVS_NETWORK_LOCAL_CHANGED, label_UDP_fail_and_changed, nvs_System_handle);
                       } */
                     // TODO:MUDAR A VERSAO DE HW PARA A VARIAVEL
-                    asprintf(&rsp, "ME G M %s;%s;%s", FW_VERSION, HW_Version, "d01");
+                    asprintf(&rsp, "ME G M %s;%s;%s", FW_VERSION, HW_Version, "d02" );
 
                     return rsp;
                 }
@@ -1421,7 +1415,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             {
                 /*memset(&rsp, 0, sizeof(rsp));*/
                 asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, return_Start_BLE_Data());
-                // ////printf("rsp %s\n", rsp);
+                // printf("rsp %s\n", rsp);
                 return rsp;
             }
             else
@@ -1460,7 +1454,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             }
             else
             {
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1527,7 +1521,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1538,7 +1532,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             {
                 if (get_Data_STR_LastCALL_From_Storage(&phoneNumber) == ESP_OK)
                 {
-                    // ////printf("\n last phnumber print %s\n", phoneNumber);
+                    // printf("\n last phnumber print %s\n", phoneNumber);
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
                         /*memset(&rsp, 0, sizeof(rsp));*/
@@ -1564,7 +1558,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1579,7 +1573,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
                     asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, "MOTORLINE");
-                    // ////printf("rsp %s\n", rsp);
+                    // printf("rsp %s\n", rsp);
                     memset(SYSTEM_NAME, 0, sizeof(SYSTEM_NAME));
                     sprintf(SYSTEM_NAME, "%s", "MOTORLINE");
                     return rsp;
@@ -1600,7 +1594,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1664,7 +1658,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                     asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, change_Owner(payload, BLE_INDICATION));
                 }
 
-                // ////printf("\n\n change owner 1\n\n");
+                // printf("\n\n change owner 1\n\n");
 
                 return rsp;
 
@@ -1679,7 +1673,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1705,7 +1699,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // //////printf(ERROR_USER_NOT_PERMITION);
+                // //printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1715,7 +1709,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             {
                 if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
                 {
-                    // ////printf("\n\nSDCARD 0\n\n");
+                    // printf("\n\nSDCARD 0\n\n");
                     if (format_sdcard() == ESP_OK)
                     {
                         nvs_set_u8(nvs_System_handle, NVS_LAST_MONTH, 0);
@@ -1775,7 +1769,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1810,7 +1804,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             }
             else
             {
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1824,7 +1818,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1838,7 +1832,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             else
             {
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1851,28 +1845,28 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             if (user_validateData->permition == '2')
             {
                 char *json_Translate_File;
-                //printf("\n\ncrc32 lang11\n\n\n\n");
+                printf("\n\ncrc32 lang11\n\n\n\n");
                 FILE *f = fopen("/spiffs/aux_language.json", "r");
                 label_Block_Feedback_SMS = 0;
                 char ckf[9] = {};
                 if (f != NULL)
                 {
 
-                    //printf("\n\ncrc32 lang22\n\n\n\n");
+                    printf("\n\ncrc32 lang22\n\n\n\n");
 
                     sprintf(ckf, "%X", crc32_Language_file);
-                    //printf("\n\ncrc32 ckf lang\n%s - %s\n\n\n", ckf, payload);
+                    printf("\n\ncrc32 ckf lang\n%s - %s\n\n\n", ckf, payload);
 
                     if (!strcmp(ckf, payload))
                     {
                         FILE *f_aux = fopen("/spiffs/language.json", "r");
-                        //printf("\n\ncrc32 lang33\n\n\n\n");
+                        printf("\n\ncrc32 lang33\n\n\n\n");
                         if (f_aux != NULL)
                         {
 
                             fclose(f_aux);
                             remove("/spiffs/language.json");
-                            //printf("\n\n f_aux != NULL 55\n\n");
+                            printf("\n\n f_aux != NULL 55\n\n");
                             fclose(f);
                             rename("/spiffs/aux_language.json", "/spiffs/language.json");
 
@@ -1880,56 +1874,56 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                         }
                         else
                         {
-                            //printf("\n\n f_aux == NULL 1212\n\n");
+                            printf("\n\n f_aux == NULL 1212\n\n");
                             fclose(f);
-                            //printf("\n\ncrc32 lang77\n\n\n\n");
+                            printf("\n\ncrc32 lang77\n\n\n\n");
                             rename("/spiffs/aux_language.json", "/spiffs/language.json");
                             f = fopen("/spiffs/language.json", "r");
                         }
 
-                        //printf("\n\n\n end lang files ERROR\n\n\n");
+                        printf("\n\n\n end lang files ERROR\n\n\n");
 
-                        // ////printf("\n\n\n end lang files 1\n\n\n");
+                        // printf("\n\n\n end lang files 1\n\n\n");
                         fseek(f, 0L, SEEK_END);
                         file_Lenght = ftell(f);
                         fseek(f, 0L, SEEK_SET);
                         // rewind(f);
-                        //printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
+                        printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
 
-                        // ////printf("\n\n\n ckf OK \n\n\n");
+                        // printf("\n\n\n ckf OK \n\n\n");
 
                         json_Translate_File = (char *)malloc(file_Lenght * sizeof(char));
                         memset(json_Translate_File, 0, file_Lenght);
 
-                        //printf("\n\n\n end lang files 4\n\n\n");
+                        printf("\n\n\n end lang files 4\n\n\n");
 
                         if (json_Translate_File)
                         {
-                            //printf("\n\n\n end lang files 5\n\n\n");
+                            printf("\n\n\n end lang files 5\n\n\n");
 
                             fread(json_Translate_File, sizeof(char), file_Lenght, f);
-                            //printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
+                            printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
 
                             cJSON_Delete(sms_Rsp_Json);
                             sms_Rsp_Json = cJSON_Parse(json_Translate_File);
                             jsonCounterTranslate = 1;
                             free(json_Translate_File);
 
-                            //printf("\n\n\n end lang files 8\n\n\n");
+                            printf("\n\n\n end lang files 8\n\n\n");
                             if (sms_Rsp_Json == NULL)
                             {
 
-                                //printf("\n\n X10 9999\n\n");
+                                printf("\n\n X10 9999\n\n");
                                 const char *error_ptr = cJSON_GetErrorPtr();
                                 if (error_ptr != NULL)
                                 {
-                                    //printf("Error before: %s\n", error_ptr);
+                                    printf("Error before: %s\n", error_ptr);
                                 }
                             }
                         }
 
                         fclose(f);
-                        //printf("\n\n\n end lang files 9\n\n\n");
+                        printf("\n\n\n end lang files 9\n\n\n");
 
                         asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, "OK");
 
@@ -1953,17 +1947,17 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
 
                     return rsp;
                 }
-                /* //////printf("\n\n\n end lang files 7\n\n\n");
+                /* //printf("\n\n\n end lang files 7\n\n\n");
                 sms_Rsp_Json = cJSON_Parse(json_Translate_File);
-                //////printf("\n\n\n end lang files 8\n\n\n"); */
+                //printf("\n\n\n end lang files 8\n\n\n"); */
                 if (sms_Rsp_Json == NULL)
                 {
                     label_Block_Feedback_SMS = 0;
-                    // ////printf("\n\n X10 9999\n\n");
+                    // printf("\n\n X10 9999\n\n");
                     const char *error_ptr = cJSON_GetErrorPtr();
                     if (error_ptr != NULL)
                     {
-                        // ////printf("Error before: %s\n", error_ptr);
+                        // printf("Error before: %s\n", error_ptr);
                     }
                 }
             }
@@ -1971,7 +1965,7 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             {
                 label_Block_Feedback_SMS = 0;
 
-                // ////printf(ERROR_USER_NOT_PERMITION);
+                // printf(ERROR_USER_NOT_PERMITION);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
@@ -1992,7 +1986,7 @@ uint8_t changeInputTranslators(char *payload)
     char input1_msg[60] = {};
     char input2_msg[60] = {};
 
-    // //printf("\n\n input change payload %s\n\n", payload);
+    // printf("\n\n input change payload %s\n\n", payload);
 
     for (size_t i = 0; i < strlen(payload); i++)
     {
@@ -2015,8 +2009,8 @@ uint8_t changeInputTranslators(char *payload)
         }
     }
 
-    // //printf("\n\n input change 1 %s\n\n", input1_msg);
-    // //printf("\n\n input change 2 %s\n\n", input2_msg);
+    // printf("\n\n input change 1 %s\n\n", input1_msg);
+    // printf("\n\n input change 2 %s\n\n", input2_msg);
     if (strlen(input1_msg) > 4)
     {
         modifyJSONValue("INPUT_HAS_BEEN_ACTIVATED1", input1_msg);
@@ -2041,7 +2035,7 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
         nvs_iterator_t it;
         it = nvs_entry_find("keys", NVS_ADMIN_NAMESPACE, NVS_TYPE_STR);
         char value[200];
-        // ////printf("Iterate NVS\n");
+        // printf("Iterate NVS\n");
         int64_t start_time = esp_timer_get_time();
         while (it != NULL)
         {
@@ -2049,16 +2043,16 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
             nvs_entry_info_t info;
             nvs_entry_info(it, &info);
             it = nvs_entry_next(it);
-            // ////printf("key '%s', type '%d' \n", info.key, info.type);
+            // printf("key '%s', type '%d' \n", info.key, info.type);
             get_Data_Users_From_Storage(info.key, &value);
 
-            // ////printf("  * value: %s\n", value);
+            // printf("  * value: %s\n", value);
         }
         int64_t time = esp_timer_get_time() - start_time;
 
-        // ////printf("Iterate NVS END\n");
-        ////////printf("Time: %lld", time);
-        // ////printf("\ncount numbers: %d\n", count);
+        // printf("Iterate NVS END\n");
+        ////printf("Time: %lld", time);
+        // printf("\ncount numbers: %d\n", count);
 
         if (nvs_erase_all(nvs_Admin_handle) == ESP_OK)
         {
@@ -2132,7 +2126,7 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
                         sprintf(file_contents, "%s %c %c %s", ADMIN_ELEMENT, RESET_CMD, ADMIN_PARAMETER, user_deleteValidateData.phone);
                     }
 
-                    // ////printf("\ndelete admin ble %s\n", file_contents);
+                    // printf("\ndelete admin ble %s\n", file_contents);
                     return file_contents;
                 }
                 else if (BLE_SMS_INDICATION == SMS_INDICATION)
@@ -2143,7 +2137,7 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
                     send_UDP_queue(mqttInfo);
                     memset(file_contents, 0, sizeof(file_contents));
                     sprintf(file_contents, return_Json_SMS_Data("ADMIN_HAS_BEEN_DELETED"), user_deleteValidateData.phone);
-                    // ////printf("\ndelete admin sms %s\n", file_contents);
+                    // printf("\ndelete admin sms %s\n", file_contents);
                     return file_contents;
                 }
                 else
@@ -2155,7 +2149,7 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
             }
             else
             {
-                // ////printf("delete admin falhou\n");
+                // printf("delete admin falhou\n");
                 memset(file_contents, 0, sizeof(file_contents));
                 sprintf(file_contents, "%s", return_Json_SMS_Data("ERROR_RESET"));
                 return file_contents;
@@ -2163,13 +2157,13 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
         }
         else
         {
-            // ////printf("este user é owner nao eliminado\n");
+            // printf("este user é owner nao eliminado\n");
             memset(file_contents, 0, sizeof(file_contents));
             sprintf(file_contents, "%s", return_Json_SMS_Data("ERROR_USER_NOT_IS_ADMIN"));
             return file_contents;
         }
 
-        // ////printf("read user 1123 %s\n", file_contents);
+        // printf("read user 1123 %s\n", file_contents);
         memset(file_contents, 0, sizeof(file_contents));
         sprintf(file_contents, "%s", return_Json_SMS_Data("ERROR_RESET"));
         return file_contents;
@@ -2177,7 +2171,7 @@ char *MyUser_erase_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informa
     else
     {
 
-        // ////printf(ERROR_USER_NOT_FOUND);
+        // printf(ERROR_USER_NOT_FOUND);
         memset(file_contents, 0, sizeof(file_contents));
         sprintf(file_contents, "%s", return_Json_SMS_Data("ERROR_USER_NOT_FOUND"));
         return file_contents;
@@ -2258,9 +2252,9 @@ char *set_Alarm_Sound(char *payload)
     if (payload[0] >= '1' && payload[0] <= '8')
     {
         feedback_Sound_Index = payload[0] - 48;
-        // ////printf("\n\nset_Alarm_Sound 1 -  %d\n\n", feedback_Sound_Index);
+        // printf("\n\nset_Alarm_Sound 1 -  %d\n\n", feedback_Sound_Index);
         save_INT8_Data_In_Storage(NVS_KEY_FEEDBACK_SOUND_INDEX, feedback_Sound_Index, nvs_System_handle);
-        // ////printf("\n\nset_Alarm_Sound 2\n\n");
+        // printf("\n\nset_Alarm_Sound 2\n\n");
         return payload;
     }
     else
@@ -2274,7 +2268,7 @@ char *set_Alarm_Sound(char *payload)
 char *play_Alert_Sound()
 {
     uint8_t state = PLAY_RECORD_SOUND_STATE;
-    send_Type_Call_queue(state);
+   
     return "NTRSP";
 }
 
@@ -2402,7 +2396,7 @@ uint8_t reset_Owner_password(char *payload, data_EG91_Send_SMS *data_SMS)
                 // user_validateData.week[7] = '\0';
 
                 sprintf(&newline, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;", myUser_owner_Password_change.phone, myUser_owner_Password_change.firstName, myUser_owner_Password_change.start.date, myUser_owner_Password_change.start.hour, myUser_owner_Password_change.end.days, myUser_owner_Password_change.end.hour, myUser_owner_Password_change.key, myUser_owner_Password_change.permition, myUser_owner_Password_change.week, myUser_owner_Password_change.relayPermition, myUser_owner_Password_change.ble_security);
-                // ////printf("new line password %s\n", newline);
+                // printf("new line password %s\n", newline);
 
                 sprintf(udp_dataSend, "ME R K %s;%s", myUser_owner_Password_change.phone, myUser_owner_Password_change.key);
 
@@ -2410,9 +2404,9 @@ uint8_t reset_Owner_password(char *payload, data_EG91_Send_SMS *data_SMS)
 
                 sprintf(data_SMS->payload, return_Json_SMS_Data("OWNER_RESET_PASSWORD"), payload);
                 xQueueSendToBack(queue_EG91_SendSMS, (void *)data_SMS, pdMS_TO_TICKS(100));
-                // ////printf("new line password %s\n", newline);
+                // printf("new line password %s\n", newline);
                 send_UDP_Send(udp_dataSend, "");
-                // ////printf("new line password11 %s\n", newline);
+                // printf("new line password11 %s\n", newline);
                 return 1;
             }
             else
@@ -2424,7 +2418,7 @@ uint8_t reset_Owner_password(char *payload, data_EG91_Send_SMS *data_SMS)
         }
         else
         {
-            // ////printf("\n\n NOT OWNER PASSWORD CHANGE\n\n");
+            // printf("\n\n NOT OWNER PASSWORD CHANGE\n\n");
             return 0;
         }
     }
@@ -2448,7 +2442,7 @@ char *change_Owner(char *payload, uint8_t BLE_SMS)
         {
             if (payload[i] != '+')
             {
-                // ////printf("PHONE NUMBER NAO CORRECTA\n");
+                // printf("PHONE NUMBER NAO CORRECTA\n");
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
         }
@@ -2467,35 +2461,35 @@ char *change_Owner(char *payload, uint8_t BLE_SMS)
 
             if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, NULL, &required_size) == ESP_OK)
             {
-                // ////printf("\nrequire size %d\n", required_size);
-                // ////printf("\nGET OWNER NAMESPACE\n");
+                // printf("\nrequire size %d\n", required_size);
+                // printf("\nGET OWNER NAMESPACE\n");
                 if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, owner_Data, &required_size) == ESP_OK)
                 {
                     UsersCountNumbers = get_User_Counter_From_Storage();
-                    // ////printf("\nUsersCountNumbers 1 %d\n", UsersCountNumbers);
+                    // printf("\nUsersCountNumbers 1 %d\n", UsersCountNumbers);
                     parse_ValidateData_User(owner_Data, &owner_Struct);
 
                     if (Myuser_deleteUser(&newOwner_struct) == ESP_OK)
                     {
                         UsersCountNumbers = get_User_Counter_From_Storage();
-                        // ////printf("\nUsersCountNumbers 2 %d\n", UsersCountNumbers);
-                        //  ////printf("\nowner_Data2 %s - %s\n", owner_Data, owner_Struct.phone);
+                        // printf("\nUsersCountNumbers 2 %d\n", UsersCountNumbers);
+                        //  printf("\nowner_Data2 %s - %s\n", owner_Data, owner_Struct.phone);
                         if (Myuser_deleteUser(&owner_Struct) == ESP_OK)
                         {
                             UsersCountNumbers = get_User_Counter_From_Storage();
-                            // ////printf("\nUsersCountNumbers 3 %d\n", UsersCountNumbers);
-                            //  ////printf("\nowner_Data3 %d\n", owner_Data);
+                            // printf("\nUsersCountNumbers 3 %d\n", UsersCountNumbers);
+                            //  printf("\nowner_Data3 %d\n", owner_Data);
                             owner_Struct.permition = '1';
                             newOwner_struct.permition = '2';
 
                             MyUser_Add(&owner_Struct);
                             UsersCountNumbers = get_User_Counter_From_Storage();
-                            // ////printf("\nUsersCountNumbers 4 %d\n", UsersCountNumbers);
-                            //  ////printf("\nowner_Data4 %s\n", owner_Data);
+                            // printf("\nUsersCountNumbers 4 %d\n", UsersCountNumbers);
+                            //  printf("\nowner_Data4 %s\n", owner_Data);
                             MyUser_Add(&newOwner_struct);
                             UsersCountNumbers = get_User_Counter_From_Storage();
-                            // ////printf("\nUsersCountNumbers 5 %d\n", UsersCountNumbers);
-                            //  ////printf("\nowner_Data5 %s\n", owner_Data);
+                            // printf("\nUsersCountNumbers 5 %d\n", UsersCountNumbers);
+                            //  printf("\nowner_Data5 %s\n", owner_Data);
 
                             memset(newOwner_Data, 0, 200 /* sizeof(newUserData) */);
                             sprintf(newOwner_Data, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;", newOwner_struct.phone, newOwner_struct.firstName, newOwner_struct.start.date, newOwner_struct.start.hour, newOwner_struct.end.days, newOwner_struct.end.hour, newOwner_struct.key, newOwner_struct.permition, newOwner_struct.week, newOwner_struct.relayPermition, newOwner_struct.ble_security, newOwner_struct.erase_User_After_Date);
@@ -2507,25 +2501,25 @@ char *change_Owner(char *payload, uint8_t BLE_SMS)
                             send_UDP_Send(UDP_Rsp, "");
                             // send_UDP_queue(UDP_Rsp);
 
-                            desactivateUDP_network();
+                           
 
                             if (BLE_SMS == BLE_INDICATION)
                             {
-                                // ////printf("\nowner_Data5 BLE_INDICATION\n");
+                                // printf("\nowner_Data5 BLE_INDICATION\n");
                                 return "OK";
                             }
                             else if (BLE_SMS == SMS_INDICATION)
                             {
                                 memset(file_contents, 0, 200);
 
-                                // ////printf("\n\nSEND SMS CHANGE OWNER\n\n");
+                                // printf("\n\nSEND SMS CHANGE OWNER\n\n");
                                 if (!strcmp(newOwner_struct.firstName,"S/N"))
                                 {
                                     sprintf(newOwner_struct.firstName,"%s",return_Json_SMS_Data("NO_NAME"));
                                 }
                                 
                                 sprintf(file_contents, return_Json_SMS_Data("OWNER_CHANGED_TO_ADMIN"), newOwner_struct.firstName, newOwner_struct.phone);
-                                // ////printf("\n\nSEND SMS CHANGE OWNER1\n\n");
+                                // printf("\n\nSEND SMS CHANGE OWNER1\n\n");
                                 return file_contents;
                             }
                             else if (BLE_SMS == UDP_INDICATION)
@@ -2534,14 +2528,14 @@ char *change_Owner(char *payload, uint8_t BLE_SMS)
                             }
                             else
                             {
-                                // ////printf("\nowner_Data5 BLE_INDICATION 111\n");
+                                // printf("\nowner_Data5 BLE_INDICATION 111\n");
                                 return return_Json_SMS_Data("ERROR_RESET");
                             }
                         }
                         else
                         {
                             newOwner_struct.permition = '1';
-                            // ////printf("\nowner_Data5 BLE_INDICATION 555\n");
+                            // printf("\nowner_Data5 BLE_INDICATION 555\n");
                             MyUser_Add(&newOwner_struct);
                             return return_Json_SMS_Data("ERROR_RESET");
                         }
@@ -2579,8 +2573,8 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
     /*  if (UsersCountNumbers < LIMIT_USERS_REGISTER_NUMBER)
      { */
     /* code */
-    // ////printf("add default number 1\n");
-    // ////printf("number add=%s len=%d", payload, strlen(payload));
+    // printf("add default number 1\n");
+    // printf("number add=%s len=%d", payload, strlen(payload));
     char phNumber[MYUSER_PHONE_SIZE];
     char frsName[20] = {};
     char surName[4] = {};
@@ -2647,9 +2641,9 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
         }
     }
 
-    // ////printf("phone add admin %s\n", phNumber);
-    // ////printf("first name add admin %s\n", frsName);
-    // ////printf("surname name add admin %s\n", surName);
+    // printf("phone add admin %s\n", phNumber);
+    // printf("first name add admin %s\n", frsName);
+    // printf("surname name add admin %s\n", surName);
 
     if (strlen(phNumber) < 20 && strlen(phNumber) > 1)
     {
@@ -2688,7 +2682,7 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
         user_validateData.ble_security = '0';
         user_validateData.erase_User_After_Date = '0';
 
-        // ////printf("new user bff 1313 %s\n", file_contents);
+        // printf("new user bff 1313 %s\n", file_contents);
 
         char auxfileContents[200];
 
@@ -2702,7 +2696,7 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
         memset(file_contents, 0, sizeof(file_contents));
         if (MyUser_Search_User(user_validateData.phone, auxfileContents) != ESP_OK)
         {
-            // ////printf("\n\nuser_validateData.phone add admin %s\n\n", user_validateData.phone);
+            // printf("\n\nuser_validateData.phone add admin %s\n\n", user_validateData.phone);
             uint16_t ACK_Add_User = MyUser_Add(&user_validateData);
             if (ACK_Add_User == ESP_OK)
             {
@@ -2710,7 +2704,7 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
                 {
                     memset(file_contents, 0, sizeof(file_contents));
 
-                    sprintf(file_contents, "ME S A %s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;%c;%s", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date, user_validateData.wiegand_rele_permition, user_validateData.wiegand_code);
+                    sprintf(file_contents, "ME S A %s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;%c;%s", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour,user_validateData.key, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date, user_validateData.wiegand_rele_permition, user_validateData.wiegand_code);
 
                     if (BLE_SMS_INDICATION == BLE_INDICATION)
                     {
@@ -2745,7 +2739,7 @@ char *MyUser_add_Admin(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_informati
             }
             else if (ACK_Add_User == ERROR_WIEGAND_ALREADY_EXIST)
             {
-                // //printf("\n\nnew user bff 1999\n\n");
+                // printf("\n\nnew user bff 1999\n\n");
                 return ERROR_USER_WIEGAND_ALREADY_EXIST;
             }
             else
@@ -2824,7 +2818,7 @@ char *get_LogFiles_profiles()
     {
 
         sprintf(fileName, "/sdcard/%02d.csv", i);
-        // ////printf("\nFILE NAME %s\n", fileName);
+        // printf("\nFILE NAME %s\n", fileName);
         if (!access(fileName, F_OK))
         {
             f = fopen(fileName, "r");
@@ -2833,26 +2827,26 @@ char *get_LogFiles_profiles()
 
             file_Len = ftell(f);
             append += sprintf(file_contents + append, "%d-%ld ", i, file_Len);
-            // ////printf("\n%s\n", file_contents);
+            // printf("\n%s\n", file_contents);
             fclose(f);
         }
         else
         {
-            // ////printf("\nThe File %s\t not Found\n", fileName);
+            // printf("\nThe File %s\t not Found\n", fileName);
             append += sprintf(file_contents + append, "%d-0 ", i);
-            // ////printf("\n%s\n", file_contents);
+            // printf("\n%s\n", file_contents);
         }
     }
 
-    // ////printf("\n\n unmount 111\n\n");
+    // printf("\n\n unmount 111\n\n");
     free_SPI_Host();
     // esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
-    // // ////printf("\n\n unmount 222\n\n");
+    // // printf("\n\n unmount 222\n\n");
     // //ESP_LOGI("TAG", "Card unmounted");
 
     // // deinitialize the bus after all devices are removed
     // spi_bus_free(host.slot);
-    // ////printf("\n\n unmount 333\n\n");
+    // printf("\n\n unmount 333\n\n");
 
     return file_contents;
 }
@@ -2868,10 +2862,10 @@ char *send_LogFile(uint8_t gattsIF, uint16_t connID, uint16_t handle_table, char
     };
     sprintf(message.payload, "%s", payload);
 
-    // ////printf("queue created\n");
-    // ////printf("MyUser_ReadAllUsers CONN ID %d\n", message.connID);
-    // ////printf("MyUser_ReadAllUsers GATTSIF %d\n", message.gattsIF);
-    // ////printf("MyUser_ReadAllUsers %d\n", message.handle_table);
+    // printf("queue created\n");
+    // printf("MyUser_ReadAllUsers CONN ID %d\n", message.connID);
+    // printf("MyUser_ReadAllUsers GATTSIF %d\n", message.gattsIF);
+    // printf("MyUser_ReadAllUsers %d\n", message.handle_table);
 
     if (sendLOG_User_Label == 0)
     {
@@ -2894,7 +2888,7 @@ void task_Send_LOG_File(void *pvParameter)
     // heap_trace_start(HEAP_TRACE_LEAKS);
     sendLOGS_parameters_Message *message = (sendLOGS_parameters_Message *)pvParameter;
 
-    // ////printf("\n\ntask_Send_LOG_File 00 - %s\n\n", message->payload);
+    // printf("\n\ntask_Send_LOG_File 00 - %s\n\n", message->payload);
 
     sendLOGS_parameters_Message cpy_message = {
         .connID = message->connID,
@@ -2902,33 +2896,33 @@ void task_Send_LOG_File(void *pvParameter)
         .handle_table = message->handle_table,
         .usr_perm = message->usr_perm,
     };
-    // ////printf("\n\ntask_Send_LOG_File 001\n\n");
+    // printf("\n\ntask_Send_LOG_File 001\n\n");
     sprintf(cpy_message.payload, "%s", message->payload);
     char fileLOGS_content[182];
-    // ////printf("\n\ntask_Send_LOG_File 01\n\n");
+    // printf("\n\ntask_Send_LOG_File 01\n\n");
     init_SDCard();
-    // ////printf("\n\ntask_Send_LOG_File 21\n\n");
+    // printf("\n\ntask_Send_LOG_File 21\n\n");
 
-    // ////printf("\n\ntask_Send_LOG_File 1\n\n");
+    // printf("\n\ntask_Send_LOG_File 1\n\n");
 
-    // ////printf("\n\ntask_Send_LOG_File 2 - %s\n\n", message->payload);
+    // printf("\n\ntask_Send_LOG_File 2 - %s\n\n", message->payload);
     if (strlen(cpy_message.payload) > 2)
     {
-        // ////printf("\n\n unmount 111\n\n");
+        // printf("\n\n unmount 111\n\n");
         free_SPI_Host();
         // esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
-        // // ////printf("\n\n unmount 222\n\n");
+        // // printf("\n\n unmount 222\n\n");
         // //ESP_LOGI("TAG", "Card unmounted");
 
         // // deinitialize the bus after all devices are removed
         // spi_bus_free(host.slot);
-        // ////printf("\n\n unmount 333\n\n");
+        // printf("\n\n unmount 333\n\n");
         sendLOG_User_Label = 0;
         vTaskDelete(NULL);
     }
     else
     {
-        // ////printf("\n\ntask_Send_LOG_File 3\n\n");
+        // printf("\n\ntask_Send_LOG_File 3\n\n");
         FILE *ptr;
 
         if (atoi(cpy_message.payload) > 0 && atoi(cpy_message.payload) <= 12)
@@ -2938,33 +2932,33 @@ void task_Send_LOG_File(void *pvParameter)
 
             asprintf(&fileName, "/sdcard/%02d.csv", atoi(cpy_message.payload));
             ptr = fopen(fileName, "r");
-            // ////printf("\n\ntask_Send_LOG_File 4\n\n");
+            // printf("\n\ntask_Send_LOG_File 4\n\n");
             if (NULL == ptr)
             {
                 free_SPI_Host();
-                // ////printf("\n\n unmount 111\n\n");
+                // printf("\n\n unmount 111\n\n");
                 // esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
-                // // ////printf("\n\n unmount 222\n\n");
+                // // printf("\n\n unmount 222\n\n");
                 // //ESP_LOGI("TAG", "Card unmounted");
 
                 // // deinitialize the bus after all devices are removed
                 // spi_bus_free(host.slot);
-                // ////printf("\n\n unmount 333\n\n");
-                // ////printf("file can't be opened \n");
+                // printf("\n\n unmount 333\n\n");
+                // printf("file can't be opened \n");
                 sendLOG_User_Label = 0;
                 free(fileName);
                 vTaskDelete(NULL);
             }
             else
             {
-                // ////printf("\nOPEN FILE: %s\n", fileName);
+                // printf("\nOPEN FILE: %s\n", fileName);
             }
 
-            // ////printf("\n\ntask_Send_LOG_File 5\n\n");
+            // printf("\n\ntask_Send_LOG_File 5\n\n");
 
             while (!feof(ptr))
             {
-                // ////printf("\n\ntask_Send_LOG_File 6\n\n");
+                // printf("\n\ntask_Send_LOG_File 6\n\n");
                 memset(fileLOGS_content, 0, sizeof(fileLOGS_content));
                 for (int i = 0; i < 180; i++)
                 {
@@ -2982,7 +2976,7 @@ void task_Send_LOG_File(void *pvParameter)
                     fileLOGS_content[strlen(fileLOGS_content) - 1] = 0;
                 }
 
-                // ////printf("\nLOGS SEND DATA:\n%s\n", fileLOGS_content);
+                // printf("\nLOGS SEND DATA:\n%s\n", fileLOGS_content);
 
                 if (esp_ble_gatts_send_indicate(cpy_message.gattsIF, cpy_message.connID, cpy_message.handle_table, strlen(fileLOGS_content), (uint8_t *)fileLOGS_content, false) != ESP_OK)
                 {
@@ -2994,7 +2988,7 @@ void task_Send_LOG_File(void *pvParameter)
                 vTaskDelay(pdMS_TO_TICKS(50));
                 // take_LOG_Files_Semph();
 
-                // ////printf("\nlog: %#X\n", ch);
+                // printf("\nlog: %#X\n", ch);
             }
             // free(pvParameter);
             fclose(ptr);
@@ -3002,15 +2996,15 @@ void task_Send_LOG_File(void *pvParameter)
         }
         sendLOG_User_Label = 0;
 
-        // ////printf("\n\n unmount 111\n\n");
+        // printf("\n\n unmount 111\n\n");
         // esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
-        // ////printf("\n\n unmount 222\n\n");
+        // printf("\n\n unmount 222\n\n");
         free_SPI_Host();
         // ESP_LOGI("TAG", "Card unmounted");
 
         // deinitialize the bus after all devices are removed
         // spi_bus_free(host.slot);
-        // ////printf("\n\n unmount 333\n\n");
+        // printf("\n\n unmount 333\n\n");
         // heap_trace_stop();
         // heap_trace_dump();
         vTaskDelete(NULL);

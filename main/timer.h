@@ -58,6 +58,7 @@ static QueueHandle_t s_timer_queue;
 static QueueHandle_t alarm_I1_Timeout_queue;
 
 extern TaskHandle_t xHandle_Timer_VerSystem;
+TimerHandle_t xResetTimer;
 
 
 extern uint8_t RSSI_LED_TOOGLE;
@@ -91,7 +92,7 @@ void updateSystemTimer(int seconds);
 
 
 
-
+void vResetTimerCallback(TimerHandle_t xTimer);
 void initTimers();
 
 void task_VerifySystem(void *pvParameter);

@@ -39,7 +39,7 @@ uint8_t rele1_Restriction;
 void task_BiState_Send_RelayState2(void *pvParameter)
 {
     queue_BLE_Parameters2 = xQueueCreate(1, sizeof(/* rsp */ data_BLE_Send_RelayState));
-    // //////printf("\nenter task_BiState_Send_RelayState2\n");
+    // //printf("\nenter task_BiState_Send_RelayState2\n");
     data_BLE_Send_RelayState cpy_message; //= (data_BLE_Send_RelayState *)pvParameter;
     char teste[200];
     data_BLE_Send_RelayState cpy_cpy_message;
@@ -47,12 +47,12 @@ void task_BiState_Send_RelayState2(void *pvParameter)
     // rdySem_Control_Send_RelayState2 = xSemaphoreCreateBinary();
     for (;;)
     {
-        // ////printf("\nenter task_BiState_Send_RelayState2\n");
+        // printf("\nenter task_BiState_Send_RelayState2\n");
         memset(&cpy_message, 0, sizeof(cpy_message));
         memset(&cpy_cpy_message, 0, sizeof(cpy_cpy_message));
         if (xQueueReceive(queue_BLE_Parameters2, /* &teste */ &(cpy_cpy_message), portMAX_DELAY))
         {
-            // //printf("\nsemaphore give 111\n");
+            // printf("\nsemaphore give 111\n");
             cpy_message = cpy_cpy_message;
             label_MonoStableRelay2 = 1;
 
@@ -63,7 +63,7 @@ void task_BiState_Send_RelayState2(void *pvParameter)
                 {
                     gpio_set_level(GPIO_OUTPUT_IO_1, 1);
                     sprintf(cpy_message.payload, "%s %c %c %d", RELE2_ELEMENT, SET_CMD, RELE_PARAMETER, getRele2());
-                    // ////printf("\nfeedback relay2- %s - %d\n", cpy_message.payload, cpy_message.BLE_SMS_INDICATION);
+                    // printf("\nfeedback relay2- %s - %d\n", cpy_message.payload, cpy_message.BLE_SMS_INDICATION);
                     if (label_MonoStableRelay2 == 1)
                     {
                         BLE_Broadcast_Notify(cpy_message.payload);
@@ -79,7 +79,7 @@ void task_BiState_Send_RelayState2(void *pvParameter)
 
                     unsigned int q_size = uxQueueMessagesWaiting(queue_BLE_Parameters2);
 
-                    // //printf("\n\nqueue rele 2- %d\n\n", q_size);
+                    // printf("\n\nqueue rele 2- %d\n\n", q_size);
 
                     if (q_size < 1)
                     {
@@ -91,7 +91,7 @@ void task_BiState_Send_RelayState2(void *pvParameter)
                         memset(cpy_message.payload, 0, sizeof(cpy_message.payload));
                         sprintf(cpy_message.payload, "%s %c %c %d", RELE2_ELEMENT, SET_CMD, RELE_PARAMETER, getRele2());
 
-                        // //printf("\nfeedback relay22- %s\n", cpy_message.payload);
+                        // printf("\nfeedback relay22- %s\n", cpy_message.payload);
 
                         if (cpy_message.BLE_SMS_INDICATION == UDP_INDICATION)
                         {
@@ -136,7 +136,7 @@ void task_BiState_Send_RelayState2(void *pvParameter)
 
                     unsigned int q_size = uxQueueMessagesWaiting(queue_BLE_Parameters2);
 
-                    // ////printf("\n\nqueue rele - %d\n\n", q_size);
+                    // printf("\n\nqueue rele - %d\n\n", q_size);
 
                     if (q_size < 1)
                     {
@@ -145,7 +145,7 @@ void task_BiState_Send_RelayState2(void *pvParameter)
                             gpio_set_level(GPIO_OUTPUT_IO_1, 0);
                         }
 
-                        // //printf("\nfeedback relay2222- %s\n", cpy_message.payload);
+                        // printf("\nfeedback relay2222- %s\n", cpy_message.payload);
 
                         BLE_Broadcast_Notify(cpy_message.payload);
 
@@ -197,9 +197,9 @@ void task_BiState_Send_RelayState1(void *pvParameter)
     //  xSemaphoreGive(rdySem_RelayMonoInicial);
     rdySem_RelayMonoInicial = xSemaphoreCreateBinary();
     rdySem_RelayMonoStart = xSemaphoreCreateBinary();
-    // ////printf("sem 11");
+    // printf("sem 11");
     xSemaphoreGive(rdySem_RelayMonoStart);
-    // ////printf("sem 22\n");
+    // printf("sem 22\n");
     uint8_t timeout = 0;
 
     queue_BLE_Parameters1 = xQueueCreate(1, sizeof(data_BLE_Send_RelayState));
@@ -218,7 +218,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
             
 
             label_MonoStableRelay1 = 1;
-            //printf("\nfeedback relay hohoho\n");
+            printf("\nfeedback relay hohoho\n");
             save_INT8_Data_In_Storage(NVS_KEY_RELAY1_LAST_VALUE, 0, nvs_System_handle);
 
             if (cpy_message.relaynumber == RELE1_NUMBER)
@@ -232,7 +232,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
 
                     sprintf(cpy_message.payload, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
                     
-                    //printf("\nfeedback relay 11- %s\n", cpy_message.payload);
+                    printf("\nfeedback relay 11- %s\n", cpy_message.payload);
 
                     BLE_Broadcast_Notify(cpy_message.payload);
 
@@ -244,19 +244,19 @@ void task_BiState_Send_RelayState1(void *pvParameter)
                     {
                         
                         sprintf(cpy_message.mqttInfo_ble.data, "%s", cpy_message.payload);
-                         //printf("\nfeedback relay6565 22- %s - %s\n", cpy_message.mqttInfo_ble.data, cpy_message.mqttInfo_ble.topic);
+                         printf("\nfeedback relay6565 22- %s - %s\n", cpy_message.mqttInfo_ble.data, cpy_message.mqttInfo_ble.topic);
                         send_UDP_queue(&(cpy_message.mqttInfo_ble));
                     }
 
                     // xQueueSendToBack(UDP_Send_queue, (void *)&UDP_message, pdMS_TO_TICKS(1000));
 
-                    // ////printf("\nfeedback relay 22- %s\n", cpy_message.payload);
+                    // printf("\nfeedback relay 22- %s\n", cpy_message.payload);
 
                     vTaskDelay(pdMS_TO_TICKS((rele1_Bistate_Time * 1000)));
 
                     unsigned int q_size = uxQueueMessagesWaiting(queue_BLE_Parameters1);
 
-                    // //printf("\n\nqueue rele 2 - %d\n\n", q_size);
+                    // printf("\n\nqueue rele 2 - %d\n\n", q_size);
 
                     if (q_size < 1)
                     {
@@ -267,7 +267,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
 
                         memset(cpy_message.payload, 0, sizeof(cpy_message.payload));
                         sprintf(cpy_message.payload, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
-                        // //printf("\nfeedback relay33- %s\n", cpy_message.payload);
+                        // printf("\nfeedback relay33- %s\n", cpy_message.payload);
 
                         BLE_Broadcast_Notify(cpy_message.payload);
 
@@ -323,7 +323,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
                     
                     unsigned int q_size = uxQueueMessagesWaiting(queue_BLE_Parameters1);
                     
-                    // ////printf("\n\nqueue rele - %d\n\n", q_size);
+                    // printf("\n\nqueue rele - %d\n\n", q_size);
 
                     if (q_size < 1)
                     {
@@ -333,11 +333,11 @@ void task_BiState_Send_RelayState1(void *pvParameter)
                         }
 
                         BLE_Broadcast_Notify("R1 G R 0");
-                        // ////printf("\n\n before PULSE_TIME_WAS_RENEWED11\n\n");
+                        // printf("\n\n before PULSE_TIME_WAS_RENEWED11\n\n");
                         if (cpy_message.EG91_data.labelIncomingCall != 1 && cpy_message.EG91_data.labelRsp == 1)
                         {
 
-                            // ////printf("\n\n before PULSE_TIME_WAS_RENEWED22\n\n");
+                            // printf("\n\n before PULSE_TIME_WAS_RENEWED22\n\n");
                             if (getRele1())
                             {
                                 // vTaskDelay(pdMS_TO_TICKS(1000));
@@ -355,18 +355,18 @@ void task_BiState_Send_RelayState1(void *pvParameter)
                     }
                     else
                     {
-                        // ////printf("\n\n before PULSE_TIME_WAS_RENEWED33\n\n");
+                        // printf("\n\n before PULSE_TIME_WAS_RENEWED33\n\n");
                         sprintf(cpy_message.EG91_data.payload, return_Json_SMS_Data("PULSE_TIME_WAS_RENEWED"), RELE1_NUMBER);
 
                         if (cpy_message.EG91_data.labelIncomingCall == 1)
                         {
-                            // ////printf("\n\n before PULSE_TIME_WAS_RENEWED44\n\n");
+                            // printf("\n\n before PULSE_TIME_WAS_RENEWED44\n\n");
                             give_rdySem_Control_Send_AT_Command();
                             //    xSemaphoreGive(rdySem_Control_Send_AT_Command);
                         }
                         else
                         {
-                            // ////printf("\n\n before PULSE_TIME_WAS_RENEWED55\n\n");
+                            // printf("\n\n before PULSE_TIME_WAS_RENEWED55\n\n");
                             xQueueSendToBack(queue_EG91_SendSMS, (void *)&cpy_message.EG91_data, pdMS_TO_TICKS(1000));
                         }
                     }
@@ -403,7 +403,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         }
     }
 
-    // ////printf("\n\nconfiguration_Relay_Parameter\n\n");
+    // printf("\n\nconfiguration_Relay_Parameter\n\n");
 
     dot_Counter = dot_Counter + 1;
 
@@ -445,7 +445,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
 
         found_Count |= 16;
         // aux_DotCounter = aux_DotCounter + 1;
-        // ////printf("\n\nrelayTIME_1 - %s , %d\n\n", relayTIME_1, atoi(relayTIME_1));
+        // printf("\n\nrelayTIME_1 - %s , %d\n\n", relayTIME_1, atoi(relayTIME_1));
     }
     else
     {
@@ -489,7 +489,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         }
 
         found_Count |= 8;
-        // ////printf("\n\nrelayTIME_2 - %s , %d\n\n", relayTIME_2, atoi(relayTIME_2));
+        // printf("\n\nrelayTIME_2 - %s , %d\n\n", relayTIME_2, atoi(relayTIME_2));
     }
     else
     {
@@ -522,7 +522,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         {
             // aux_DotCounter = aux_DotCounter + 1;
             found_Count |= 4;
-            // ////printf("\n\nrelayMODE_1 - %s , %d\n\n", relayMODE_1, atoi(relayMODE_1));
+            // printf("\n\nrelayMODE_1 - %s , %d\n\n", relayMODE_1, atoi(relayMODE_1));
         }
         else
         {
@@ -560,7 +560,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         {
             // aux_DotCounter = aux_DotCounter + 1;
             found_Count |= 2;
-            // ////printf("\n\nrelayMODE_2 - %s , %d\n\n", relayMODE_2, atoi(relayMODE_2));
+            // printf("\n\nrelayMODE_2 - %s , %d\n\n", relayMODE_2, atoi(relayMODE_2));
         }
         else
         {
@@ -597,7 +597,7 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
 
         if ((relayRestriction_1[0] == '1' || relayRestriction_1[0] == '0') && strlen(relayRestriction_1) == 1)
         {
-            // ////printf("\n\relayRestriction_1 - %s , %d\n\n", relayRestriction_1, atoi(relayRestriction_1));
+            // printf("\n\relayRestriction_1 - %s , %d\n\n", relayRestriction_1, atoi(relayRestriction_1));
 
             found_Count |= 1;
             // aux_DotCounter = aux_DotCounter + 1;
@@ -628,45 +628,45 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
 
             // resetRele1();
             rele1_Bistate_Time = atoi(relayTIME_1);
-            // ////printf("\n\n rele1_Bistate_Time asas - %d\n\n", rele1_Bistate_Time);
+            // printf("\n\n rele1_Bistate_Time asas - %d\n\n", rele1_Bistate_Time);
             nvs_set_u32(nvs_System_handle, NVS_RELAY1_BISTATE_TIME, rele1_Bistate_Time);
             // save_STR_Data_In_Storage(NVS_RELAY1_BISTATE_TIME, relayTIME_1, nvs_System_handle);
         }
 
-        // ////printf("\n\nfound_Count1 - %d\n\n", found_Count);
+        // printf("\n\nfound_Count1 - %d\n\n", found_Count);
         if (((found_Count & 8) >> 3) == 1)
         {
             // resetRele2();
             rele2_Bistate_Time = atoi(relayTIME_2);
-            // ////printf("\n\n rele2_Bistate_Time asas - %d\n\n", rele2_Bistate_Time);
+            // printf("\n\n rele2_Bistate_Time asas - %d\n\n", rele2_Bistate_Time);
             nvs_set_u32(nvs_System_handle, NVS_RELAY2_BISTATE_TIME, rele2_Bistate_Time);
             // save_STR_Data_In_Storage(NVS_RELAY2_BISTATE_TIME, relayTIME_2, nvs_System_handle);
         }
-        // ////printf("\n\nfound_Count2 - %d\n\n", found_Count);
+        // printf("\n\nfound_Count2 - %d\n\n", found_Count);
         if (((found_Count & 4) >> 2) == 1)
         {
             // resetRele1();
             rele1_Mode_Label = atoi(relayMODE_1);
             save_INT8_Data_In_Storage(NVS_KEY_RELAY1_LAST_VALUE, 0, nvs_System_handle);
-            // ////printf("\n\n rele1_Mode_Label asas - %d\n\n", rele1_Mode_Label);
+            // printf("\n\n rele1_Mode_Label asas - %d\n\n", rele1_Mode_Label);
             save_INT8_Data_In_Storage(NVS_RELAY1_MODE, rele1_Mode_Label, nvs_System_handle);
         }
-        // ////printf("\n\nfound_Count3 - %d\n\n", found_Count);
+        // printf("\n\nfound_Count3 - %d\n\n", found_Count);
         if (((found_Count & 2) >> 1) == 1)
         {
             // resetRele2();
             rele2_Mode_Label = atoi(relayMODE_2);
             save_INT8_Data_In_Storage(NVS_KEY_RELAY2_LAST_VALUE, 0, nvs_System_handle);
-            // ////printf("\n\n rele2_Mode_Label asas - %d\n\n", rele2_Mode_Label);
+            // printf("\n\n rele2_Mode_Label asas - %d\n\n", rele2_Mode_Label);
             save_INT8_Data_In_Storage(NVS_RELAY2_MODE, rele2_Mode_Label, nvs_System_handle);
         }
 
-        // ////printf("\n\nfound_Count4 - %d\n\n", found_Count);
+        // printf("\n\nfound_Count4 - %d\n\n", found_Count);
         if (found_Count & 1)
         {
             // resetRele1();
             rele1_Restriction = atoi(relayRestriction_1);
-            // ////printf("\n\n rele1_Restriction asas - %d\n\n", rele1_Restriction);
+            // printf("\n\n rele1_Restriction asas - %d\n\n", rele1_Restriction);
             save_INT8_Data_In_Storage(NVS_KEY_RELAY_PAIRING_VALUE, rele1_Restriction, nvs_System_handle);
         }
 
@@ -680,11 +680,11 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         else if (BLE_SMS == SMS_INDICATION)
         {
             char UDP_Rsp[100] = {};
-            //printf("\n\nfound_Count - %s\n\n", mqttInfo->data);
+            printf("\n\nfound_Count - %s\n\n", mqttInfo->data);
             sprintf(mqttInfo->data, "%s %s", "ME S D", payload);
-            //printf("\n\nfound_Count - %d\n\n", found_Count);
+            printf("\n\nfound_Count - %d\n\n", found_Count);
             sprintf(mqttInfo->topic,"%s","");
-            //printf("\n\nfound_Count - %d\n\n", found_Count);
+            printf("\n\nfound_Count - %d\n\n", found_Count);
             // send_UDP_Send(UDP_Rsp);
             send_UDP_queue(mqttInfo);
 
@@ -717,26 +717,26 @@ char *getUserApp_id(char *topic)
         
     }
 
-    //printf("\n\n get user topic %s\n\n",topic);
+    printf("\n\n get user topic %s\n\n",topic);
     return topic;
     
 }
 
 char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, char param, char *phPassword, char *payload, MyUser *user_validateData, uint8_t gattsIF, uint16_t connID, uint16_t handle_table, data_EG91_Send_SMS *data_SMS, mqtt_information *mqttInfo)
 {
-    // ////printf("\n parse relay data inicial\n");
+    // printf("\n parse relay data inicial\n");
     //   char *sdCard_Date;
     char *rsp = NULL; /* = (char*) malloc(200 * sizeof(char)); */
 
     /*memset(&rsp, 0, sizeof(rsp));*/
     memset(&sdCard_log_relay, 0, sizeof(sdCard_log_relay));
-    // ////printf("pass (11) %s\n", user_validateData->key);
-    // ////printf("bistate time = %d\n", rele1_Bistate_Time);
-    // ////printf("\n\n SD CARD BI STATE 555- %s  / %s\n\n",user_validateData->firstName,user_validateData->phone);
+    // printf("pass (11) %s\n", user_validateData->key);
+    // printf("bistate time = %d\n", rele1_Bistate_Time);
+    // printf("\n\n SD CARD BI STATE 555- %s  / %s\n\n",user_validateData->firstName,user_validateData->phone);
     if (fd_configurations.alarmMode.A == 1 && (cmd == SET_CMD || cmd == RESET_CMD) && param == RELE_PARAMETER && releNumber == RELE1_NUMBER)
     {
 
-        // ////printf("\n\n feedback number position22  %s\n\n", fd_configurations.phone1);
+        // printf("\n\n feedback number position22  %s\n\n", fd_configurations.phone1);
 
         if (user_validateData->permition == '0')
         {
@@ -766,13 +766,13 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
     {
         // if ((label_MonoStableRelay1 != 1 && releNumber == RELE1_NUMBER) || (label_MonoStableRelay2 != 1 && releNumber == RELE2_NUMBER))
         // {
-        //printf("\n\n ENTER IN MONOSTABLE CHECK\n\n");
-        // ////printf("\n\n logs_struct.type SMS 11 %d\n\n", BLE_SMS_Indication);
+        printf("\n\n ENTER IN MONOSTABLE CHECK\n\n");
+        // printf("\n\n logs_struct.type SMS 11 %d\n\n", BLE_SMS_Indication);
         if (validate_DataUser(user_validateData, phPassword))
         {
             // free(phPassword);
-            // ////printf("\n after validate user reles\n");
-            // ////printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
+            // printf("\n after validate user reles\n");
+            // printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
             if (param == RELE_PARAMETER)
             {
                 data_BLE_Send_RelayState message;
@@ -808,12 +808,12 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else if (BLE_SMS_Indication == SMS_INDICATION)
                         {
-                            // ////printf("\n\n logs_struct.type SMS 22\n\n");
+                            // printf("\n\n logs_struct.type SMS 22\n\n");
                             sprintf(logs_struct.type, "%s", "SMS");
                         }
                         else if (BLE_SMS_Indication == UDP_INDICATION)
                         {
-                            // ////printf("\n\n logs_struct.type SMS 22\n\n");
+                            // printf("\n\n logs_struct.type SMS 22\n\n");
                             sprintf(logs_struct.phone,"%s",getUserApp_id(mqttInfo->topic));
                             sprintf(logs_struct.type, "%s", "WEB");
                         }
@@ -917,7 +917,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else if (BLE_SMS_Indication == SMS_INDICATION)
                         {
-                            // ////printf("\n\n logs_struct.type SMS aaaa\n\n");
+                            // printf("\n\n logs_struct.type SMS aaaa\n\n");
                             sprintf(logs_struct.type, "%s", "SMS");
                         }
                         else if (BLE_SMS_Indication == UDP_INDICATION)
@@ -1115,7 +1115,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ONLY_PERMISSION_TO_CALL"));
                 }
 
-                //printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
+                printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
 
                 if (setReles(releNumber, BLE_SMS_Indication, gattsIF, connID, handle_table, data_SMS, mqttInfo))
                 {
@@ -1136,6 +1136,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 1)
                         {
+                            printf("\n\n alarm1 timeout\n\n");
                             alarm_I1_Check_And_Save_Data(user_validateData->phone);
                         }
                         else if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
@@ -1171,7 +1172,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                                     sprintf(logs_struct.type, "%s", "WEB");
                                 }
 
-                                // ////printf("\n\n SD CARD BI STATE - %s  / %s\n\n",user_validateData->firstName,user_validateData->phone);
+                                // printf("\n\n SD CARD BI STATE - %s  / %s\n\n",user_validateData->firstName,user_validateData->phone);
 
                                 if (rele_Level)
                                 {
@@ -1210,7 +1211,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                                 //
                                 if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD) || network_Activate_Flag == 1)
                                 {
-                                    // //printf("\nENTER WRITE SD CARD BI STATE\n");
+                                    // printf("\nENTER WRITE SD CARD BI STATE\n");
                                     sdCard_Logs_struct logs_struct;
                                     memset(&logs_struct, 0, sizeof(logs_struct));
 
@@ -1226,7 +1227,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                                     {
                                         sprintf(logs_struct.type, "%s", "READER");
                                         sprintf(logs_struct.phone, "%s", user_validateData->wiegand_code);
-                                        // //printf("\n SD CARD BI STATE - %s\n", user_validateData->wiegand_code);
+                                        // printf("\n SD CARD BI STATE - %s\n", user_validateData->wiegand_code);
                                     }
                                     else
                                     {
@@ -1253,9 +1254,9 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                                      BLE_Broadcast_Notify(rsp_notify); */
                                     sdCard_Write_LOGS(&logs_struct);
 
-                                    // //printf("\nENTER WRITE SD CARD 1234\n");
+                                    // printf("\nENTER WRITE SD CARD 1234\n");
                                 }
-                                // //printf("\nENTER WRITE SD CARD 6666\n");
+                                // printf("\nENTER WRITE SD CARD 6666\n");
                                 return return_ERROR_Codes(&rsp, "NTRSP");
                             }
                         }
@@ -1362,11 +1363,11 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     {
 
                         int rele_Level = getRele2();
-                        // ////printf("\n\nif fd_configurations.alarmMode.A %d, fd_configurations.normal_FB_Mode %d \n\n", fd_configurations.alarmMode.A, fd_configurations.normal_FB_Mode);
+                        // printf("\n\nif fd_configurations.alarmMode.A %d, fd_configurations.normal_FB_Mode %d \n\n", fd_configurations.alarmMode.A, fd_configurations.normal_FB_Mode);
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // ////printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
 
@@ -1482,7 +1483,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         {
 
                             // free(sdCard_Date);
-                            // ////printf("data_SMS->labelRsp == %d", data_SMS->labelRsp);
+                            // printf("data_SMS->labelRsp == %d", data_SMS->labelRsp);
                             // if (data_SMS->labelRsp == 1)
                             // {
 
@@ -1653,14 +1654,14 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     else
                     {
 
-                        // ////printf(ERROR_SET);
+                        // printf(ERROR_SET);
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_SET"));
                     }
                 }
                 else
                 {
 
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -1787,7 +1788,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 else
                 {
 
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -1823,20 +1824,20 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     }
                     else
                     {
-                        // ////printf(ERROR_SET);
+                        // printf(ERROR_SET);
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_SET"));
                     }
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
             else
             {
 
-                // ////printf(ERROR_PARAMETER);
+                // printf(ERROR_PARAMETER);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
             }
         }
@@ -1863,11 +1864,11 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         sprintf(logs_struct.type, "%s", "SMS");
                     }
 
-                    // ////printf("\nlogs_struct.name1 %s\n", logs_struct.name);
-                    // ////printf("\nlogs_struct.name2 %s\n", user_validateData->firstName);
+                    // printf("\nlogs_struct.name1 %s\n", logs_struct.name);
+                    // printf("\nlogs_struct.name2 %s\n", user_validateData->firstName);
                     sprintf(logs_struct.name, "%s", user_validateData->firstName);
-                    // ////printf("\nlogs_struct.name3 %s\n", logs_struct.name);
-                    // ////printf("\nlogs_struct.name4 %s\n", user_validateData->firstName);
+                    // printf("\nlogs_struct.name3 %s\n", logs_struct.name);
+                    // printf("\nlogs_struct.name4 %s\n", user_validateData->firstName);
                     sprintf(logs_struct.phone, "%s", user_validateData->phone);
                     sprintf(logs_struct.relay, "%c%c", 'R', releNumber + 48);
                     sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
@@ -1878,17 +1879,17 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
             }
 
-            // ////printf(ERROR_USER_NOT_PERMITION);
+            // printf(ERROR_USER_NOT_PERMITION);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
         }
         /*  }
        else
         {
-            //////printf("\n\n NOT ENTER IN MONOSTABLE CHECK\n\n");
+            //printf("\n\n NOT ENTER IN MONOSTABLE CHECK\n\n");
             if (BLE_SMS_Indication == BLE_INDICATION)
             {
-                //////printf("\n\n NOT ENTER IN MONOSTABLE CHECK 11\n\n");
-                //////printf(ERROR_SET);
+                //printf("\n\n NOT ENTER IN MONOSTABLE CHECK 11\n\n");
+                //printf(ERROR_SET);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data(ERROR_SET));
             }
             else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -1896,7 +1897,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 // data_EG91_Send_SMS cpy_message12 = *data_SMS;
                 asprintf(&rsp, return_Json_SMS_Data("RELAY_IS_ON_UNABLE_TURN_ON"), releNumber);
                 // sprintf(cpy_message12.payload, "RELAY %d IS ON. UNABLE TO TURN ON", releNumber);
-                //////printf("\nlabel led %d,%d\n", cpy_message12.labelRsp, data_SMS->labelRsp);
+                //printf("\nlabel led %d,%d\n", cpy_message12.labelRsp, data_SMS->labelRsp);
                 // xQueueSendToFront(queue_EG91_SendSMS, (void *)&cpy_message12, (TickType_t)0);
                 return rsp;
             }
@@ -1912,7 +1913,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 {
                     // if (BLE_SMS_Indication == BLE_INDICATION && rele1_Restriction == 1)
                     // {
-                    //     //////printf("NAO PERMITIDO GET. SO POR CHAMADA\n");
+                    //     //printf("NAO PERMITIDO GET. SO POR CHAMADA\n");
                     //     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                     // }
                     // else
@@ -1968,7 +1969,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
                 else
                 {
-                    // ////printf(ERROR_GET);
+                    // printf(ERROR_GET);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                 }
             }
@@ -1990,7 +1991,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_GET);
+                            // printf(ERROR_GET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                         }
                     }
@@ -2025,7 +2026,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_GET);
+                            // printf(ERROR_GET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                         }
                     }
@@ -2036,7 +2037,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -2058,7 +2059,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_GET);
+                            // printf(ERROR_GET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                         }
                     }
@@ -2076,7 +2077,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_GET);
+                            // printf(ERROR_GET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                         }
                     }
@@ -2087,7 +2088,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -2122,25 +2123,25 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     }
                     else
                     {
-                        // ////printf(ERROR_GET);
+                        // printf(ERROR_GET);
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
                     }
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
             else
             {
-                // ////printf(ERROR_GET);
+                // printf(ERROR_GET);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET"));
             }
         }
         else
         {
-            // ////printf(ERROR_USER_NOT_PERMITION);
+            // printf(ERROR_USER_NOT_PERMITION);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
         }
     }
@@ -2161,7 +2162,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         sdCard_Logs_struct logs_struct;
                         memset(&logs_struct, 0, sizeof(logs_struct));
 
-                        // ////printf("\n\n logs_struct.type SMS 11\n\n");
+                        // printf("\n\n logs_struct.type SMS 11\n\n");
 
                         if (BLE_SMS_Indication == BLE_INDICATION)
                         {
@@ -2169,7 +2170,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else if (BLE_SMS_Indication == SMS_INDICATION)
                         {
-                            // ////printf("\n\n logs_struct.type SMS 22\n\n");
+                            // printf("\n\n logs_struct.type SMS 22\n\n");
                             sprintf(logs_struct.type, "%s", "SMS");
                         }
                         else if (BLE_SMS_Indication == UDP_INDICATION)
@@ -2256,7 +2257,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else if (BLE_SMS_Indication == SMS_INDICATION)
                         {
-                            // ////printf("\n\n logs_struct.type SMS aaaa\n\n");
+                            // printf("\n\n logs_struct.type SMS aaaa\n\n");
                             sprintf(logs_struct.type, "%s", "SMS");
                         }
                         else if (BLE_SMS_Indication == UDP_INDICATION)
@@ -2416,7 +2417,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                             sdCard_Write_LOGS(&logs_struct);
                         }
                         // free(sdCard_Date);
-                        // ////printf("NAO PERMITIDO RESET. SO POR CHAMADA\n");
+                        // printf("NAO PERMITIDO RESET. SO POR CHAMADA\n");
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("LOGS_ONLY_PERMISSION_TO_CALL"));
                     }
                     else
@@ -2453,48 +2454,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                             BLE_Broadcast_Notify("R1 R R 0");
                             return return_ERROR_Codes(&rsp, "NTRSP");
                         }
-                        else if (BLE_SMS_Indication == SMS_INDICATION)
-                        {
-                            if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD) || network_Activate_Flag == 1)
-                            {
-
-                                sdCard_Logs_struct logs_struct;
-                                memset(&logs_struct, 0, sizeof(logs_struct));
-
-                                sprintf(logs_struct.type, "%s", "SMS");
-                                sprintf(logs_struct.name, "%s", user_validateData->firstName);
-                                sprintf(logs_struct.phone, "%s", user_validateData->phone);
-                                sprintf(logs_struct.relay, "%s", "R1");
-                                sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-                                sprintf(logs_struct.date, "%s", replace_Char_in_String(nowTime.strTime, ',', ';'));
-                                sdCard_Write_LOGS(&logs_struct);
-                            }
-
-                            if (!getRele1())
-                            {
-                                asprintf(&rsp, return_Json_SMS_Data("RELAY_WAS_ALREADY_OFF"), RELE1_NUMBER);
-                                return rsp;
-                            }
-                            else
-                            {
-                                resetRele1();
-
-                                if (fd_configurations.alarmMode.A == 1)
-                                {
-                                    alarm_I1_Check_And_Save_Data(user_validateData->phone);
-                                }
-                                else if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
-                                {
-                                    normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE1_NUMBER);
-                                }
-
-                                BLE_Broadcast_Notify("R1 R R 0");
-                                asprintf(&rsp, return_Json_SMS_Data("RELAY_OFF"), RELE1_NUMBER, "<02>");
-                                return rsp;
-                            }
-
-                            return rsp;
-                        }
+                        
                     }
                 }
                 else if (releNumber == RELE2_NUMBER)
@@ -2520,7 +2480,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // ////printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
                         // asprintf(&rsp, "%s %c %c %d", RELE2_ELEMENT, cmd, param, getRele2());
@@ -2559,7 +2519,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // ////printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
 
@@ -2611,7 +2571,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         // free(sdCard_Date);
                     }
 
-                    // ////printf(ERROR_RESET);
+                    // printf(ERROR_RESET);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                 }
             }
@@ -2648,7 +2608,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_RESET);
+                            // printf(ERROR_RESET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                         }
                     }
@@ -2688,7 +2648,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         }
                         else
                         {
-                            // ////printf(ERROR_RESET);
+                            // printf(ERROR_RESET);
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                         }
                     }
@@ -2699,7 +2659,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -2761,13 +2721,13 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     }
                     else
                     {
-                        // ////printf(ERROR_RESET);
+                        // printf(ERROR_RESET);
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                     }
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
@@ -2805,19 +2765,19 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     }
                     else
                     {
-                        // ////printf(ERROR_RESET);
+                        // printf(ERROR_RESET);
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                     }
                 }
                 else
                 {
-                    // ////printf(ERROR_USER_NOT_PERMITION);
+                    // printf(ERROR_USER_NOT_PERMITION);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
                 }
             }
             else
             {
-                // ////printf(ERROR_PARAMETER);
+                // printf(ERROR_PARAMETER);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
             }
         }
@@ -2843,11 +2803,11 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         sprintf(logs_struct.type, "%s", "READER");
                         sprintf(logs_struct.phone, "%s", user_validateData->wiegand_code);
                     }
-                    // ////printf("\nlogs_struct.name1 %s\n", logs_struct.name);
-                    // ////printf("\nlogs_struct.name2 %s\n", user_validateData->firstName);
+                    // printf("\nlogs_struct.name1 %s\n", logs_struct.name);
+                    // printf("\nlogs_struct.name2 %s\n", user_validateData->firstName);
                     sprintf(logs_struct.name, "%s", user_validateData->firstName);
-                    // ////printf("\nlogs_struct.name3 %s\n", logs_struct.name);
-                    // ////printf("\nlogs_struct.name4 %s\n", user_validateData->firstName);
+                    // printf("\nlogs_struct.name3 %s\n", logs_struct.name);
+                    // printf("\nlogs_struct.name4 %s\n", user_validateData->firstName);
                     sprintf(logs_struct.phone, "%s", user_validateData->phone);
                     sprintf(logs_struct.relay, "%c%c", 'R', releNumber + 48);
                     sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("NOT_CHANGE"));
@@ -2858,13 +2818,13 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                 }
             }
 
-            // ////printf(ERROR_USER_NOT_PERMITION);
+            // printf(ERROR_USER_NOT_PERMITION);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
         }
     }
     else
     {
-        // ////printf(ERROR_CMD);
+        // printf(ERROR_CMD);
         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_CMD"));
     }
 
@@ -2886,18 +2846,18 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
     char feedBackRelay[50];
     memset(feedBackRelay, 0, sizeof(feedBackRelay));
-    //printf("\n\n logs_struct.type SMS 555 \n\n");
+    printf("\n\n logs_struct.type SMS 555 \n\n");
     data_BLE_Send_RelayState message;
 
-    //printf("\n\n logs_struct.type SMS 666 \n\n");
+    printf("\n\n logs_struct.type SMS 666 \n\n");
     memset(&message, 0, sizeof(message));
 
     
-    // ////printf("\n\n logs_struct.type SMS 777 \n\n");
+    // printf("\n\n logs_struct.type SMS 777 \n\n");
     if (releNumber == RELE1_NUMBER)
     {
-         //printf("\n\n logs_struct.type SMS 44 %d\n\n", message.BLE_SMS_INDICATION);
-        //  ////printf("setReles 11\n");
+         printf("\n\n logs_struct.type SMS 44 %d\n\n", message.BLE_SMS_INDICATION);
+        //  printf("setReles 11\n");
         if (rele1_Mode_Label == MONOESTABLE_MODE_INDEX)
         {
 
@@ -2905,7 +2865,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
             {
                 if (label_MonoStableRelay1 != 1)
                 {
-                    //printf("\n\n logs_struct.type SMS 55 %d\n\n", message.BLE_SMS_INDICATION);
+                    printf("\n\n logs_struct.type SMS 55 %d\n\n", message.BLE_SMS_INDICATION);
 
                     message.connID = connID;
                     message.gattsIF = gattsIF;
@@ -2914,7 +2874,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
                     if (BLE_SMS_Indication == BLE_INDICATION)
                     {
-                        //printf("\n\n\n rele in bistate1\n\n\n");
+                        printf("\n\n\n rele in bistate1\n\n\n");
                         sprintf(message.mqttInfo_ble.topic, "%s", "");
                         message.BLE_SMS_INDICATION = BLE_INDICATION;
                     }
@@ -2928,20 +2888,20 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                         sprintf(message.mqttInfo_ble.topic, "%s", mqttInfo->topic);
                         message.BLE_SMS_INDICATION = UDP_INDICATION;
                     }
-                    // ////printf("\n\n logs_struct.type SMS 66 %d\n\n", message.BLE_SMS_INDICATION);
+                    // printf("\n\n logs_struct.type SMS 66 %d\n\n", message.BLE_SMS_INDICATION);
                     sprintf(feedBackRelay, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
-                    //printf("\nfeedback relay- %s\n", feedBackRelay);
+                    printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
                    // sprintf(message.mqttInfo_ble.data,"%s",feedBackRelay);
 
-                    // ////printf("\n\n\n rele in bistate1\n\n\n");
+                    // printf("\n\n\n rele in bistate1\n\n\n");
                     xQueueSendToBack(queue_BLE_Parameters1, (void *)&message, pdMS_TO_TICKS(1000));
 
                     return 1;
                 }
                 else
                 {
-                    //printf("\n\n\n rele in bistate2\n\n\n");
+                    printf("\n\n\n rele in bistate2\n\n\n");
                     message.connID = connID;
                     message.gattsIF = gattsIF;
                     message.handle_table = handle_table;
@@ -2949,7 +2909,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
                     if (BLE_SMS_Indication == BLE_INDICATION)
                     {
-                        // ////printf("\n\n\n rele in bistate1\n\n\n");
+                        // printf("\n\n\n rele in bistate1\n\n\n");
                         message.BLE_SMS_INDICATION = BLE_INDICATION;
                     }
                     else if (BLE_SMS_Indication == WIEGAND_INDICATION)
@@ -2963,7 +2923,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     }
 
                     sprintf(feedBackRelay, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
-                    // ////printf("\nfeedback relay- %s\n", feedBackRelay);
+                    // printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
                     sprintf(message.mqttInfo_ble.data, "%s", feedBackRelay);
 
@@ -2984,7 +2944,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     message.EG91_data = *data_SMS;
 
                     xQueueSendToBack(queue_BLE_Parameters1, (void *)&message, pdMS_TO_TICKS(100));
-                    //printf("\n label after cpy call2\n");
+                    printf("\n label after cpy call2\n");
                 }
                 else
                 {
@@ -3054,12 +3014,12 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     message.relaynumber = releNumber;
                     // message.BLE_SMS_INDICATION = BLE_INDICATION;
 
-                    // //printf("\nfeedback relay- %s\n", feedBackRelay);
+                    // printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
 
                     if (BLE_SMS_Indication == BLE_INDICATION)
                     {
-                        // ////printf("\n\n\n rele in bistate1\n\n\n");
+                        // printf("\n\n\n rele in bistate1\n\n\n");
                         message.BLE_SMS_INDICATION = BLE_INDICATION;
                     }
                     else if (BLE_SMS_Indication == WIEGAND_INDICATION)
@@ -3071,12 +3031,12 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                         sprintf(message.mqttInfo_ble.topic, "%s", mqttInfo->topic);
                         message.BLE_SMS_INDICATION = UDP_INDICATION;
                     }
-                    // ////printf("\n\n logs_struct.type SMS 66 %d\n\n", message.BLE_SMS_INDICATION);
+                    // printf("\n\n logs_struct.type SMS 66 %d\n\n", message.BLE_SMS_INDICATION);
                     sprintf(feedBackRelay, "%s %c %c %d", RELE2_ELEMENT, SET_CMD, RELE_PARAMETER, getRele2());
-                    // ////printf("\nfeedback relay- %s\n", feedBackRelay);
+                    // printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
 
-                    // ////printf("\n\n\n rele in bistate1\n\n\n");
+                    // printf("\n\n\n rele in bistate1\n\n\n");
 
                     xQueueSendToBack(queue_BLE_Parameters2, (void *)&message, (TickType_t)0);
 
@@ -3084,7 +3044,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                 }
                 else
                 {
-                    // ////printf("\n\n\n rele in bistate3\n\n\n");
+                    // printf("\n\n\n rele in bistate3\n\n\n");
                     message.connID = connID;
                     message.gattsIF = gattsIF;
                     message.handle_table = handle_table;
@@ -3092,7 +3052,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
                     if (BLE_SMS_Indication == BLE_INDICATION)
                     {
-                        // ////printf("\n\n\n rele in bistate1\n\n\n");
+                        // printf("\n\n\n rele in bistate1\n\n\n");
                         message.BLE_SMS_INDICATION = BLE_INDICATION;
                     }
                     else if (BLE_SMS_Indication == WIEGAND_INDICATION)
@@ -3106,7 +3066,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     }
 
                     sprintf(feedBackRelay, "%s %c %c %d", RELE2_ELEMENT, SET_CMD, RELE_PARAMETER, getRele2());
-                    // ////printf("\nfeedback relay- %s\n", feedBackRelay);
+                    // printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
                     sprintf(message.mqttInfo_ble.data, "%s", feedBackRelay);
 
@@ -3131,13 +3091,13 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     message.BLE_SMS_INDICATION = (uint8_t)SMS_INDICATION;
                     message.EG91_data = *data_SMS;
 
-                    // ////printf("\nmessage struct relay %d - indiciation %d - payload %s - rsp %d - incall %d ph %s", message.relaynumber, message.BLE_SMS_INDICATION, message.EG91_data.payload, message.EG91_data.labelRsp, message.EG91_data.labelIncomingCall, message.EG91_data.phoneNumber);
+                    // printf("\nmessage struct relay %d - indiciation %d - payload %s - rsp %d - incall %d ph %s", message.relaynumber, message.BLE_SMS_INDICATION, message.EG91_data.payload, message.EG91_data.labelRsp, message.EG91_data.labelIncomingCall, message.EG91_data.phoneNumber);
 
-                    // ////printf("\n label cpy rsp sms %d - %d - %s\n", message.EG91_data.labelRsp, message.EG91_data.labelRsp, message.EG91_data.phoneNumber);
+                    // printf("\n label cpy rsp sms %d - %d - %s\n", message.EG91_data.labelRsp, message.EG91_data.labelRsp, message.EG91_data.phoneNumber);
                     char txt111[] = "qwerty";
                     xQueueSendToBack(queue_BLE_Parameters2, /* (void *)&txt111 */ (void *)&message, pdMS_TO_TICKS(100));
-                    // ////printf("\n label after cpy call2\n");
-                    // ////printf("\nafter send queue 1\n");
+                    // printf("\n label after cpy call2\n");
+                    // printf("\nafter send queue 1\n");
                 }
                 else
                 {
@@ -3197,7 +3157,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 void setRele1()
 {
     int level = getRele1();
-    // ////printf("\nsetRele1\n");
+    // printf("\nsetRele1\n");
     gpio_set_level(GPIO_OUTPUT_IO_0, !level);
     save_INT8_Data_In_Storage(NVS_KEY_RELAY1_LAST_VALUE, !level, nvs_System_handle);
 }

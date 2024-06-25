@@ -59,7 +59,7 @@ uint8_t start_Download_Sound_File();
 
 char *save_Language_TranslateFile(char *payload);
 
-uint8_t system_Reset(char* payload,data_EG91_Send_SMS data_SMS);
+uint8_t system_Reset();
 
 uint8_t reset_Owner_password(char *payload,data_EG91_Send_SMS *data_SMS);
 

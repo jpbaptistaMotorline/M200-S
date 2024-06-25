@@ -420,7 +420,7 @@ TEST(list_dir)
   SPIFFS_opendir(FS, "/", &d);
   int found = 0;
   while ((pe = SPIFFS_readdir(&d, pe))) {
-    //////printf("  %s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
+    //printf("  %s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
     for (i = 0; i < file_cnt; i++) {
       if (strcmp(files[i], (char *)pe->name) == 0) {
         found++;
@@ -579,7 +579,7 @@ void test_cb(spiffs *fs, spiffs_fileop_type op, spiffs_obj_id obj_id, spiffs_pag
   ucb.op = op;
   ucb.obj_id = obj_id;
   ucb.pix = pix;
-  //////printf("%4i  op:%i objid:%04x pix:%04x\n", ucb.calls, ucb.op, ucb.obj_id, ucb.pix);
+  //printf("%4i  op:%i objid:%04x pix:%04x\n", ucb.calls, ucb.op, ucb.obj_id, ucb.pix);
 }
 
 TEST(user_callback_basic) {
@@ -870,7 +870,7 @@ TEST_END
 TEST(write_big_file_chunks_page)
 {
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100);
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   int res = test_create_and_write_file("bigfile", size, SPIFFS_DATA_PAGE_SIZE(FS));
   TEST_CHECK(res >= 0);
   res = read_and_verify("bigfile");
@@ -888,7 +888,7 @@ TEST(write_big_files_chunks_page)
   int files = 10;
   int res;
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100)/files;
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   for (f = 0; f < files; f++) {
     sprintf(name, "bigfile%i", f);
     res = test_create_and_write_file(name, size, SPIFFS_DATA_PAGE_SIZE(FS));
@@ -908,7 +908,7 @@ TEST_END
 TEST(write_big_file_chunks_index)
 {
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100);
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   int res = test_create_and_write_file("bigfile", size, SPIFFS_DATA_PAGE_SIZE(FS) * SPIFFS_OBJ_HDR_IX_LEN(FS));
   TEST_CHECK(res >= 0);
   res = read_and_verify("bigfile");
@@ -926,7 +926,7 @@ TEST(write_big_files_chunks_index)
   int files = 10;
   int res;
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100)/files;
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   for (f = 0; f < files; f++) {
     sprintf(name, "bigfile%i", f);
     res = test_create_and_write_file(name, size, SPIFFS_DATA_PAGE_SIZE(FS) * SPIFFS_OBJ_HDR_IX_LEN(FS));
@@ -946,7 +946,7 @@ TEST_END
 TEST(write_big_file_chunks_huge)
 {
   int size = (FS_PURE_DATA_PAGES(FS) / 2) * SPIFFS_DATA_PAGE_SIZE(FS);
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   int res = test_create_and_write_file("bigfile", size, size);
   TEST_CHECK(res >= 0);
   res = read_and_verify("bigfile");
@@ -964,7 +964,7 @@ TEST(write_big_files_chunks_huge)
   int files = 10;
   int res;
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100)/files;
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   for (f = 0; f < files; f++) {
     sprintf(name, "bigfile%i", f);
     res = test_create_and_write_file(name, size, size);
@@ -984,7 +984,7 @@ TEST_END
 TEST(truncate_big_file)
 {
   int size = (FS_PURE_DATA_PAGES(FS) / 2) * SPIFFS_DATA_PAGE_SIZE(FS);
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   int res = test_create_and_write_file("bigfile", size, size);
   TEST_CHECK(res >= 0);
   res = read_and_verify("bigfile");
@@ -1101,7 +1101,7 @@ TEST(file_uniqueness)
   int files = ((SPIFFS_CFG_PHYS_SZ(FS) * 75) / 100) / 2 / SPIFFS_CFG_LOG_PAGE_SZ(FS);
       //(FS_PURE_DATA_PAGES(FS) / 2) - SPIFFS_PAGES_PER_BLOCK(FS)*8;
   int i;
-  //////printf("  creating %i files\n", files);
+  //printf("  creating %i files\n", files);
   for (i = 0; i < files; i++) {
     char content[20];
     sprintf(fname, "file%i", i);
@@ -1114,7 +1114,7 @@ TEST(file_uniqueness)
     TEST_CHECK(res >= 0);
     SPIFFS_close(FS, fd);
   }
-  //////printf("  checking %i files\n", files);
+  //printf("  checking %i files\n", files);
   for (i = 0; i < files; i++) {
     char content[20];
     char ref_content[20];
@@ -1127,13 +1127,13 @@ TEST(file_uniqueness)
     TEST_CHECK(strcmp(ref_content, content) == 0);
     SPIFFS_close(FS, fd);
   }
-  //////printf("  removing %i files\n", files/2);
+  //printf("  removing %i files\n", files/2);
   for (i = 0; i < files; i += 2) {
     sprintf(fname, "file%i", i);
     res = SPIFFS_remove(FS, fname);
     TEST_CHECK(res >= 0);
   }
-  //////printf("  creating %i files\n", files/2);
+  //printf("  creating %i files\n", files/2);
   for (i = 0; i < files; i += 2) {
     char content[20];
     sprintf(fname, "file%i", i);
@@ -1146,7 +1146,7 @@ TEST(file_uniqueness)
     TEST_CHECK(res >= 0);
     SPIFFS_close(FS, fd);
   }
-  //////printf("  checking %i files\n", files);
+  //printf("  checking %i files\n", files);
   for (i = 0; i < files; i++) {
     char content[20];
     char ref_content[20];
@@ -1561,7 +1561,7 @@ TEST(lseek_read) {
     TEST_CHECK(res >= 0);
     for (i = 0; i < sizeof(buf); i++) {
       if (buf[i] != refbuf[offs+i]) {
-        //////printf("  mismatch at offs %i\n", offs);
+        //printf("  mismatch at offs %i\n", offs);
       }
       TEST_CHECK(buf[i] == refbuf[offs+i]);
     }
@@ -1574,7 +1574,7 @@ TEST(lseek_read) {
     TEST_CHECK(res >= 0);
     for (i = 0; i < sizeof(buf); i++) {
       if (buf[i] != refbuf[offs+i]) {
-        //////printf("  mismatch at offs %i\n", offs);
+        //printf("  mismatch at offs %i\n", offs);
       }
       TEST_CHECK(buf[i] == refbuf[offs+i]);
     }
@@ -1725,7 +1725,7 @@ TEST_END
 TEST(write_big_file_chunks_1)
 {
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100);
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   int res = test_create_and_write_file("bigfile", size, 1);
   TEST_CHECK(res >= 0);
   res = read_and_verify("bigfile");
@@ -1742,7 +1742,7 @@ TEST(write_big_files_chunks_1)
   int files = 10;
   int res;
   int size = ((50*SPIFFS_CFG_PHYS_SZ(FS))/100)/files;
-  //////printf("  filesize %i\n", size);
+  //printf("  filesize %i\n", size);
   for (f = 0; f < files; f++) {
     sprintf(name, "bigfile%i", f);
     res = test_create_and_write_file(name, size, 1);
@@ -2000,7 +2000,7 @@ TEST(long_run)
   };
 
   int macro_runs = 500;
-  //////printf("  ");
+  //printf("  ");
   u32_t clob_size = SPIFFS_CFG_PHYS_SZ(FS)/4;
   int res = test_create_and_write_file("long_clobber", clob_size, clob_size);
   TEST_CHECK(res >= 0);
@@ -2009,15 +2009,15 @@ TEST(long_run)
   TEST_CHECK(res >= 0);
 
   while (macro_runs--) {
-    //////printf("  ---- run %i ----\n", macro_runs);
+    //printf("  ---- run %i ----\n", macro_runs);
     if ((macro_runs % 20) == 0) {
-      //////printf(".");
+      //printf(".");
       fflush(stdout);
     }
     res = run_file_config(sizeof(cfgs)/sizeof(cfgs[0]), &cfgs[0], 20, 2, 0);
     TEST_CHECK(res >= 0);
   }
-  //////printf("\n");
+  //printf("\n");
 
   res = read_and_verify("long_clobber");
   TEST_CHECK(res >= 0);
@@ -2063,11 +2063,11 @@ TEST(ix_map_basic)
   TEST_CHECK_GE(res, SPIFFS_OK);
   u32_t size = s.size;
 
-  //////printf("file created, size: %i..\n", size);
+  //printf("file created, size: %i..\n", size);
 
   fd1 = SPIFFS_open(FS, "1", SPIFFS_O_RDONLY, 0);
   TEST_CHECK_GT(fd1, 0);
-  //////printf(".. corresponding pix entries: %i\n", SPIFFS_bytes_to_ix_map_entries(FS, size));
+  //printf(".. corresponding pix entries: %i\n", SPIFFS_bytes_to_ix_map_entries(FS, size));
 
   u8_t rd_buf[SPIFFS_CFG_LOG_PAGE_SZ(FS)];
 
@@ -2076,7 +2076,7 @@ TEST(ix_map_basic)
 
   clear_flash_ops_log();
 
-  //////printf("reading file without memory mapped index\n");
+  //printf("reading file without memory mapped index\n");
   while ((res = SPIFFS_read(FS, fd1, rd_buf, sizeof(rd_buf))) == sizeof(rd_buf));
   TEST_CHECK_GT(res, SPIFFS_OK);
 
@@ -2090,7 +2090,7 @@ TEST(ix_map_basic)
   TEST_CHECK_EQ(SPIFFS_close(FS, fd1), SPIFFS_OK);
 
 
-  //////printf("reading file with memory mapped index\n");
+  //printf("reading file with memory mapped index\n");
   spiffs_ix_map map;
   spiffs_page_ix ixbuf[SPIFFS_bytes_to_ix_map_entries(FS, size)];
 
@@ -2119,7 +2119,7 @@ TEST(ix_map_basic)
   memcpy(ref_ixbuf, ixbuf, sizeof(ixbuf));
 
   // force a gc by creating small files until full, reordering the index
-  //////printf("forcing gc, error ERR_FULL %i expected\n", SPIFFS_ERR_FULL);
+  //printf("forcing gc, error ERR_FULL %i expected\n", SPIFFS_ERR_FULL);
   res = SPIFFS_OK;
   u32_t ix = 10;
   while (res == SPIFFS_OK) {
@@ -2178,11 +2178,11 @@ TEST(ix_map_remap)
   TEST_CHECK_GE(res, SPIFFS_OK);
   u32_t size = s.size;
 
-  //////printf("file created, size: %i..\n", size);
+  //printf("file created, size: %i..\n", size);
 
   fd1 = SPIFFS_open(FS, "1", SPIFFS_O_RDONLY, 0);
   TEST_CHECK_GT(fd1, 0);
-  //////printf(".. corresponding pix entries: %i\n", SPIFFS_bytes_to_ix_map_entries(FS, size) + 1);
+  //printf(".. corresponding pix entries: %i\n", SPIFFS_bytes_to_ix_map_entries(FS, size) + 1);
   TEST_CHECK_EQ(SPIFFS_bytes_to_ix_map_entries(FS, size), size_pages + 1);
 
   // map index to memory
@@ -2200,34 +2200,34 @@ TEST(ix_map_remap)
   TEST_CHECK_GE(res, SPIFFS_OK);
 
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
   }
-  //////printf("\n");
+  //printf("\n");
 
   memcpy(ixbuf_ref, ixbuf, sizeof(spiffs_page_ix) * entries);
 
   TEST_CHECK_EQ(SPIFFS_ix_remap(FS, fd1, 0), SPIFFS_OK);
   TEST_CHECK_EQ(canary, ixbuf[entries]);
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_EQ(0, memcmp(ixbuf_ref, ixbuf, sizeof(spiffs_page_ix) * entries));
 
   TEST_CHECK_EQ(SPIFFS_ix_remap(FS, fd1, SPIFFS_DATA_PAGE_SIZE(FS)), SPIFFS_OK);
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_EQ(canary, ixbuf[entries]);
   TEST_CHECK_EQ(0, memcmp(&ixbuf_ref[1], ixbuf, sizeof(spiffs_page_ix) * (entries-1)));
 
 
   TEST_CHECK_EQ(SPIFFS_ix_remap(FS, fd1, 0), SPIFFS_OK);
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_EQ(canary, ixbuf[entries]);
   TEST_CHECK_EQ(0, memcmp(ixbuf_ref, ixbuf, sizeof(spiffs_page_ix) * entries));
 
@@ -2235,14 +2235,14 @@ TEST(ix_map_remap)
   TEST_CHECK_EQ(canary, ixbuf[entries]);
 
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf_ref[i]);
+    //printf("%04x ", ixbuf_ref[i]);
   }
-  //////printf("\n");
+  //printf("\n");
 
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
   }
-  //////printf("\n");
+  //printf("\n");
 
   int matches = 0;
   for (i = 0; i < entries; i++) {
@@ -2284,7 +2284,7 @@ TEST(ix_map_partial)
   TEST_CHECK_GE(res, SPIFFS_OK);
   u32_t size = s.size;
 
-  //////printf("file created, size: %i..\n", size);
+  //printf("file created, size: %i..\n", size);
 
   const u32_t crc_unmapped = get_spiffs_file_crc("1");
 
@@ -2296,21 +2296,21 @@ TEST(ix_map_partial)
   spiffs_ix_map map;
   spiffs_page_ix ixbuf[entries];
 
-  //////printf("map 0-50%%\n");
+  //printf("map 0-50%%\n");
   res = SPIFFS_ix_map(FS, fd, &map, 0, size/2, ixbuf);
   TEST_CHECK_GE(res, SPIFFS_OK);
 
   const u32_t crc_mapped_beginning = get_spiffs_file_crc_by_fd(fd);
   TEST_CHECK_EQ(crc_mapped_beginning, crc_unmapped);
 
-  //////printf("map 25-75%%\n");
+  //printf("map 25-75%%\n");
   res = SPIFFS_ix_remap(FS, fd, size/4);
   TEST_CHECK_GE(res, SPIFFS_OK);
 
   const u32_t crc_mapped_middle = get_spiffs_file_crc_by_fd(fd);
   TEST_CHECK_EQ(crc_mapped_middle, crc_unmapped);
 
-  //////printf("map 50-100%%\n");
+  //printf("map 50-100%%\n");
   res = SPIFFS_ix_remap(FS, fd, size/2);
   TEST_CHECK_GE(res, SPIFFS_OK);
 
@@ -2346,7 +2346,7 @@ TEST(ix_map_beyond)
   TEST_CHECK_GE(res, SPIFFS_OK);
   u32_t size = s.size;
 
-  //////printf("file created, size: %i..\n", size);
+  //printf("file created, size: %i..\n", size);
 
   // map index to memory
   fd = SPIFFS_open(FS, "1", SPIFFS_O_RDWR | SPIFFS_O_APPEND, 0);
@@ -2355,20 +2355,20 @@ TEST(ix_map_beyond)
   const int entries = SPIFFS_bytes_to_ix_map_entries(FS, size);
   spiffs_ix_map map;
   spiffs_page_ix ixbuf[entries];
-  //////printf("map has %i entries\n", entries);
+  //printf("map has %i entries\n", entries);
 
-  //////printf("map 100-200%%\n");
+  //printf("map 100-200%%\n");
   res = SPIFFS_ix_map(FS, fd, &map, size, size, ixbuf);
   TEST_CHECK_GE(res, SPIFFS_OK);
 
-  //////printf("make sure map is empty\n");
+  //printf("make sure map is empty\n");
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
     TEST_CHECK_EQ(ixbuf[i], 0);
   }
-  //////printf("\n");
+  //printf("\n");
 
-  //////printf("elongate by 100%%\n");
+  //printf("elongate by 100%%\n");
   for (i = 0; i < size_pages; i++) {
     memrand(buf, sizeof(buf));
     res = SPIFFS_write(FS, fd, buf, sizeof(buf));
@@ -2379,30 +2379,30 @@ TEST(ix_map_beyond)
   res = SPIFFS_stat(FS, "1", &s);
   TEST_CHECK_GE(res, SPIFFS_OK);
   size = s.size;
-  //////printf("file elongated, size: %i..\n", size);
+  //printf("file elongated, size: %i..\n", size);
 
-  //////printf("make sure map is full but for one element\n");
+  //printf("make sure map is full but for one element\n");
   int zeroed = 0;
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
     if (ixbuf[i] == 0) zeroed++;
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_LE(zeroed, 1);
 
-  //////printf("remap till end\n");
+  //printf("remap till end\n");
   TEST_CHECK_EQ(SPIFFS_ix_remap(FS, fd, size), SPIFFS_OK);
 
-  //////printf("make sure map is empty but for one element\n");
+  //printf("make sure map is empty but for one element\n");
   int nonzero = 0;
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
     if (ixbuf[i]) nonzero++;
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_LE(nonzero, 1);
 
-  //////printf("elongate again, by other fd\n");
+  //printf("elongate again, by other fd\n");
 
   spiffs_file fd2 = SPIFFS_open(FS, "1", SPIFFS_O_WRONLY | SPIFFS_O_APPEND, 0);
   TEST_CHECK_GT(fd2, 0);
@@ -2414,13 +2414,13 @@ TEST(ix_map_beyond)
   }
   TEST_CHECK_GE(SPIFFS_close(FS, fd2), SPIFFS_OK);
 
-  //////printf("make sure map is full but for one element\n");
+  //printf("make sure map is full but for one element\n");
   zeroed = 0;
   for (i = 0; i < entries; i++) {
-    //////printf("%04x ", ixbuf[i]);
+    //printf("%04x ", ixbuf[i]);
     if (ixbuf[i] == 0) zeroed++;
   }
-  //////printf("\n");
+  //printf("\n");
   TEST_CHECK_LE(zeroed, 1);
 
   return TEST_RES_OK;

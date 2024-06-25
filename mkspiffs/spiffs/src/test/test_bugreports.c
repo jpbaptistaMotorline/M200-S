@@ -39,7 +39,7 @@ TEST(nodemcu_full_fs_1) {
   int res;
   spiffs_file fd;
 
-  //////printf("  fill up system by writing one byte a lot\n");
+  //printf("  fill up system by writing one byte a lot\n");
   fd = SPIFFS_open(FS, "test1.txt", SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(fd > 0);
   int i;
@@ -53,15 +53,15 @@ TEST(nodemcu_full_fs_1) {
   int errno = SPIFFS_errno(FS);
   int res2 = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res2 == SPIFFS_OK);
-  //////printf("  >>> file %s size: %i\n", s.name, s.size);
+  //printf("  >>> file %s size: %i\n", s.name, s.size);
 
   TEST_CHECK(errno == SPIFFS_ERR_FULL);
   SPIFFS_close(FS, fd);
 
-  //////printf("  remove big file\n");
+  //printf("  remove big file\n");
   res = SPIFFS_remove(FS, "test1.txt");
 
-  //////printf("res:%i errno:%i\n",res, SPIFFS_errno(FS));
+  //printf("res:%i errno:%i\n",res, SPIFFS_errno(FS));
 
   TEST_CHECK(res == SPIFFS_OK);
   res2 = SPIFFS_fstat(FS, fd, &s);
@@ -71,7 +71,7 @@ TEST(nodemcu_full_fs_1) {
   TEST_CHECK(res2 < 0);
   TEST_CHECK(SPIFFS_errno(FS) == SPIFFS_ERR_NOT_FOUND);
 
-  //////printf("  create small file\n");
+  //printf("  create small file\n");
   fd = SPIFFS_open(FS, "test2.txt", SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(fd > 0);
   res = SPIFFS_OK;
@@ -83,7 +83,7 @@ TEST(nodemcu_full_fs_1) {
 
   res2 = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res2 == SPIFFS_OK);
-  //////printf("  >>> file %s size: %i\n", s.name, s.size);
+  //printf("  >>> file %s size: %i\n", s.name, s.size);
 
   TEST_CHECK(s.size == 1000);
   SPIFFS_close(FS, fd);
@@ -98,7 +98,7 @@ TEST(nodemcu_full_fs_2) {
   int res;
   spiffs_file fd;
 
-  //////printf("  fill up system by writing one byte a lot\n");
+  //printf("  fill up system by writing one byte a lot\n");
   fd = SPIFFS_open(FS, "test1.txt", SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(fd > 0);
   int i;
@@ -112,7 +112,7 @@ TEST(nodemcu_full_fs_2) {
   int errno = SPIFFS_errno(FS);
   int res2 = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res2 == SPIFFS_OK);
-  //////printf("  >>> file %s size: %i\n", s.name, s.size);
+  //printf("  >>> file %s size: %i\n", s.name, s.size);
 
   TEST_CHECK(errno == SPIFFS_ERR_FULL);
   SPIFFS_close(FS, fd);
@@ -121,7 +121,7 @@ TEST(nodemcu_full_fs_2) {
   TEST_CHECK(res2 == SPIFFS_OK);
 
   SPIFFS_clearerr(FS);
-  //////printf("  create small file\n");
+  //printf("  create small file\n");
   fd = SPIFFS_open(FS, "test2.txt", SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
 #if 0
   // before gc in v3.1
@@ -136,14 +136,14 @@ TEST(nodemcu_full_fs_2) {
   TEST_CHECK(SPIFFS_errno(FS) == SPIFFS_ERR_FULL);
   res2 = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res2 == SPIFFS_OK);
-  //////printf("  >>> file %s size: %i\n", s.name, s.size);
+  //printf("  >>> file %s size: %i\n", s.name, s.size);
   TEST_CHECK(s.size == 0);
   SPIFFS_clearerr(FS);
 #else
   TEST_CHECK(SPIFFS_errno(FS) == SPIFFS_ERR_FULL);
   SPIFFS_clearerr(FS);
 #endif
-  //////printf("  remove files\n");
+  //printf("  remove files\n");
   res = SPIFFS_remove(FS, "test1.txt");
   TEST_CHECK(res == SPIFFS_OK);
 #if 0
@@ -151,7 +151,7 @@ TEST(nodemcu_full_fs_2) {
   TEST_CHECK(res == SPIFFS_OK);
 #endif
 
-  //////printf("  create medium file\n");
+  //printf("  create medium file\n");
   fd = SPIFFS_open(FS, "test3.txt", SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(SPIFFS_errno(FS) == SPIFFS_OK);
   TEST_CHECK(fd > 0);
@@ -164,7 +164,7 @@ TEST(nodemcu_full_fs_2) {
 
   res2 = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res2 == SPIFFS_OK);
-  //////printf("  >>> file %s size: %i\n", s.name, s.size);
+  //printf("  >>> file %s size: %i\n", s.name, s.size);
   TEST_CHECK(s.size == 20*1000);
 
   return TEST_RES_OK;
@@ -208,7 +208,7 @@ TEST(nodemcu_309) {
       char *buf = "0123456789ABCDE\n";
       res = SPIFFS_write(FS, fd, buf, strlen(buf));
       if (!err && res < 0) {
-        //////printf("err @ %i,%i\n", i, j);
+        //printf("err @ %i,%i\n", i, j);
         err = 1;
       }
     }
@@ -221,7 +221,7 @@ TEST(nodemcu_309) {
   u32_t used;
 
   SPIFFS_info(FS, &total, &used);
-  //////printf("total:%i\nused:%i\nremain:%i\nerrno:%i\n", total, used, total-used, errno);
+  //printf("total:%i\nused:%i\nremain:%i\nerrno:%i\n", total, used, total-used, errno);
   //TEST_CHECK(total-used < 11000); // disabled, depends on too many variables
 
   spiffs_DIR d;
@@ -231,7 +231,7 @@ TEST(nodemcu_309) {
   SPIFFS_opendir(FS, "/", &d);
   int spoon_guard = 0;
   while ((pe = SPIFFS_readdir(&d, pe))) {
-    //////printf("%s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
+    //printf("%s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
     TEST_CHECK(spoon_guard++ < 3);
   }
   TEST_CHECK(spoon_guard == 3);
@@ -276,7 +276,7 @@ TEST(robert) {
 
   spiffs_stat s;
   TEST_CHECK(SPIFFS_stat(FS, fname, &s) == SPIFFS_OK);
-  //////printf("file %s stat size %i\n", s.name, s.size);
+  //printf("file %s stat size %i\n", s.name, s.size);
   TEST_CHECK(s.size == 500);
 
   return TEST_RES_OK;
@@ -315,7 +315,7 @@ TEST(spiffs_12) {
   u32_t used;
 
   SPIFFS_info(FS, &total, &used);
-  //////printf("total:%i (%iK)\nused:%i (%iK)\nremain:%i (%iK)\nerrno:%i\n", total, total/1024, used, used/1024, total-used, (total-used)/1024, errno);
+  //printf("total:%i (%iK)\nused:%i (%iK)\nremain:%i (%iK)\nerrno:%i\n", total, total/1024, used, used/1024, total-used, (total-used)/1024, errno);
 
   spiffs_DIR d;
   struct spiffs_dirent e;
@@ -323,7 +323,7 @@ TEST(spiffs_12) {
 
   SPIFFS_opendir(FS, "/", &d);
   while ((pe = SPIFFS_readdir(&d, pe))) {
-    //////printf("%s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
+    //printf("%s [%04x] size:%i\n", pe->name, pe->obj_id, pe->size);
   }
   SPIFFS_closedir(&d);
 
@@ -536,7 +536,7 @@ TEST(spiffs_dup_file_74) {
       SPIFFS_opendir(FS, "/", &dir);
       struct spiffs_dirent dirent;
       while (SPIFFS_readdir(&dir, &dirent)) {
-        //////printf("%s\n", dirent.name);
+        //printf("%s\n", dirent.name);
       }
       // this will print "/config" two times
       TEST_CHECK(0);
@@ -642,7 +642,7 @@ static int run_fuzz_test(FILE *f, int maxfds, int debuglog) {
     buff[i] = i * 19;
   }
 
-#define LOGOP if (debuglog) //////printf
+#define LOGOP if (debuglog) //printf
 
   while ((c = fgetc(f)) >= 0) {
     int add;
@@ -938,7 +938,7 @@ TEST(small_free_space) {
     fd = SPIFFS_open(FS, fileCurrName, SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
     TEST_CHECK(fd > 0);
 
-    //////printf("About to write to %s\n", fileCurrName);
+    //printf("About to write to %s\n", fileCurrName);
     res = SPIFFS_write(FS, fd, buf, strlen(buf));
 
     TEST_CHECK(res == strlen(buf));
@@ -951,7 +951,7 @@ TEST(small_free_space) {
     if (fileCntr > maxFileNr) {
       char fileDelName[64];
       sprintf(fileDelName, "%s%d%s", filename, fileDelNumber, fileext);
-      //////printf("Deleting %s (free space %d)\n", fileDelName, total - used);
+      //printf("Deleting %s (free space %d)\n", fileDelName, total - used);
   
       res = SPIFFS_remove(FS, fileDelName);
 
@@ -1069,18 +1069,18 @@ TEST(spiffs_hidden_file_90) {
     SPIFFS_opendir(FS, "/", &dir);
     struct spiffs_dirent dirent;
     while (SPIFFS_readdir(&dir, &dirent)) {
-      //////printf("%-32s sz:%-7i obj_id:%08x pix:%08x\n", dirent.name, dirent.size, dirent.obj_id, dirent.pix);
+      //printf("%-32s sz:%-7i obj_id:%08x pix:%08x\n", dirent.name, dirent.size, dirent.obj_id, dirent.pix);
     }
   }
 
-  //////printf("remove cli.bin res %i\n", SPIFFS_remove(FS, "cli.bin"));
+  //printf("remove cli.bin res %i\n", SPIFFS_remove(FS, "cli.bin"));
 
   {
     spiffs_DIR dir;
     SPIFFS_opendir(FS, "/", &dir);
     struct spiffs_dirent dirent;
     while (SPIFFS_readdir(&dir, &dirent)) {
-      //////printf("%-32s sz:%-7i obj_id:%08x pix:%08x\n", dirent.name, dirent.size, dirent.obj_id, dirent.pix);
+      //printf("%-32s sz:%-7i obj_id:%08x pix:%08x\n", dirent.name, dirent.size, dirent.obj_id, dirent.pix);
     }
   }
   return TEST_RES_OK;
@@ -1096,19 +1096,19 @@ TEST(null_deref_check_93) {
 
   SPIFFS_vis(FS);
 
-  //////printf("\n\n-------------------------------------------------\n\n");
+  //printf("\n\n-------------------------------------------------\n\n");
 
   SPIFFS_check(FS);
   //fs_store_dump("imgs/93.dump.checked.bin");
 
   SPIFFS_vis(FS);
 
-  //////printf("\n\n-------------------------------------------------\n\n");
+  //printf("\n\n-------------------------------------------------\n\n");
 
   SPIFFS_check(FS);
 
   SPIFFS_vis(FS);
-  //////printf("\n\n-------------------------------------------------\n\n");
+  //printf("\n\n-------------------------------------------------\n\n");
 
 
 

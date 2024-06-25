@@ -347,7 +347,7 @@ uint8_t parse_CountryPhoneNumber(char *data)
     {
         if (strcmp(auxData, countryCodes[i]) == 0)
         {
-            // ////printf("Found in row-%d\n", i + 1);
+            // printf("Found in row-%d\n", i + 1);
             return 1;
         }
     }
@@ -368,7 +368,7 @@ char *check_zeroInNumber(char *number)
         if ((number[0] == '0') && number[1] != '0')
         {
 
-            // ////printf("\n  payload phnumber sms 33 %s \n", aux_phNumber);
+            // printf("\n  payload phnumber sms 33 %s \n", aux_phNumber);
             for (size_t i = 1; i < strlen(number); i++)
             {
                 number[i - 1] = number[i];
@@ -419,7 +419,7 @@ char *check_IF_haveCountryCode_AUX_Call(char *phoneNumber)
                 auxCountryCode[CountryCode_Counter] = phoneNumber[CountryCode_Counter];
                 CountryCode_Counter++;
             }
-            // ////printf("aux phnumber11 %s\n", auxCountryCode);
+            // printf("aux phnumber11 %s\n", auxCountryCode);
             if (parse_CountryPhoneNumber(auxCountryCode))
             {
                 for (int i = CountryCode_Counter; i < strlen(phoneNumber); i++)
@@ -428,7 +428,7 @@ char *check_IF_haveCountryCode_AUX_Call(char *phoneNumber)
                 }
 
                 sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                // ////printf("aux country code zero 4- %s", aux_phNumber);
+                // printf("aux country code zero 4- %s", aux_phNumber);
                 return aux_phNumber;
             }
             else
@@ -445,12 +445,12 @@ char *check_IF_haveCountryCode_AUX_Call(char *phoneNumber)
 
                 for (int i = CountryCode_Counter + 1; i < strlen(phoneNumber); i++)
                 {
-                    // ////printf("aux phnumberfaf %s, %d\n", aux_phNumber, i);
+                    // printf("aux phnumberfaf %s, %d\n", aux_phNumber, i);
                     aux_phNumber[i - (CountryCode_Counter)-1] = phoneNumber[i];
                 }
 
                 sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                // ////printf("aux country code zero 5- %s", aux_phNumber);
+                // printf("aux country code zero 5- %s", aux_phNumber);
                 return aux_phNumber;
             }
             else
@@ -463,13 +463,13 @@ char *check_IF_haveCountryCode_AUX_Call(char *phoneNumber)
         {
 
             sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-            // ////printf("aux country code zero 6- %s", aux_phNumber);
+            // printf("aux country code zero 6- %s", aux_phNumber);
             return aux_phNumber;
         }
     }
 
     sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-    // ////printf("aux country code zero 7- %s", aux_phNumber);
+    // printf("aux country code zero 7- %s", aux_phNumber);
     return aux_phNumber;
 }
 
@@ -486,7 +486,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
     memset(aux_phNumber, 0, sizeof(aux_phNumber));
     memset(PH_Number, 0, sizeof(PH_Number));
     memset(auxCountryCode, 0, sizeof(auxCountryCode));
-    // //printf("\n\nCountryCode_number1 %s\n\n", phoneNumber);
+    // printf("\n\nCountryCode_number1 %s\n\n", phoneNumber);
     if (phoneNumber[0] == '+')
     {
 
@@ -501,7 +501,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     auxCountryCode[CountryCode_Counter - 1] = phoneNumber[CountryCode_Counter];
                     CountryCode_Counter++;
                 }
-                // ////printf("aux phnumber11 %s\n", auxCountryCode);
+                // printf("aux phnumber11 %s\n", auxCountryCode);
                 if (parse_CountryPhoneNumber(auxCountryCode))
                 {
                     for (int i = CountryCode_Counter; i < strlen(phoneNumber); i++)
@@ -513,37 +513,37 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     {
                         /* code */
                         sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                        // ////printf("aux country code zero 1- %s", aux_phNumber);
+                        // printf("aux country code zero 1- %s", aux_phNumber);
                     }
-                    // ////printf("aux phnumber %s\n", aux_phNumber);
+                    // printf("aux phnumber %s\n", aux_phNumber);
                     return aux_phNumber;
                 }
                 else
                 {
-                    // ////printf("aux phnumber ERROR %s\n", aux_phNumber);
+                    // printf("aux phnumber ERROR %s\n", aux_phNumber);
                     return "ERROR";
                 }
             }
             else
             {
                 auxCountryCode[CountryCode_Counter - 1] = phoneNumber[CountryCode_Counter];
-                // ////printf("\n  payload phnumber sms 7894 %s \n", phoneNumber);
+                // printf("\n  payload phnumber sms 7894 %s \n", phoneNumber);
 
                 if (parse_CountryPhoneNumber(auxCountryCode))
                 {
 
                     for (int i = CountryCode_Counter + 1; i < strlen(phoneNumber); i++)
                     {
-                        // ////printf("aux phnumberfaf %s, %d\n", aux_phNumber, i);
+                        // printf("aux phnumberfaf %s, %d\n", aux_phNumber, i);
                         aux_phNumber[i - (CountryCode_Counter + 1)] = phoneNumber[i];
                     }
 
                     if (!label_addUser)
                     {
                         sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                        // ////printf("aux country code zero 2- %s", aux_phNumber);
+                        // printf("aux country code zero 2- %s", aux_phNumber);
                     }
-                    // ////printf("\n  payload phnumber sms 123456 %s \n", aux_phNumber);
+                    // printf("\n  payload phnumber sms 123456 %s \n", aux_phNumber);
                     return aux_phNumber;
                 }
                 else
@@ -563,8 +563,8 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
         CountryCode_Counter = 2;
         while (CountryCode_Counter < 10)
         {
-            // ////printf("CountryCode_Counter %d\n", CountryCode_Counter);
-            // ////printf("aux phnumber %s\n", auxCountryCode);
+            // printf("CountryCode_Counter %d\n", CountryCode_Counter);
+            // printf("aux phnumber %s\n", auxCountryCode);
             if (phoneNumber[CountryCode_Counter] == '1' && phoneNumber[CountryCode_Counter + 1] == '-')
             {
                 memset(auxCountryCode, 0, sizeof(auxCountryCode));
@@ -573,7 +573,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     auxCountryCode[CountryCode_Counter - 2] = phoneNumber[CountryCode_Counter];
                     CountryCode_Counter++;
                 }
-                // ////printf("aux phnumber11 %s\n", auxCountryCode);
+                // printf("aux phnumber11 %s\n", auxCountryCode);
                 if (parse_CountryPhoneNumber(auxCountryCode))
                 {
                     for (int i = CountryCode_Counter; i < strlen(phoneNumber); i++)
@@ -584,7 +584,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     if (!label_addUser)
                     {
                         sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                        // ////printf("aux country code zero 3- %s", aux_phNumber);
+                        // printf("aux country code zero 3- %s", aux_phNumber);
                     }
 
                     return aux_phNumber;
@@ -594,7 +594,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     if (!label_addUser)
                     {
                         sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                        // ////printf("aux country code zero 11- %s", aux_phNumber);
+                        // printf("aux country code zero 11- %s", aux_phNumber);
 
                         return aux_phNumber;
                     }
@@ -616,7 +616,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                     {
 
                         sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                        // ////printf("aux country code zero 8- %s", aux_phNumber);
+                        // printf("aux country code zero 8- %s", aux_phNumber);
                     }
 
                     return aux_phNumber;
@@ -632,7 +632,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
                 if (!label_addUser)
                 {
                     sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-                    // ////printf("aux country code zero 12- %s", aux_phNumber);
+                    // printf("aux country code zero 12- %s", aux_phNumber);
 
                     return aux_phNumber;
                 }
@@ -646,7 +646,7 @@ char *check_IF_haveCountryCode(char *phoneNumber, uint8_t label_addUser)
         if (!label_addUser)
         {
             sprintf(aux_phNumber, "%s", check_zeroInNumber(aux_phNumber));
-            // ////printf("aux country code zero 10- %s", aux_phNumber);
+            // printf("aux country code zero 10- %s", aux_phNumber);
 
             return aux_phNumber;
         }
@@ -702,18 +702,18 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
 
     uint8_t count = 0;
     uint8_t stringIndex = 0;
-    //////printf("\n\n rrrrrad  3n\n\n");
+    // printf("\n\n rrrrrad  3n\n\n");
     asprintf(&inputData, "%s", int_inputData);
-    //////printf("\n\n rrrrrad  4n\n\n");
+    // printf("\n\n rrrrrad  4n\n\n");
     memset(phPassword, 0, sizeof(phPassword));
     memset(aabff, 0, sizeof(aabff));
-    //////printf("\n\n rrrrrad  5n\n\n");
+    // printf("\n\n rrrrrad  5n\n\n");
     memset(Input_Command, 0, sizeof(Input_Command));
     memset(input_Payload, 0, sizeof(input_Payload));
-    //////printf("\n\n rrrrrad  6n\n\n");
+    // printf("\n\n rrrrrad  6n\n\n");
     memset(phNumber, 0, sizeof(phNumber));
     memset(element, 0, sizeof(element));
-    //////printf("\n\n rrrrrad  7n\n\n");
+    // printf("\n\n rrrrrad  7n\n\n");
     memset(&validateData_user, 0, sizeof(validateData_user));
 
     char search[50];
@@ -725,7 +725,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
        sprintf(mqttInfo->topic, "%s", "");
     } */
 
-    //////printf("\n\nlabel_remove_non_printable = 0\n\n");
+    // printf("\n\nlabel_remove_non_printable = 0\n\n");
 
     for (size_t i = 0; i < strlen(inputData); i++)
     {
@@ -746,11 +746,11 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             }
         }
     }
-    // ////printf("\n\n");
+    // printf("\n\n");
     count = 0;
     stringIndex = 0;
 
-    //////printf("\n\nlabel_remove_non_printable = 2323\n\n");
+    // printf("\n\nlabel_remove_non_printable = 2323\n\n");
 
     if (count > 5)
     {
@@ -767,19 +767,20 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
         }
     }
 
-    // ////printf("\n\n count search = %d\n\n", count);
+    // printf("\n\n count search = %d\n\n", count);
 
     count = 0;
     stringIndex = 0;
 
-    // //////printf("\n\ncore input data - %s - %d\n\n", inputData, strlen(inputData));
+    // //printf("\n\ncore input data - %s - %d\n\n", inputData, strlen(inputData));
 
-    if (inputData[0] == 'M' && inputData[1] == 'E' && inputData[2] == '.' && inputData[3] == 'S' && inputData[4] == '.' && inputData[5] == 'O' && BLE_SMS_Indication == BLE_INDICATION)
+    if (inputData[0] == 'M' && inputData[1] == 'E' && inputData[2] == '.' && inputData[3] == 'S' && inputData[4] == '.' && inputData[5] == 'O' && BLE_SMS_Indication == BLE_INDICATION )
     {
 
         asprintf(&output_Data, "ME S O %s", MyUser_add_Owner(inputData, 0, BLE_INDICATION));
         free(inputData);
-
+        send_UDP_Send(output_Data,"");
+        //send_UDP_queue(output_Data);
         return output_Data;
     }
 
@@ -787,7 +788,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
 
     if (owner_Label != 1)
     {
-        if (BLE_SMS_Indication == BLE_INDICATION)
+        if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
         {
             asprintf(&output_Data, "%s-%d", "OWNER NOT EXIST", check_IF_System_Have_SIM_and_PIN());
             free(inputData);
@@ -856,7 +857,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             Input_Command[i] = toupper(Input_Command[i]);
         }
 
-        ////printf("\n\n input comand3232 %s \n\n", Input_Command);
+        printf("\n\n input comand3232 %s \n\n", Input_Command);
 
         // ESP_LOGW("tag", "Input_Command input %s yyy \n", "hello world" /* Input_Command) */);
 
@@ -869,25 +870,22 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
         else
         {
 
-            // ////printf(ERROR_INPUT_COMMAND);
+            // printf(ERROR_INPUT_COMMAND);
             free(inputData);
             return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_CMD"));
         }
 
-        if (cmd == 'G' && BLE_SMS_Indication == SMS_INDICATION)
-        {
-            data_SMS->labelRsp = 1;
-        }
+       
 
-        //////printf("phNumber %s ok\n", phNumber);
-        //////printf("phPassword %s ok\n", phPassword);
-        //////printf("Input_Command %s ok\n", Input_Command);
-        //////printf("input_Payload %s ok\n", input_Payload);
+        // printf("phNumber %s ok\n", phNumber);
+        // printf("phPassword %s ok\n", phPassword);
+        // printf("Input_Command %s ok\n", Input_Command);
+        // printf("input_Payload %s ok\n", input_Payload);
 
         int line = 0;
         memset(aux_phNumber, 0, sizeof(aux_phNumber));
 
-        // ////printf("aux_phNumber1111 %s ok\n", aux_phNumber);
+        // printf("aux_phNumber1111 %s ok\n", aux_phNumber);
 
         sprintf(aux_phNumber, "%s", check_IF_haveCountryCode(phNumber, 0));
 
@@ -899,7 +897,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             // ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
             // ESP_LOGI("TAG", "free heap memory : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
             //  memset(&validateData_user,0,sizeof(validateData_user));
-            //  ////printf("\n\n SD CARD BI STATE 777- %s  / %s\n\n",validateData_user.firstName,validateData_user.phone);
+            //  printf("\n\n SD CARD BI STATE 777- %s  / %s\n\n",validateData_user.firstName,validateData_user.phone);
             parse_ValidateData_User(aabff, &validateData_user);
 
             if (get_Feedback_SMS() == 1 && validateData_user.permition != '2' && BLE_SMS_Indication == SMS_INDICATION)
@@ -907,13 +905,13 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 data_SMS->labelRsp = 0;
             }
 
-            // ////printf("\nparse_ValidateData_User\n");
+            // printf("\nparse_ValidateData_User\n");
             if (!strcmp(validateData_user.key, phPassword))
             {
-                // ////printf("\nstrcmp\n");
+                // printf("\nstrcmp\n");
                 if (!strcmp(element, RELE1_ELEMENT))
                 {
-                    // ////printf("\nstrcmp11\n");
+                     printf("\nstrcmp11\n");
                     //  heap_trace_start(HEAP_TRACE_ALL);
 
                     output_Data = parse_ReleData(BLE_SMS_Indication, RELE1_NUMBER, Input_Command[3], Input_Command[5], phPassword, input_Payload, &validateData_user, gattsIF, connID, handle_table, data_SMS, mqttInfo);
@@ -924,7 +922,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 }
                 else if (!strcmp(element, RELE2_ELEMENT))
                 {
-                    ////printf("\nstrcmp12\n");
+                    printf("\nstrcmp12\n");
                     output_Data = parse_ReleData(BLE_SMS_Indication, RELE2_NUMBER, Input_Command[3], Input_Command[5], phPassword, input_Payload, &validateData_user, gattsIF, connID, handle_table, data_SMS, mqttInfo);
                     free(inputData);
 
@@ -967,7 +965,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -996,7 +994,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1023,7 +1021,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1050,7 +1048,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1076,7 +1074,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1101,7 +1099,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1126,7 +1124,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1151,7 +1149,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         else
                         {
 
-                            // ////printf(ERROR_USER_NOT_PERMITION);
+                            // printf(ERROR_USER_NOT_PERMITION);
                             free(inputData);
                             return return_ERROR_Codes(&output_Data, ERROR_USER_NOT_PERMITION);
                         }
@@ -1184,7 +1182,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                                     }
                                     else if (input_Payload[0] == 'G')
                                     {
-                                        // ////printf("\nget_LogFiles_profiles\n");
+                                        // printf("\nget_LogFiles_profiles\n");
                                         asprintf(&output_Data, "ME G H %s", get_LogFiles_profiles());
                                         free(inputData);
                                         return output_Data;
@@ -1232,7 +1230,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 }
                 else if (!strcmp(element, USER_ELEMENT))
                 {
-                    // ////printf("\n\n ENTER USER PARSING DATA\n\n");
+                    // printf("\n\n ENTER USER PARSING DATA\n\n");
                     if (Input_Command[3] == 'G' && Input_Command[5] == '*')
                     {
                         if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
@@ -1265,33 +1263,33 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                         {
                             free(inputData);
                             asprintf(&output_Data, "%s", return_Json_SMS_Data("ONLY_BLE_FUNCTION"));
-                            // ////printf("outputData rsp - %s", output_Data);
+                            // printf("outputData rsp - %s", output_Data);
                             return output_Data;
                         }
                     }
                     else
                     {
-                        //////printf("\n enter users comm\n");
+                        // printf("\n enter users comm\n");
                         /* memset(&output_Data, 0, sizeof(output_Data)); */
                         output_Data = parse_UserData(BLE_SMS_Indication, line, Input_Command[3], Input_Command[5], phPassword, input_Payload, &validateData_user, gattsIF, connID, handle_table, mqttInfo);
 
-                        // ////printf("\n enter users comm 12\n");
+                        // printf("\n enter users comm 12\n");
                         free(inputData);
-                        // ////printf("\n enter users comm 13\n");
+                        // printf("\n enter users comm 13\n");
                         return output_Data;
                     }
                 }
                 else if (!strcmp(element, ROUTINE_ELEMENT))
                 {
 
-                    // ////printf("\n enter routines 1\n");
+                    // printf("\n enter routines 1\n");
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
                         if (validateData_user.permition == '2')
                         {
 
                             output_Data = parse_RoutineData(BLE_SMS_Indication, gattsIF, connID, handle_table, Input_Command[3], Input_Command[5], input_Payload);
-                            // ////printf("\n erase routines 13\n");
+                            // printf("\n erase routines 13\n");
                             free(inputData);
                             return output_Data;
                         }
@@ -1316,7 +1314,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             else
             {
 
-                // ////printf("\n\n\n wrong password\n\n\n");
+                // printf("\n\n\n wrong password\n\n\n");
                 if ((!strcmp(element, RELE1_ELEMENT) || !strcmp(element, RELE2_ELEMENT)) && (cmd == 'S' || cmd == 'R') && parameter == 'R')
                 {
                     if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD) || network_Activate_Flag == 1)
@@ -1350,12 +1348,12 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                     data_SMS->labelRsp = 0;
                 }
 
-                // ////printf("\n\n\n wrong password 222\n\n\n");
+                // printf("\n\n\n wrong password 222\n\n\n");
                 free(inputData);
 
                 // return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_PASSWORD_WRONG"));
 
-                // ////printf("\nERROR_PASSWORD_WRONG - %s\n", output_Data);
+                // printf("\nERROR_PASSWORD_WRONG - %s\n", output_Data);
                 //   return return_Json_SMS_Data("ERROR_PASSWORD_WRONG");
                 return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_PASSWORD_WRONG"));
             }
@@ -1394,24 +1392,24 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 }
             }
 
-            // ////printf("\n USER NOT FOUND ENTER 4");
+            // printf("\n USER NOT FOUND ENTER 4");
 
             free(inputData);
-            // ////printf("\n USER NOT FOUND ENTER 5");
+            // printf("\n USER NOT FOUND ENTER 5");
             return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_USER_NOT_FOUND"));
         }
 
         free(inputData);
         return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_INPUT_DATA"));
     }
-    // ////printf("\n\n count search 464 = %d\n\n", count);
+    // printf("\n\n count search 464 = %d\n\n", count);
 
     // if (inputData != NULL)
     // {
     free(inputData);
     //}
 
-    // ////printf("\n\n count search 464 = %d\n\n", 44);
+    // printf("\n\n count search 464 = %d\n\n", 44);
     return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_INPUT_DATA"));
 }
 
@@ -1437,7 +1435,7 @@ char *removeSpacesFromStr(char *string)
 
 char *replace_Char_in_String(char *str, char c_to_replace, char c_new)
 {
-    // ////printf("\n replace str0 %s\n", str);
+    // printf("\n replace str0 %s\n", str);
     for (int i = 0; i < strlen(str); i++)
     {
         if (str[i] == c_to_replace)
@@ -1445,7 +1443,7 @@ char *replace_Char_in_String(char *str, char c_to_replace, char c_new)
             str[i] = c_new;
         }
     }
-    // ////printf("\n replace str01 %s\n", str);
+    // printf("\n replace str01 %s\n", str);
 
     return str;
 }
@@ -1459,16 +1457,16 @@ uint8_t restore_FileContacts()
 
     /*  Open all required files */
     fPtr = fopen("/spiffs/backup.txt", "r");
-    // ////printf("fPtr = fopen(hello\n");
+    // printf("fPtr = fopen(hello\n");
     fTemp = fopen("/spiffs/hello.txt", "w");
-    // ////printf("fPtr = fopen(hello backup \n");
+    // printf("fPtr = fopen(hello backup \n");
 
     /* fopen() return NULL if unable to open file in given mode. */
     if (fPtr == NULL)
     {
         /* Unable to open file hence exit */
-        // ////printf("\nUnable to open file.\n");
-        // ////printf("Please check whether file exists and you have read/write privilege.\n");
+        // printf("\nUnable to open file.\n");
+        // printf("Please check whether file exists and you have read/write privilege.\n");
         return 0;
     }
 
@@ -1480,25 +1478,25 @@ uint8_t restore_FileContacts()
     {
 
         fputs(buffer, fTemp);
-        // ////printf("restore %s\n", buffer);
+        // printf("restore %s\n", buffer);
     }
 
-    // ////printf("\nfile 11\n");
+    // printf("\nfile 11\n");
     /* Close all files to release resource */
     fclose(fPtr);
-    // ////printf("\nfile 22\n");
+    // printf("\nfile 22\n");
     fclose(fTemp);
-    // ////printf("\nfile 33\n");
+    // printf("\nfile 33\n");
 
     fTemp = fopen("/spiffs/hello.txt", "r");
-    // ////printf("fPtr = fopen(hello backup \n\n");
+    // printf("fPtr = fopen(hello backup \n\n");
 
     /* fopen() return NULL if unable to open file in given mode. */
     if (fTemp == NULL)
     {
         /* Unable to open file hence exit */
-        // ////printf("\nUnable to open file.\n");
-        // ////printf("Please check whether file exists and you have read/write privilege.\n");
+        // printf("\nUnable to open file.\n");
+        // printf("Please check whether file exists and you have read/write privilege.\n");
         return 0;
     }
     else
@@ -1531,13 +1529,13 @@ void init_Storage()
     err = nvs_open_from_partition("keys", NVS_USERS_NAMESPACE, NVS_READWRITE, &nvs_Users_handle);
     err = nvs_open_from_partition("keys", NVS_ROUTINES_NAMESPACE, NVS_READWRITE, &nvs_Routines_handle);
     err = nvs_open_from_partition("keys", NVS_EXEPTION_DAYS_NAMESPACE, NVS_READWRITE, &nvs_Exeption_Days_handle);
-    // ////printf("\nerror 0 %d\n", err);
+    // printf("\nerror 0 %d\n", err);
     err = nvs_open_from_partition("keys", NVS_FEEDBACK_NAMESPACE, NVS_READWRITE, &nvs_Feedback_handle);
     // err = nvs_open_from_partition("keys", "beepNamespace", NVS_READWRITE, &nvs_beep_handle);
     err = nvs_open_from_partition("keys", "beepNamespace", NVS_READWRITE, &nvs_beep_handle);
 
     err = nvs_open_from_partition("keys", NVS_MOBILE_HOLYDAYS_NAMESPACE, NVS_READWRITE, &nvs_Mobile_Holydays_handle);
-    // ////printf("\nerror 123 = %d\n", err);
+    // printf("\nerror 123 = %d\n", err);
 
     err = nvs_open_from_partition("keys", NVS_WIEGAND_CODES_GUEST_NAMESPACE, NVS_READWRITE, &nvs_wiegand_codes_users_handle);
 
@@ -1551,19 +1549,19 @@ uint8_t save_STR_Data_In_Storage(char *key, char *payload, nvs_handle_t my_handl
 
     if (nvs_Users_handle == NULL)
     {
-        // ////printf("\n\n handle null \n\n");
+        // printf("\n\n handle null \n\n");
         nvs_open_from_partition("keys", NVS_USERS_NAMESPACE, NVS_READWRITE, &nvs_Users_handle);
     }
 
-    //////printf("\n\n save str %s - %d - %s - %d\n\n", key, strlen(key), payload, strlen(payload));
+    // printf("\n\n save str %s - %d - %s - %d\n\n", key, strlen(key), payload, strlen(payload));
     int x = nvs_set_str(my_handle, key, (const char *)payload);
-    //////printf("\n\n str save x %d\n\n", x);
+    // printf("\n\n str save x %d\n\n", x);
     return x;
 }
 
 uint8_t save_INT8_Data_In_Storage(char *key, uint8_t value, nvs_handle_t my_handle)
 {
-    // ////printf("\n\n int save value %d\n\n", value);
+    // printf("\n\n int save value %d\n\n", value);
     return nvs_set_u8(my_handle, key, value);
 }
 
@@ -1595,12 +1593,12 @@ int8_t get_Data_Users_From_Storage(char *key, char *output_Data)
 
     if (nvs_get_str(nvs_Admin_handle, key, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
-        // ////printf("\nGET ADMIN NAMESPACE\n");
+        // printf("\nrequire size %d\n", required_size);
+        // printf("\nGET ADMIN NAMESPACE\n");
         //   txtEX = (char *)malloc(required_size * sizeof(char));
         if (nvs_get_str(nvs_Admin_handle, key, aux_Get_Data_User_str, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Data_User_str);
+            // printf("\naux get str %s\n", aux_Get_Data_User_str);
             sprintf(output_Data, "%s", aux_Get_Data_User_str);
             return ESP_OK;
         }
@@ -1611,19 +1609,19 @@ int8_t get_Data_Users_From_Storage(char *key, char *output_Data)
 
     if (nvs_get_str(nvs_Owner_handle, key, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
-        // ////printf("\nGET OWNER NAMESPACE\n");
+        // printf("\nrequire size %d\n", required_size);
+        // printf("\nGET OWNER NAMESPACE\n");
         if (nvs_get_str(nvs_Owner_handle, key, aux_Get_Data_User_str, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Data_User_str);
+            // printf("\naux get str %s\n", aux_Get_Data_User_str);
             sprintf(output_Data, "%s", aux_Get_Data_User_str);
             return ESP_OK;
         }
     }
 
     // err = nvs_get_str(&my_handle, "ex", &txtEX, strlen("motorline"));
-    // ////printf("\nerror 2 %d\n", err);
-    // ////printf("\nex nvs %s\n", output_Data);
+    // printf("\nerror 2 %d\n", err);
+    // printf("\nex nvs %s\n", output_Data);
     return ESP_FAIL;
 }
 
@@ -1635,15 +1633,15 @@ uint8_t get_Data_STR_Feedback_From_Storage(char *key, char *output_Data)
     char aux_Get_Feedback_User_str[200];
     memset(aux_Get_Feedback_User_str, 0, sizeof(aux_Get_Feedback_User_str));
 
-    // ////printf("\nerror 1 %d\n", err);
+    // printf("\nerror 1 %d\n", err);
 
     if (nvs_get_str(nvs_Feedback_handle, key, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
-        // ////printf("\nGET USERS NAMESPACE\n");
+        // printf("\nrequire size %d\n", required_size);
+        // printf("\nGET USERS NAMESPACE\n");
         if (nvs_get_str(nvs_Feedback_handle, key, aux_Get_Feedback_User_str, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str feedback %s\n", aux_Get_Feedback_User_str);
+            // printf("\naux get str feedback %s\n", aux_Get_Feedback_User_str);
             sprintf(output_Data, "%s", aux_Get_Feedback_User_str);
             return ESP_OK;
         }
@@ -1658,16 +1656,16 @@ uint8_t get_INT8_Data_From_Storage(char *key, nvs_handle_t my_handle)
 
     esp_err_t err = nvs_get_u8(my_handle, key, &value);
 
-    // ////printf("\n\n ERROR INT8 %d\n\n", err);
+    // printf("\n\n ERROR INT8 %d\n\n", err);
 
     if (err == ESP_OK)
     {
-        // ////printf("\n\n get_INT8_Data_From_Storage value %d\n\n", value);
+        // printf("\n\n get_INT8_Data_From_Storage value %d\n\n", value);
         return value;
     }
     else
     {
-        // ////printf("\n\n get_INT8_Data_From_Storage value -1\n\n");
+        // printf("\n\n get_INT8_Data_From_Storage value -1\n\n");
         return -1;
     }
 
@@ -1714,21 +1712,21 @@ uint8_t get_Data_STR_LastCALL_From_Storage(char *output_Data)
     esp_err_t err = 0;
     size_t required_size;
 
-    // ////printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
-    // ////printf("\nerror 1 %d\n", err);
+    // printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
+    // printf("\nerror 1 %d\n", err);
 
     if (nvs_get_str(nvs_System_handle, NVS_LAST_CALL, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
+        // printf("\nrequire size %d\n", required_size);
 
         if (nvs_get_str(nvs_System_handle, NVS_LAST_CALL, output_Data, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", output_Data);
+            // printf("\naux get str %s\n", output_Data);
             //   sprintf(output_Data, "%s", aux_Get_Feedback_User_str);
             return ESP_OK;
         }
     }
-    // ////printf("\nerror 1 get fail\n");
+    // printf("\nerror 1 get fail\n");
     return ESP_FAIL;
 }
 
@@ -1768,7 +1766,7 @@ void insert_SubString(char *mainString, char *subString, int position)
         o = o + 1;
     }
 
-    // ////printf("%s", mainString);
+    // printf("%s", mainString);
 }
 
 char *return_ERROR_Codes(char *input_array, char *ERROR_Code_Message)
@@ -1787,17 +1785,17 @@ void modifyJSONValue(const char *key, const char *newValue)
     if (cJSON_GetObjectItem(sms_Rsp_Json, key) != NULL)
     {
         // Update diagnostic parameter
-        //////printf("\nValor da chave 1223\n");
+        // printf("\nValor da chave 1223\n");
         cJSON_ReplaceItemInObject(sms_Rsp_Json, key, cJSON_CreateString(newValue)); // Substitui o valor existente pelo novo valor
     }
 
     if (cJSON_GetObjectItem(default_sms_Rsp_Json, key) != NULL)
     {
-        //////printf("\nValor da chave 4567\n");
+        // printf("\nValor da chave 4567\n");
         cJSON_ReplaceItemInObject(default_sms_Rsp_Json, key, cJSON_CreateString(newValue)); // Substitui o valor existente pelo novo valor
     }
 
-    //////printf("Valor da chave modificado com sucesso.\n");
+    // printf("Valor da chave modificado com sucesso.\n");
 }
 
 char *return_Json_SMS_Data(char *json_Key)
@@ -1806,21 +1804,21 @@ char *return_Json_SMS_Data(char *json_Key)
 
     if (sms_Rsp_Json != NULL)
     {
-        // ////printf("\n\nChecking 1212 - %s\n\n", json_Key);
+        // printf("\n\nChecking 1212 - %s\n\n", json_Key);
         rsp_Json_Data = cJSON_GetObjectItemCaseSensitive(sms_Rsp_Json, json_Key);
-        // ////printf("\n\nChecking 1515 %s\n\n", rsp_Json_Data->string);
+        // printf("\n\nChecking 1515 %s\n\n", rsp_Json_Data->string);
         if (cJSON_IsString(rsp_Json_Data) && (rsp_Json_Data->valuestring != NULL))
         {
-            //////printf("Checking monitor \"%s\"\n", rsp_Json_Data->valuestring);
+            // printf("Checking monitor \"%s\"\n", rsp_Json_Data->valuestring);
             return rsp_Json_Data->valuestring;
         }
         else
         {
             rsp_Json_Data = cJSON_GetObjectItemCaseSensitive(default_sms_Rsp_Json, json_Key);
-            //////printf("Checking monitor 11\"%s\"\n", rsp_Json_Data->valuestring);
+            // printf("Checking monitor 11\"%s\"\n", rsp_Json_Data->valuestring);
             if (cJSON_IsString(rsp_Json_Data) && (rsp_Json_Data->valuestring != NULL))
             {
-                //////printf("Checking monitor 22\"%s\"\n", rsp_Json_Data->valuestring);
+                // printf("Checking monitor 22\"%s\"\n", rsp_Json_Data->valuestring);
                 return rsp_Json_Data->valuestring;
             }
             else
@@ -1835,7 +1833,7 @@ char *return_Json_SMS_Data(char *json_Key)
 
         if (cJSON_IsString(rsp_Json_Data) && (rsp_Json_Data->valuestring != NULL))
         {
-            // ////printf("Checking monitor \"%s\"\n", rsp_Json_Data->valuestring);
+            // printf("Checking monitor \"%s\"\n", rsp_Json_Data->valuestring);
             return rsp_Json_Data->valuestring;
         }
     }
@@ -1866,7 +1864,7 @@ void get_NVS_Parameters()
         rele2_Mode_Label = MONOESTABLE_MODE_INDEX;
     }
 
-    // ////printf("\n\nget_NVS_Parameters rele2_Mode_Label - %d\n\n", rele2_Mode_Label);
+    // printf("\n\nget_NVS_Parameters rele2_Mode_Label - %d\n\n", rele2_Mode_Label);
 
     if (nvs_get_u32(nvs_System_handle, NVS_RELAY1_BISTATE_TIME, (uint32_t)&rele1_Bistate_Time) != ESP_OK)
     {
@@ -1875,7 +1873,7 @@ void get_NVS_Parameters()
         rele1_Bistate_Time = 1;
     }
 
-    // ////printf("\n\nrele1_Bistate_Time %d \n\n", rele1_Bistate_Time);
+    // printf("\n\nrele1_Bistate_Time %d \n\n", rele1_Bistate_Time);
     if (nvs_get_u32(nvs_System_handle, NVS_RELAY2_BISTATE_TIME, (uint32_t)&rele2_Bistate_Time) != ESP_OK)
     {
         nvs_set_u32(nvs_System_handle, NVS_RELAY2_BISTATE_TIME, 1);
@@ -1896,13 +1894,12 @@ void get_NVS_Parameters()
         nvs_set_u32(nvs_System_handle, NVS_LIMIT_USERS, LIMIT_USERS_REGISTER_NUMBER);
     }
 
-    label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
+   /*  label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
 
-    if (label_network_portalRegister == 255)
-    {
+    
         label_network_portalRegister = 1;
-        save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
-    }
+        save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle); */
+    
 
     char translate_data[50] = {};
 
@@ -1954,7 +1951,7 @@ void get_NVS_Parameters()
         verification_SMS_CALL = 0;
     }
 
-    //////printf("\n\n routine clear 5454\n\n");
+    // printf("\n\n routine clear 5454\n\n");
     initNVS_relay2();
     initNVS_relay1();
 
@@ -1967,18 +1964,18 @@ void initNVS_relay2()
 {
     uint8_t releValue = 0;
     label_Routine2_ON = get_INT8_Data_From_Storage(NVS_KEY_ROUTINE2_LABEL, nvs_System_handle); // get a label da rotina 1 se estava ativa
-    //////printf("\n\n routine clear 5555\n\n");
+    // printf("\n\n routine clear 5555\n\n");
     if (label_Routine2_ON == 255) // verificação se ja existe, se não existe inicia com 0
     {
         label_Routine2_ON = 0;
         save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, label_Routine2_ON, nvs_System_handle);
     }
-    //////printf("\n\n routine clear 6666\n\n");
+    // printf("\n\n routine clear 6666\n\n");
     releValue = get_INT8_Data_From_Storage(NVS_KEY_RELAY2_LAST_VALUE, nvs_System_handle); // get ao ultimo estado do rele 1
-    //////printf("\n\n routine clear 7777\n\n");
+    // printf("\n\n routine clear 7777\n\n");
     if (releValue == 255) // verificação se ja se encontra inicializada, se não estiver inicia o valor do ultimo estado, a label da rotina e do tempo da rotina a 0
     {
-        //////printf("\n\n routine clear 8888\n\n");
+        // printf("\n\n routine clear 8888\n\n");
         gpio_set_level(GPIO_OUTPUT_IO_1, 0);
         save_INT8_Data_In_Storage(NVS_KEY_RELAY2_LAST_VALUE, 0, nvs_System_handle);
         label_Routine2_ON = 0;
@@ -1987,34 +1984,34 @@ void initNVS_relay2()
     }
     else // se ja estiver a label iniciada
     {
-        //////printf("\n\n routine clear 9999\n\n");
+        // printf("\n\n routine clear 9999\n\n");
         label_Routine2_ON = get_INT8_Data_From_Storage(NVS_KEY_ROUTINE2_LABEL, nvs_System_handle); // get à label do ultimo estado da rotina
 
         if (label_Routine2_ON == 255) // verificação se esta inicializada
         {
-            //////printf("\n\n routine clear 10000\n\n");
-            // caso nao esteja inicializada inicia a label a 0
+            // printf("\n\n routine clear 10000\n\n");
+            //  caso nao esteja inicializada inicia a label a 0
             label_Routine2_ON = 0;
             save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, label_Routine2_ON, nvs_System_handle);
         }
-        //////printf("\n\n routine clear 1001\n\n");
+        // printf("\n\n routine clear 1001\n\n");
         if (label_Routine2_ON == 1) // check if rotine was activated
         {
-            //////printf("\n\n routine clear 1003\n\n");
+            // printf("\n\n routine clear 1003\n\n");
             uint64_t timeRoutine2 = 0;
             if (nvs_get_u64(nvs_System_handle, NVS_KEY_ROUTINE2_TIME_ON, &timeRoutine2) != ESP_OK) // get time off of the rotine
             {
-                //////printf("\n\n routine clear 1002\n\n");
+                // printf("\n\n routine clear 1002\n\n");
                 timeRoutine2 = 0;
                 nvs_set_u64(nvs_System_handle, NVS_KEY_ROUTINE2_TIME_ON, 0);
-                //////printf("\n\n routine clear 1003\n\n");
+                // printf("\n\n routine clear 1003\n\n");
             }
             // if time routine is 0 or now time is bigger than routine off time put 0 in variavels
-            //////printf("\n\n routine clear 00\n\n");
-            //////printf("\n\n routine clear 000\n\n");
+            // printf("\n\n routine clear 00\n\n");
+            // printf("\n\n routine clear 000\n\n");
             if (timeRoutine2 == 0 || get_nowTime_in_seconds() > timeRoutine2)
             {
-                // //printf("\n\n routine clear\n\n");
+                // printf("\n\n routine clear\n\n");
                 gpio_set_level(GPIO_OUTPUT_IO_1, 0);
                 label_Routine2_ON = 0;
                 save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, 0, nvs_System_handle);
@@ -2022,7 +2019,7 @@ void initNVS_relay2()
             }
             else // put 1 in the variavels
             {
-                // //printf("\n\n routine NOT clear\n\n");
+                // printf("\n\n routine NOT clear\n\n");
                 gpio_set_level(GPIO_OUTPUT_IO_1, 1);
                 label_Routine2_ON = 1;
                 save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, 1, nvs_System_handle);
@@ -2117,13 +2114,115 @@ uint8_t get_STR_Data_In_Storage(char *key, nvs_handle_t my_handle, char *strRSP)
     {
         if (nvs_get_str(my_handle, key, aux_Get_Data_User_str, &required_size) == ESP_OK)
         {
-            // //printf("\naux get str %s\n", aux_Get_Data_User_str);
+            // printf("\naux get str %s\n", aux_Get_Data_User_str);
             sprintf(strRSP, "%s", aux_Get_Data_User_str);
             return ESP_OK;
         }
     }
 
     return ESP_FAIL;
+}
+
+void resetProcess()
+{
+
+    uint8_t Input1_value = 0;
+    uint8_t Input2_value = 0;
+
+    Input1_value = !gpio_get_level(CONFIG_GPIO_INPUT_0);
+    Input2_value = !gpio_get_level(CONFIG_GPIO_INPUT_1);
+    uint8_t resetPinLabel = 0;
+    uint8_t actValue = 0;
+
+    inline uint64_t now_time = get_nowTime_in_seconds();
+   
+
+    printf("\n\nnonow time %lld\n\n", now_time);
+
+    gpio_set_level(GPIO_OUTPUT_ACT, 1);
+    while (get_nowTime_in_seconds() < now_time + 10)
+    {
+        printf("\n\nnonow time2 %lld\n\n", get_nowTime_in_seconds());
+        if (!gpio_get_level(CONFIG_GPIO_INPUT_0) && !gpio_get_level(CONFIG_GPIO_INPUT_1))
+        {
+
+            resetPinLabel = 1;
+        }
+        else
+        {
+            resetPinLabel = 0;
+            goto endFunction;
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+
+    if (resetPinLabel)
+    {
+        resetPinLabel = 0;
+        gpio_set_level(GPIO_OUTPUT_ACT, 0);
+        vTaskDelay(pdMS_TO_TICKS(5000));
+
+        now_time = 0;
+        now_time = get_nowTime_in_seconds();
+
+        while (get_nowTime_in_seconds() < now_time + 5)
+        {
+            gpio_set_level(GPIO_OUTPUT_ACT, actValue);
+            actValue = ~actValue;
+            printf("\n\nnonow time3 %lld\n\n", get_nowTime_in_seconds());
+            if (gpio_get_level(CONFIG_GPIO_INPUT_0) && gpio_get_level(CONFIG_GPIO_INPUT_1))
+            {
+                resetPinLabel = 1;
+            }
+            else
+            {
+                resetPinLabel = 0;
+                goto endFunction;
+            }
+            vTaskDelay(pdMS_TO_TICKS(200));
+        }
+    }
+
+    if (resetPinLabel)
+    {
+        gpio_set_level(GPIO_OUTPUT_ACT, 0);
+        vTaskDelay(pdMS_TO_TICKS(5000));
+        label_Reset_Password_OR_System = 0;
+        now_time = 0;
+        now_time = get_nowTime_in_seconds();
+
+        while (get_nowTime_in_seconds() < now_time + 3)
+        {
+
+            gpio_set_level(GPIO_OUTPUT_ACT, actValue);
+            actValue = ~actValue;
+            printf("\n\nnonow time4 %lld\n\n", get_nowTime_in_seconds());
+            if (!gpio_get_level(CONFIG_GPIO_INPUT_0) && !gpio_get_level(CONFIG_GPIO_INPUT_1))
+            {
+
+                resetPinLabel = 1;
+            }
+            else
+            {
+                resetPinLabel = 0;
+                goto endFunction;
+            }
+
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
+    }
+
+    if (resetPinLabel)
+    {
+        system_Reset();
+    }
+    else
+    {
+        printf("\n\n NO RESET\n\n");
+    }
+
+endFunction:
+    return;
 }
 
 void vTimerCallback(TimerHandle_t xTimer)
@@ -2137,68 +2236,35 @@ void vTimerCallback(TimerHandle_t xTimer)
     }
     else
     {
-        // ////printf("\nact toogle\n");
-        // ////printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
+        printf("\nact toogle - \n");
+        // printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
 
-        if (label_Reset_Password_OR_System == 1)
+        if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
         {
-            gpio_set_level(GPIO_OUTPUT_ACT, 1);
-            vTaskDelay(pdMS_TO_TICKS(150));
-            gpio_set_level(GPIO_OUTPUT_ACT, 0);
-            vTaskDelay(pdMS_TO_TICKS(150));
-            gpio_set_level(GPIO_OUTPUT_ACT, 1);
-            vTaskDelay(pdMS_TO_TICKS(150));
-            gpio_set_level(GPIO_OUTPUT_ACT, 0);
-            vTaskDelay(pdMS_TO_TICKS(150));
-        }
-        else
-        {
-            if (gpio_get_level(GPIO_INPUT_IO_SIMPRE) && label_Reset_Password_OR_System != 0)
-            {
-                uint8_t times_TO_ACT_Toogle = RSSI_LED_TOOGLE;
+            uint8_t times_TO_ACT_Toogle = RSSI_LED_TOOGLE;
 
-                if (times_TO_ACT_Toogle == 5)
-                {
-                    gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                }
-                else
-                {
-                    while (times_TO_ACT_Toogle > 0)
-                    {
-                        gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                        vTaskDelay(pdMS_TO_TICKS(300));
-                        gpio_set_level(GPIO_OUTPUT_ACT, 0);
-                        vTaskDelay(pdMS_TO_TICKS(300));
-                        times_TO_ACT_Toogle--;
-                    }
-                }
-
-                /* toggle21 ^= 0x01;
-                gpio_set_level(GPIO_OUTPUT_ACT, toggle21); */
-            }
-            else if (label_Reset_Password_OR_System == 0)
+            if (times_TO_ACT_Toogle == 5)
             {
                 gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 0);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 0);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 0);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 1);
-                vTaskDelay(pdMS_TO_TICKS(150));
-                gpio_set_level(GPIO_OUTPUT_ACT, 0);
-                vTaskDelay(pdMS_TO_TICKS(150));
             }
             else
             {
-                gpio_set_level(GPIO_OUTPUT_ACT, 1);
+                while (times_TO_ACT_Toogle > 0)
+                {
+                    gpio_set_level(GPIO_OUTPUT_ACT, 1);
+                    vTaskDelay(pdMS_TO_TICKS(300));
+                    gpio_set_level(GPIO_OUTPUT_ACT, 0);
+                    vTaskDelay(pdMS_TO_TICKS(300));
+                    times_TO_ACT_Toogle--;
+                }
             }
+
+            /* toggle21 ^= 0x01;
+            gpio_set_level(GPIO_OUTPUT_ACT, toggle21); */
+        }
+        else
+        {
+            gpio_set_level(GPIO_OUTPUT_ACT, 1);
         }
 
         //  gpio_set_level(GPIO_NUM_21, toggle21);
@@ -2217,7 +2283,7 @@ uint8_t refresh_ESP_RTC()
 
         for (size_t i = 0; i < 7; i++)
         {
-            // //printf("\n read rtc 22 %d", data[i]);
+            // printf("\n read rtc 22 %d", data[i]);
         }
 
         timeinfo.tm_year = data[6] + YEAR_OFFSET - 1900;
@@ -2229,17 +2295,17 @@ uint8_t refresh_ESP_RTC()
         timeinfo.tm_wday = data[4];
         timeinfo.tm_isdst = 0;
 
-        // ////printf("%d:%02d:%02d - %d %d/%d/%d\r\n", data[2], data[1], data[0], data[4], data[6] + YEAR_OFFSET, data[5], data[3]);
+        // printf("%d:%02d:%02d - %d %d/%d/%d\r\n", data[2], data[1], data[0], data[4], data[6] + YEAR_OFFSET, data[5], data[3]);
 
         time_t auxEpoch = epoch_Calculator(&timeinfo);
 
-        // ////printf("\n\n epoch refresh %ld\n\n", auxEpoch);
+        // printf("\n\n epoch refresh %ld\n\n", auxEpoch);
 
         struct timeval epoch = {auxEpoch, 0};
 
         if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, NULL, &required_size) == ESP_OK)
         {
-            // ////printf("\nrequire size %d\n", required_size);
+            // printf("\nrequire size %d\n", required_size);
 
             if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timeZone, &required_size) == ESP_OK)
             {
@@ -2254,14 +2320,14 @@ uint8_t refresh_ESP_RTC()
             sprintf(timeZone, "%s", "GMT0");
         }
 
-        // ////printf("\n\n epoch refresh 1234\n\n");
+        // printf("\n\n epoch refresh 1234\n\n");
         if (!settimeofday(&epoch, NULL))
         {
-            // ////printf("\tzset 2\n");
+            // printf("\tzset 2\n");
             if (!setenv("TZ", timeZone, 1))
             {
-                // ////printf("\n\n\n getenv - %s", getenv("TZ"));
-                // ////printf("\tzset 3\n");
+                // printf("\n\n\n getenv - %s", getenv("TZ"));
+                // printf("\tzset 3\n");
                 save_STR_Data_In_Storage(NVS_TIMEZONE, timeZone, nvs_System_handle);
                 tzset();
             }
@@ -2311,12 +2377,12 @@ uint8_t get_RTC_System_Time()
 
     sprintf(nowTime.strTime, "%02d/%02d/%02d,%02d:%02d:%02d", (nowTime.year + 2000), nowTime.month, nowTime.day, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 
-    // ////printf("\n\n time: %s - %d - %d \n\n", nowTime.strTime, nowTime.time, nowTime.date);
+    // printf("\n\n time: %s - %d - %d \n\n", nowTime.strTime, nowTime.time, nowTime.date);
 
     /*  if (PCF85_Readnow(data))
      {
-         //////printf("\r\nRTC NOW >>> 12345 ");
-         //////printf("%d:%02d:%02d - %d %d/%d/%d\r\n", data[2], data[1], data[0], data[4], data[6] + YEAR_OFFSET, data[5], data[3]);
+         //printf("\r\nRTC NOW >>> 12345 ");
+         //printf("%d:%02d:%02d - %d %d/%d/%d\r\n", data[2], data[1], data[0], data[4], data[6] + YEAR_OFFSET, data[5], data[3]);
      } */
 
     //     nowTime.year = data[6] + YEAR_OFFSET - 2000;
@@ -2331,7 +2397,7 @@ uint8_t get_RTC_System_Time()
     //     nowTime.time = data[2] * 100 + data[1];
     //     nowTime.weekDay = data[4];
 
-    //     // ////printf("\n\nnowTime.year - %d / data[6] - %d\n\n", nowTime.year, data[6]);
+    //     // printf("\n\nnowTime.year - %d / data[6] - %d\n\n", nowTime.year, data[6]);
 
     //     nowTime.date = (nowTime.year * 10000) + (nowTime.month * 100) + nowTime.day;
     //     sprintf(nowTime.strTime, "%02d/%02d/%02d,%02d:%02d", (nowTime.year + 2000), nowTime.month, nowTime.day, data[2], data[1]);
@@ -2352,16 +2418,16 @@ uint8_t get_RTC_System_Time()
 
     //         int int_epoch = 0; // mktime(&timeinfo);
 
-    //         ////printf("\n\n\n int epoch %d\n\n\n", int_epoch);
+    //         printf("\n\n\n int epoch %d\n\n\n", int_epoch);
     //         char timeZone[50] = {};
 
     //         esp_err_t err = 0;
     //         size_t required_size;
 
-    //         ////printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
-    //         ////printf("\nerror 1 %d\n", err);
+    //         printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
+    //         printf("\nerror 1 %d\n", err);
 
-    //         ////printf("\n\n\n getenv - %s",getenv("TZ"));
+    //         printf("\n\n\n getenv - %s",getenv("TZ"));
     //         // settimeofday(&epoch, NULL);
     //         time_t now;
     //         struct tm *timeinfo_Now;
@@ -2370,7 +2436,7 @@ uint8_t get_RTC_System_Time()
 
     //         /* localtime_r(&now, &timeinfo_Now);
 
-    //         ////printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
+    //         printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
     //  */
 
     //         int_epoch = mktime(&timeinfo);
@@ -2378,15 +2444,15 @@ uint8_t get_RTC_System_Time()
     //         /* memset(timezone_network, 0, 5);
     //         sprintf(timezone_network, "%s", "32");
     //         timeZone_Signal = '-'; */
-    //         ////printf("\n\n timezone network %d\n\n", atoi(timezone_network));
+    //         printf("\n\n timezone network %d\n\n", atoi(timezone_network));
 
     //         if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, NULL, &required_size) == ESP_OK)
     //         {
-    //             ////printf("\nrequire size %d\n", required_size);
+    //             printf("\nrequire size %d\n", required_size);
 
     //             if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timeZone, &required_size) == ESP_OK)
     //             {
-    //                 ////printf("\naux get str %s\n", timeZone);
+    //                 printf("\naux get str %s\n", timeZone);
     //                 int_epoch = mktime(&timeinfo);
     //             }
     //             else
@@ -2418,20 +2484,20 @@ uint8_t get_RTC_System_Time()
     //             timeinfo_Now = localtime(&now);
     //             // localtime_r(&now, &timeinfo_Now);
 
-    //             ////printf("\n\n 14521452 year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
+    //             printf("\n\n 14521452 year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
     // */
-    //             ////printf("\n\n timezone qlts %s", timeZone);
+    //             printf("\n\n timezone qlts %s", timeZone);
     //             if (!setenv("TZ", timeZone, 1))
     //             {
 
-    //                 ////printf("\n\n\n getenv22 - %s", getenv("TZ"));
+    //                 printf("\n\n\n getenv22 - %s", getenv("TZ"));
     //                 tzset();
 
     //                 time(&now);
     //                 timeinfo_Now = localtime(&now);
     //                 localtime_r(&now, &timeinfo_Now);
 
-    //                 ////printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
+    //                 printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
 
     //                /* PCF85_SetTime(timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
     //                 PCF85_SetDate(timeinfo_Now->tm_wday, timeinfo_Now->tm_mday, (timeinfo_Now->tm_mon + 1), (timeinfo_Now->tm_year + 1900)); */
@@ -2441,22 +2507,22 @@ uint8_t get_RTC_System_Time()
     //             else
     //             {
     //                 // enableAlarm();
-    //                 //  ////printf("\nTIME ZONE ERROR 1212\n");
+    //                 //  printf("\nTIME ZONE ERROR 1212\n");
     //                 return 0;
     //             }
     //         }
     //         else
     //         {
     //             // enableAlarm();
-    //             ////printf("\nTIME ZONE ERROR 1313\n");
+    //             printf("\nTIME ZONE ERROR 1313\n");
     //             return 0;
     //         }
 
-    // ////printf("\n\nget_RTC_System_Time nowTime.date - %d\n\n", nowTime.date);
+    // printf("\n\nget_RTC_System_Time nowTime.date - %d\n\n", nowTime.date);
     //  enableAlarm();
-    // ////printf("\n\nget_RTC_System_Time nowTime.time - %d\n\n", nowTime.time);
+    // printf("\n\nget_RTC_System_Time nowTime.time - %d\n\n", nowTime.time);
 
-    // ////printf("\n\nget_RTC_System_Time strtime - %s\n\n", nowTime.strTime);
+    // printf("\n\nget_RTC_System_Time strtime - %s\n\n", nowTime.strTime);
     return 1;
     // }
 }
@@ -2498,20 +2564,9 @@ void initSystem()
 
     init_Storage();
 
-    // TODO: APAGAR LINHA A BAIXO
-    // nvs_erase_key(nvs_System_handle, NVS_TIMEZONE);
-    label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
-
-    // //printf("\n\n label_network_portalRegister %d\n\n", label_network_portalRegister);
-    if (label_network_portalRegister == 255)
-    {
-        label_network_portalRegister = 1;
-        save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle);
-    }
-
-    label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
-    // //printf("\n\n label_network_portalRegister 11 %d\n\n", label_network_portalRegister);
-    ////printf("imei=543219876543210");
+   
+    // printf("\n\n label_network_portalRegister 11 %d\n\n", label_network_portalRegister);
+    printf("imei=543219876543210");
     char HW_Version[10] = {};
 
     size_t required_size = 0;
@@ -2527,11 +2582,11 @@ void initSystem()
 
     if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, NULL, &required_size) == ESP_OK)
     {
-        // ////printf("\nrequire size %d\n", required_size);
-        // //printf("\nGET USERS NAMESPACE HARDWARE\n");
+        // printf("\nrequire size %d\n", required_size);
+        // printf("\nGET USERS NAMESPACE HARDWARE\n");
         if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, HW_Version, &required_size) == ESP_OK)
         {
-            ////printf("\nrequire HW_Version %s\n", HW_Version);
+            printf("\nrequire HW_Version %s\n", HW_Version);
         }
         else
         {
@@ -2545,23 +2600,24 @@ void initSystem()
         sprintf(HW_Version, "%s", HW_VERSION_PROD);
     }
 
-    // ////printf("\n\n HW_Version - %s testes testes\n\n", HW_Version);
+    // printf("\n\n HW_Version - %s testes testes\n\n", HW_Version);
 
     char timeZone[50] = {};
     if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timeZone, &required_size) == ESP_OK)
     {
-        // ////printf("\naux get str %s\n", timeZone);
+        // printf("\naux get str %s\n", timeZone);
 
         if (!setenv("TZ", timeZone, 1))
         {
 
-            // ////printf("\n\n\n getenv22 - %s", getenv("TZ"));
+            // printf("\n\n\n getenv22 - %s", getenv("TZ"));
             tzset();
         }
     }
 
     gpio_init(); // init GPIO
     xTaskCreate(wiegand_task, "TAG", 2048 * 4 + 1024, NULL, 5, NULL);
+
     // resetRele1();
     // resetRele2();
 
@@ -2569,7 +2625,7 @@ void initSystem()
     PCF85_Init();
     refresh_ESP_RTC();
 
-    // ////printf("\n\n akakak\n\n");
+    // printf("\n\n akakak\n\n");
 
     // get_RTC_System_Time();
     uint8_t data[7];
@@ -2584,7 +2640,7 @@ void initSystem()
     routine_list = (list_node *)malloc(sizeof(list_node));
     routine_list->next = NULL;
 
-    // ////printf("\n\n akakak 111\n\n");
+    printf("\n\n akakak 111\n\n");
     rdySem = xSemaphoreCreateBinary();
 
     rdySem_RelayMonoStart = xSemaphoreCreateBinary();
@@ -2599,7 +2655,11 @@ void initSystem()
     xSemaphoreTake(rdySem_Routine_BiState_Send_RelayState1, 0);
     xSemaphoreTake(rdySem_Routine_BiState_Send_RelayState2, 0);
 
+    printf("\n\n akakak 222\n\n");
+
     FILE *f = fopen("/spiffs/language.json", "r");
+
+    printf("\n\n akakak 333\n\n");
 
     if (f != NULL)
     {
@@ -2609,37 +2669,37 @@ void initSystem()
         file_Lenght = ftell(f);
         fseek(f, 0L, SEEK_SET);
         // rewind(f);
-        // ////printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
+        // printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
 
-        // ////printf("\n\n\n ckf OK \n\n\n");
+        // printf("\n\n\n ckf OK \n\n\n");
 
         json_Translate_File = (char *)malloc(file_Lenght * sizeof(char));
 
         memset(json_Translate_File, 0, file_Lenght);
 
-        // ////printf("\n\n\n end lang files 4\n\n\n");
+        // printf("\n\n\n end lang files 4\n\n\n");
 
         if (json_Translate_File)
         {
-            // ////printf("\n\n\n end lang files 5\n\n\n");
+            // printf("\n\n\n end lang files 5\n\n\n");
 
             fread(json_Translate_File, sizeof(char), file_Lenght, f);
-            // ////printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
+            // printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
 
             // cJSON_Delete(sms_Rsp_Json);
             sms_Rsp_Json = cJSON_Parse(json_Translate_File);
             default_sms_Rsp_Json = cJSON_Parse(jsonFile);
             free(json_Translate_File);
 
-            // ////printf("\n\n\n end lang files 8\n\n\n");
+            // printf("\n\n\n end lang files 8\n\n\n");
             if (sms_Rsp_Json == NULL || default_sms_Rsp_Json == NULL)
             {
 
-                // ////printf("\n\n X10 9999\n\n");
+                // printf("\n\n X10 9999\n\n");
                 const char *error_ptr = cJSON_GetErrorPtr();
                 if (error_ptr != NULL)
                 {
-                    // //printf("Error before: %s\n", error_ptr);
+                    // printf("Error before: %s\n", error_ptr);
                 }
             }
         }
@@ -2657,15 +2717,15 @@ void initSystem()
         default_sms_Rsp_Json = cJSON_Parse(jsonFile);
         sms_Rsp_Json = cJSON_Parse(jsonFile);
 
-        // ////printf("\n\n\n ckf OK \n\n\n");
+        // printf("\n\n\n ckf OK \n\n\n");
 
         if (sms_Rsp_Json == NULL)
         {
-            // ////printf("\n\n X10 9999\n\n");
+            // printf("\n\n X10 9999\n\n");
             const char *error_ptr = cJSON_GetErrorPtr();
             if (error_ptr != NULL)
             {
-                // ////printf("\n\nError before: %s\n", error_ptr);
+                // printf("\n\nError before: %s\n", error_ptr);
             }
         }
         // free(json_Translate_File);
@@ -2673,42 +2733,46 @@ void initSystem()
     /*  modifyJSONValue( "INPUT_HAS_BEEN_ACTIVATED1","JA FOSTE ENTRADA 1");
      modifyJSONValue( "INPUT_HAS_BEEN_ACTIVATED1","JA FOSTE ENTRADA 1 AHAHAH"); */
     uint32_t value = 0;
+
+    printf("\n\n akakak 444\n\n");
     value = MyUser_List_AllUsers();
     save_User_Counter_In_Storage(value);
 
-    // ////printf("\n\n\n end lang 7777\n\n\n");
+    // printf("\n\n\n end lang 7777\n\n\n");
 
-    // ////printf("\n\n X10 1223 -- %d\n\n", gpio_get_level(GPIO_INPUT_IO_SIMPRE));
+    // printf("\n\n X10 1223 -- %d\n\n", gpio_get_level(GPIO_INPUT_IO_SIMPRE));
     get_NVS_Parameters();
-
-    // ////printf("\n\n akakak 221\n\n");
+    printf("\n\n akakak 555\n\n");
+    // printf("\n\n akakak 221\n\n");
     //  xTaskCreate(task_sendFeedbackData, "task_sendFeedbackData", 2 * 2048, NULL, 20, NULL);
     xTaskCreate(task_BiState_Send_RelayState1, "task_BiState_Send_RelayState1", 2 * 2048 + 1024, NULL, 15, &rele1_Bistate_Task_Handle);
     xTaskCreate(task_BiState_Send_RelayState2, "task_BiState_Send_RelayState2", 2 * 2048 + 1024, NULL, 15, &rele2_Bistate_Task_Handle);
-    // ////printf("\n\n BEFORE ROUTINE RELAY\n\n");
+    // printf("\n\n BEFORE ROUTINE RELAY\n\n");
     xTaskCreate(task_Routine_BiState_Send_RelayState1, "task_Routine_BiState_Send_RelayState1", 1024, NULL, 20, &task_Routine_BiState_RelayState1);
     xTaskCreate(task_Routine_BiState_Send_RelayState2, "task_Routine_BiState_Send_RelayState2", 1024, NULL, 20, &task_Routine_BiState_RelayState2);
 
     char fb_phoneff[30];
 
-    // ////printf("\n\n akakak 222\n\n");
-    //  ////printf("\n F1 label1 %d\n", get_INT8_Data_From_Storage(NVS_FB_CONF_F1, nvs_Feedback_handle));
+    // printf("\n\n akakak 222\n\n");
+    //  printf("\n F1 label1 %d\n", get_INT8_Data_From_Storage(NVS_FB_CONF_F1, nvs_Feedback_handle));
     get_Data_STR_Feedback_From_Storage(NVS_FB_CONF_P1, &fb_phoneff);
-    // ////printf("\n F1 phone1 %s\n", fb_phoneff);
-    // ////printf("\n F1 in cfg1 %d\n", get_INT8_Data_From_Storage(NVS_FB_CONF_I1, nvs_Feedback_handle));
-    // ////printf("\n\n akakak 333\n\n");
+    // printf("\n F1 phone1 %s\n", fb_phoneff);
+    // printf("\n F1 in cfg1 %d\n", get_INT8_Data_From_Storage(NVS_FB_CONF_I1, nvs_Feedback_handle));
+    // printf("\n\n akakak 333\n\n");
     xTaskCreate(task_Send_Routines, "task_Send_Routines", 1024 * 4, NULL, 18, &task_Routine_BiState_RelayState2);
-
+    printf("\n\n akakak 666\n\n");
     init_EG91();
-    // ////printf("\n\n akakak 444\n\n");
+
+    // printf("\n\n akakak 444\n\n");
     label_initSystem_SIMPRE = 1;
     // save_INT8_Data_In_Storage(NVS_KEY_SDCARD_RESET, 0, nvs_System_handle);
 
     example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 30);
     xTimers = xTimerCreate("Timer", pdMS_TO_TICKS(2000), pdTRUE, (void *)0, vTimerCallback);
-    // ////printf("\n\n akakak 444\n\n");
+
+    // printf("\n\n akakak 444\n\n");
     initTimers();
-    // ////printf("\n\n akakak 555\n\n");
+    // printf("\n\n akakak 555\n\n");
     if (xTimers == NULL)
     {
 
@@ -2727,25 +2791,30 @@ void initSystem()
 
     // EG91_writeFile("char *fileName", "char *file", 12);
     // init_SDCard();
-    // ////printf("\n\n akakak 666\n\n");
+    // printf("\n\n akakak 666\n\n");
 
-    // ////printf("\n\n akakak 888\n\n");
-    //   ////printf("\n\nINIT ROUTINES\n\n");
+    // printf("\n\n akakak 888\n\n");
+    //   printf("\n\nINIT ROUTINES\n\n");
     //   eraseRoutines();
     initRoutines();
-    // ////printf("\n\n akakak 999\n\n");
+
+    // printf("\n\n akakak 999\n\n");
 }
 
 /// @brief Print stack high water mark value
 /// @param tag TAG to insert in the print
-extern void system_stack_high_water_mark(char *tag) {
-  UBaseType_t uxHighWaterMark;
-  uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
-  if (uxHighWaterMark > 512) {
-    ESP_LOGI(tag, "\n\n[GOOD] water mark: %d\n\n", uxHighWaterMark);
-  } else {
-    ESP_LOGE(tag, "\n\n[ALERT] water mark: %d\n\n", uxHighWaterMark);
-  }
+extern void system_stack_high_water_mark(char *tag)
+{
+    UBaseType_t uxHighWaterMark;
+    uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
+    if (uxHighWaterMark > 512)
+    {
+        ESP_LOGI(tag, "\n\n[GOOD] water mark: %d\n\n", uxHighWaterMark);
+    }
+    else
+    {
+        ESP_LOGE(tag, "\n\n[ALERT] water mark: %d\n\n", uxHighWaterMark);
+    }
 }
 
 char *erase_Password_For_Rsp(char *payload, char *rsp_payload)
@@ -2754,7 +2823,7 @@ char *erase_Password_For_Rsp(char *payload, char *rsp_payload)
     uint8_t count = 0;
     uint8_t strIndex = 0;
 
-    // ////printf("\n\nrsp_Data1 - %s\n\n", payload);
+    // printf("\n\nrsp_Data1 - %s\n\n", payload);
 
     for (size_t i = 0; i < strlen(payload); i++)
     {
@@ -2776,7 +2845,7 @@ char *erase_Password_For_Rsp(char *payload, char *rsp_payload)
         }
     }
 
-    // ////printf("\n\nrsp_Data2 - %s\n\n", rsp_payload);
+    // printf("\n\nrsp_Data2 - %s\n\n", rsp_payload);
     return rsp_payload;
 }
 
@@ -2862,7 +2931,7 @@ int valueOf(char symbol)
         return 15;
     default:
     {
-        // ////printf("Cannot decode that symbol: %c", symbol);
+        // printf("Cannot decode that symbol: %c", symbol);
         return -1;
     }
     }
@@ -2915,20 +2984,15 @@ int remove_padding(unsigned char *plaintext, size_t plaintext_length)
 uint32_t CRC32_FOTA = 0;
 unsigned char stream_block[16] = {};
 
-
-
-
 void decrypt_aes_cfb_padding(const unsigned char *input, size_t input_len, unsigned char *output)
 {
 
     mbedtls_aes_context aes;
 
     unsigned char key[] = "C55YOj8C1em3IAKm";
-    
-   /*  mbedtls_aes_init(&aes);
-    mbedtls_aes_setkey_dec(&aes, key, 128); */
 
-    
+    /*  mbedtls_aes_init(&aes);
+     mbedtls_aes_setkey_dec(&aes, key, 128); */
 
     size_t iv_offset = 0;
     size_t iv_offset1 = 0;
@@ -2937,7 +3001,7 @@ void decrypt_aes_cfb_padding(const unsigned char *input, size_t input_len, unsig
     char *base64_output = NULL;
     // IV (vetor de inicialização) de 128 bits (16 bytes)
     size_t nc_off1 = 0;
-    
+
     unsigned char stream_block1[16] = {};
     mbedtls_aes_context ctx;
 
@@ -2946,49 +3010,44 @@ void decrypt_aes_cfb_padding(const unsigned char *input, size_t input_len, unsig
     int decoded_len = base64_decode((const char *)input, input_len, &decoded_input);
     if (decoded_len < 0)
     {
-        ////printf("Erro ao decodificar base64\n");
+        printf("Erro ao decodificar base64\n");
         return;
     }
-
 
     mbedtls_aes_init(&ctx);
     unsigned char out[2000] = {};
     mbedtls_aes_setkey_enc(&ctx, key, 128);
 
     // Descriptografa usando o modo CTR
-    //mbedtls_aes_crypt_(&aes, MBEDTLS_AES_DECRYPT, input, output);
+    // mbedtls_aes_crypt_(&aes, MBEDTLS_AES_DECRYPT, input, output);
 
-    //ESP_LOG_BUFFER_HEX("iv iv ", iv, sizeof(iv));
-    //ESP_LOG_BUFFER_HEX("stream stream ", stream_block, sizeof(stream_block));
-    memset(EG915_readDataFile_struct.receiveData,0, sizeof(EG915_readDataFile_struct.receiveData));
-    //mbedtls_aes_crypt_cbc(&ctx,MBEDTLS_AES_DECRYPT,decoded_len,iv, decoded_input, out);
+    // ESP_LOG_BUFFER_HEX("iv iv ", iv, sizeof(iv));
+    // ESP_LOG_BUFFER_HEX("stream stream ", stream_block, sizeof(stream_block));
+    memset(EG915_readDataFile_struct.receiveData, 0, sizeof(EG915_readDataFile_struct.receiveData));
+    // mbedtls_aes_crypt_cbc(&ctx,MBEDTLS_AES_DECRYPT,decoded_len,iv, decoded_input, out);
     EG915_readDataFile_struct.decryptSize = decoded_len;
-   mbedtls_aes_crypt_ctr(&ctx, decoded_len, &nc_off1, iv, stream_block, decoded_input, &EG915_readDataFile_struct.receiveData);
-  
-    //iv[15]++;
+    mbedtls_aes_crypt_ctr(&ctx, decoded_len, &nc_off1, iv, stream_block, decoded_input, &EG915_readDataFile_struct.receiveData);
+
+    // iv[15]++;
     //
     EG915_readDataFile_struct.packetFile_size = decoded_len;
-    //memcpy(iv, out + decoded_len - 16, 16);
+    // memcpy(iv, out + decoded_len - 16, 16);
 
-    //ESP_LOG_BUFFER_HEX("\n cfb", EG915_readDataFile_struct.receiveData, decoded_len);
-   /* ESP_LOG_BUFFER_HEX("stream stream ", stream_block, sizeof(stream_block)); */
-    //memcpy(iv,stream_block,sizeof(stream_block));
-    memset(stream_block,0,sizeof(stream_block)); 
-    
+    // ESP_LOG_BUFFER_HEX("\n cfb", EG915_readDataFile_struct.receiveData, decoded_len);
+    /* ESP_LOG_BUFFER_HEX("stream stream ", stream_block, sizeof(stream_block)); */
+    // memcpy(iv,stream_block,sizeof(stream_block));
+    memset(stream_block, 0, sizeof(stream_block));
 
     // Libera a memória alocada para o texto decodificado
-    
 
-     //ESP_LOG_BUFFER_HEX("ofb", EG915_readDataFile_struct.receiveData, decoded_len);
+    // ESP_LOG_BUFFER_HEX("ofb", EG915_readDataFile_struct.receiveData, decoded_len);
 
     // Imprime o texto descriptografado
-    
 
-    
     // mbedtls_aes_crypt_cfb8(&ctx, MBEDTLS_AES_DECRYPT, output_len/* inputLen */, iv,&base64_output /* input */, output);
-    
+
     mbedtls_aes_free(&ctx);
-   // //printf("\n\n cfb out:\n %s \n\n", out);
+    // printf("\n\n cfb out:\n %s \n\n", out);
     free(decoded_input);
     // mbedtls_cipher_free(&ctx);
 }
@@ -3001,7 +3060,7 @@ void decrypt_aes_cbc_padding(const unsigned char *input, size_t input_len, unsig
 
     char *base64_output = NULL; // malloc(strlen(input));
 
-    // ////printf("String decodificada: %s\n", input);
+    // printf("String decodificada: %s\n", input);
 
     /*if (base64_output == NULL)
     {
@@ -3016,16 +3075,16 @@ void decrypt_aes_cbc_padding(const unsigned char *input, size_t input_len, unsig
 
     if (output_len == -1)
     {
-        // ////printf("Erro ao decodificar a string Base64\n");
+        // printf("Erro ao decodificar a string Base64\n");
         return;
     }
 
-    // ////printf("String decodificada: %.*s\n", output_len, base64_output);
+    // printf("String decodificada: %.*s\n", output_len, base64_output);
 
     // Print the encrypted text as hexadecimal
     for (size_t i = 0; i < output_len; i++)
     {
-        // ////printf("%02X ", base64_output[i]);
+        // printf("%02X ", base64_output[i]);
     }
 
     unsigned char decrypted_data[100] = {};
@@ -3074,7 +3133,7 @@ void decrypt_aes_cbc_padding(const unsigned char *input, size_t input_len, unsig
     size_t plaintext_len = output_len - (size_t)padding_len;
     output[plaintext_len] = '\0'; */
 
-    // ////printf("\n\n  output[plaintext_len] 23232 - %d - %d - %s\n\n", input_len /* plaintext_len */, block_count, output);
+    // printf("\n\n  output[plaintext_len] 23232 - %d - %d - %s\n\n", input_len /* plaintext_len */, block_count, output);
 
     free(base64_output);
 }
@@ -3188,14 +3247,14 @@ uint32_t get_User_Counter_From_Storage()
 
     if (nvs_get_u32(nvs_System_handle, NVS_KEY_USER_COUNTER, &value) == ESP_OK)
     {
-        // //printf("\n\n MyUser_List_AllUsers22 - %d\n\n", value);
+        // printf("\n\n MyUser_List_AllUsers22 - %d\n\n", value);
         return value;
     }
     else
     {
         value = MyUser_List_AllUsers();
         nvs_set_u32(nvs_System_handle, NVS_KEY_USER_COUNTER, value);
-        // //printf("\n\n MyUser_List_AllUsers - %d\n\n", value);
+        // printf("\n\n MyUser_List_AllUsers - %d\n\n", value);
         return value;
     }
 

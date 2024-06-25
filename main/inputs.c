@@ -27,7 +27,7 @@ char *readInputs(uint8_t BLE_SMS_Indication, uint8_t inputNumber, char cmd, char
                 if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                 {
                     asprintf(&rsp, "%s %c %c %d", INPUT1_ELEMENT, cmd, param, read_Input1());
-                    //////printf("\nread inputs %s ",rsp);
+                    //printf("\nread inputs %s ",rsp);
                     return rsp;
                 }
                 else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -35,7 +35,7 @@ char *readInputs(uint8_t BLE_SMS_Indication, uint8_t inputNumber, char cmd, char
                     if (read_Input1())
                     {
                         asprintf(&rsp,  return_Json_SMS_Data("INPUT_ON"),1,"<05>");
-                        //////printf("\nread inputs %s ",rsp);
+                        //printf("\nread inputs %s ",rsp);
                         return rsp;
                     }
                     else
@@ -55,7 +55,7 @@ char *readInputs(uint8_t BLE_SMS_Indication, uint8_t inputNumber, char cmd, char
                 if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                 {
                     asprintf(&rsp, "%s %c %c %d", INPUT2_ELEMENT, cmd, param, read_Input2());
-                    //////printf("\nread inputs %s ",rsp);
+                    //printf("\nread inputs %s ",rsp);
                     return rsp;
                 }
                 else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -79,21 +79,21 @@ char *readInputs(uint8_t BLE_SMS_Indication, uint8_t inputNumber, char cmd, char
             else
             {
 
-                //////printf(ERROR_GET);
+                //printf(ERROR_GET);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_GET")); 
             }
         }
         else
         {
 
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
     else
     {
 
-        //////printf(ERROR_CMD);
+        //printf(ERROR_CMD);
         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_CMD")); 
     }
     return "ERROR READ INPUTS";

@@ -213,8 +213,7 @@ extern uint8_t SIM_CARD_PIN_status;
 void verify_SMS_List();
 void give_rdySem_Feedback_Call();
 void give_rdySem_Control_Send_AT_Command();
-void send_Type_Call_queue(uint8_t state);
-void give_rdySem_Control_SMS_Task();
+
 
 uint8_t EG91_PowerOn();
 uint8_t EG91_Power_Reset();
@@ -223,24 +222,19 @@ uint8_t EG91_Power_OFF();
 /* uint8_t open_mqtt_and_conection(); */
 
 uint8_t parse_OpenFile(char *payload);
-uint8_t parse_Confirmation_Send_SMS(char *payload);
+
 uint8_t parseCHUP(char *payload);
 int8_t  EG91_Parse_ReceiveData(char *receiveData, char *rsp);
 
 void    EG91_writeFile(char *fileName, char *file,int filesize);
-void    record_Feedback_Sound();
-void    play_Feedback_Sound();
 
-uint8_t EG91_Send_SMS(char *phNumber, char *text);
-uint8_t EG91_Call_PHONE(char *phNumber);
+
+
 
 uint8_t EG91_send_AT_Command(char *data, char *rsp, int time);
 uint8_t parse_NetworkStatus(char *payload);
 uint8_t EG91_parse_QFREAD(char * payload);
 
-uint8_t parse_SMS_data(data_EG91_Receive_SMS *receive_SMS_data);
-uint8_t parse_SMS(char *payload);
-uint8_t parse_SMS_Payload(char *payload);
 uint8_t parse_https_get(char *payload);
 
 uint8_t EG91_parseGet_imsi(char *data);
@@ -251,16 +245,14 @@ uint8_t reopen_and_connection();
 uint8_t has_letters(const char *str);
 
 uint8_t checkIF_operator_sms(data_EG91_Receive_SMS receive_SMS_data);
-int8_t  parse_Call(uint8_t state);
-int8_t  parse_IncomingCall_Payload(char *payload);
+
 uint8_t parse_NowTime(char *payload);
 uint8_t parse_RSSI(char *payload);
-uint8_t parse_SMS_List(char *payload);
+
 uint8_t EG91_parse_CPIN(char *payload);
 uint8_t parse_IMEI(char *payload);
 uint8_t EG91_parse_CPAS(char *receiveData);
-char    *EG91_Send_Parse_CUSD(char *payload,char *output);
-uint8_t EG91_parse_CUSD(char *receiveData);
+
 uint8_t EG91_parse_CNUM(char *receiveData);
 uint8_t EG91_parse_ICCID(char * receiveData);
 uint8_t EG91_parse_IMEI(char * receiveData);
@@ -281,17 +273,12 @@ uint8_t EG91_UDP_Ping();
 
 uint8_t send_UDP_Send(char *data,char *topic);
 
-void task_EG91_Run_SMS(void *pvParameter);
-void task_EG91_Run_IncomingCall(void *pvParameter);
-void task_EG91_SendSMS(void *pvParameter);
-void task_EG91_Feedback_Call(void *pvParameter);
-void task_EG91_Record_Feedback_Call(void *pvParameter);
-void task_EG91_Verify_Unread_SMS(void *pvParameter);
+
+
 void task_EG91_Receive_UDP(void *pvParameter);
 void task_EG91_Send_UDP(void *pvParameter);
 
-void give_rdySem_Control_SMS_UDP();
-void take_rdySem_Control_SMS_UDP();
+
 
 void giveSem_CtrIncomingCall();
 static void uart_event_task(void *pvParameters);

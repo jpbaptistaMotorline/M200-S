@@ -550,7 +550,7 @@ s32_t SPIFFS_write(spiffs *fs, spiffs_file fh, void *buf, s32_t len) {
           intptr_t __a2 = (u8_t*)&cpage_data[offset_in_cpage]+len-(u8_t*)cache;
           intptr_t __b = sizeof(spiffs_cache) + cache->cpage_count * (sizeof(spiffs_cache_page) + SPIFFS_CFG_LOG_PAGE_SZ(fs));
           if (__a1 > __b || __a2 > __b) {
-            //////printf("FATAL OOB: CACHE_WR: memcpy to cache buffer ixs:%4ld..%4ld of %4ld\n", __a1, __a2, __b);
+            //printf("FATAL OOB: CACHE_WR: memcpy to cache buffer ixs:%4ld..%4ld of %4ld\n", __a1, __a2, __b);
             ERREXIT();
           }
         }

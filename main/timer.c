@@ -56,6 +56,11 @@ uint32_t TIMER_BASE_CLK_CALC()
     return (uint32_t)timer_freq;
 }
 
+void vResetTimerCallback(TimerHandle_t xTimer)
+{
+    
+}
+
 void initTimers()
 {
     label_timerVerifySystem = 0;
@@ -68,12 +73,19 @@ void initTimers()
     example_tg_timer_init(TIMER_GROUP_1, TIMER_0, true, 5);
     s_timer_queue = xQueueCreate(2, sizeof(example_timer_event_t));
 
+    xResetTimer = xTimerCreate(
+        "ResetTimer",                 // Nome do timer
+        pdMS_TO_TICKS(5000),          // Período do timer em ticks (5000 ms)
+        pdTRUE,                       // O timer é auto-recarregável
+        (void *)1,                    // ID opcional do timer
+        vResetTimerCallback   
+    );
     // example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 10);
     // timer_pause(TIMER_GROUP_0, TIMER_0);
 
     // example_tg_timer_init(TIMER_GROUP_1, TIMER_1, true, 2);
     // xTaskCreate(&task_VerifySystem, "task_VerifySystem", 4 * 2048, NULL, 2 /*32*/, &xHandle_Timer_VerSystem);
-    xTaskCreate(&task_I1_Alarm_Timeout, "task_I1_Alarm_Timeout", 3200, NULL, 8, NULL);
+    xTaskCreate(&task_I1_Alarm_Timeout, "task_I1_Alarm_Timeout", 10000, NULL, 8, NULL);
     xTaskCreate(&task_I2_Normal_Feedback, "task_I2_Normal_Feedback", 1024, NULL, 8, NULL);
 
     // example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 10000);
@@ -104,8 +116,8 @@ void timer0_main_ctrl()
         }
         else
         {
-            //////printf("\nact toogle\n");
-            //////printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
+            //printf("\nact toogle\n");
+            //printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
             toggle21 ^= 0x01;
             gpio_set_level(GPIO_OUTPUT_ACT, toggle21);
             //  gpio_set_level(GPIO_NUM_21, toggle21);
@@ -160,9 +172,9 @@ static bool IRAM_ATTR timer_group_I1_Timeout_isr_callback(void *args)
 {
     BaseType_t high_task_awoken = pdFALSE;
     example_timer_info_t *info = (example_timer_info_t *)args;
-    //////printf("\n\n timer_group_I1_Timeout_isr_callback 1\n\n");
+    //printf("\n\n timer_group_I1_Timeout_isr_callback 1\n\n");
     uint64_t timer_counter_value = timer_group_get_counter_value_in_isr(info->timer_group, info->timer_idx);
-    //////printf("\n\n timer_group_I1_Timeout_isr_callback 2\n\n");
+    //printf("\n\n timer_group_I1_Timeout_isr_callback 2\n\n");
 
     /* Prepare basic event data that will be then sent back to task */
     example_timer_event_t evt = {
@@ -179,7 +191,7 @@ static bool IRAM_ATTR timer_group_I1_Timeout_isr_callback(void *args)
     }
 
     /* Now just send the event data back to the main program task */
-    //////printf("\n\n timeout I1 %lld\n\n",timer_counter_value);
+    //printf("\n\n timeout I1 %lld\n\n",timer_counter_value);
     xQueueSendFromISR(alarm_I1_Timeout_queue, &evt, &high_task_awoken);
     return high_task_awoken == pdTRUE; // return whether we need to yield at the end of ISR
 }
@@ -188,9 +200,9 @@ static bool IRAM_ATTR timer_group_I2_Normal_Feedback_Timeout_isr_callback(void *
 {
     BaseType_t high_task_awoken = pdFALSE;
     example_timer_info_t *info = (example_timer_info_t *)args;
-    //////printf("\n\n timer_group_I1_Timeout_isr_callback 1\n\n");
+    //printf("\n\n timer_group_I1_Timeout_isr_callback 1\n\n");
     uint64_t timer_counter_value = timer_group_get_counter_value_in_isr(info->timer_group, info->timer_idx);
-    //////printf("\n\n timer_group_I1_Timeout_isr_callback 2\n\n");
+    //printf("\n\n timer_group_I1_Timeout_isr_callback 2\n\n");
 
     /* Prepare basic event data that will be then sent back to task */
     example_timer_event_t evt = {
@@ -207,7 +219,7 @@ static bool IRAM_ATTR timer_group_I2_Normal_Feedback_Timeout_isr_callback(void *
     }
 
     /* Now just send the event data back to the main program task */
-    //////printf("\n\n timeout I1 %lld\n\n",timer_counter_value);
+    //printf("\n\n timeout I1 %lld\n\n",timer_counter_value);
     xSemaphoreGive(rdySem_Timer_Input2_feedback_Timeout);
     return high_task_awoken == pdTRUE; // return whether we need to yield at the end of ISR
 }
@@ -225,17 +237,17 @@ void init_I1_Timeout_timer0()
         .alarm_en = TIMER_ALARM_EN,
         .auto_reload = 1,
     }; // default clock source is APB
-    //////printf("\n\n timer_init I1 1\n\n");
+    //printf("\n\n timer_init I1 1\n\n");
     timer_init(group, timer, &config);
-    //////printf("\n\n timer_init I1 2\n\n");
+    //printf("\n\n timer_init I1 2\n\n");
     timer_set_counter_value(group, timer, 0);
-    //////printf("\n\n timer_init I1 3\n\n");
+    //printf("\n\n timer_init I1 3\n\n");
 
     /* Configure the alarm value and the interrupt on alarm. */
     timer_set_alarm_value(group, timer, 2 * TIMER_SCALE);
-    //////printf("\n\n timer_init I1 4\n\n");
+    //printf("\n\n timer_init I1 4\n\n");
     timer_enable_intr(group, timer);
-    //////printf("\n\n timer_init I1 5\n\n");
+    //printf("\n\n timer_init I1 5\n\n");
 
     example_timer_info_t *timer_info = calloc(1, sizeof(example_timer_info_t));
     timer_info->timer_group = group;
@@ -244,11 +256,11 @@ void init_I1_Timeout_timer0()
     timer_info->alarm_interval = 2;
     timer_isr_callback_add(group, timer, timer_group_I1_Timeout_isr_callback, timer_info, 0);
 
-    //////printf("\n\n timer_init I1 6\n\n");
+    //printf("\n\n timer_init I1 6\n\n");
     //  timer_pause(TIMER_GROUP_0, TIMER_0);
     timer_start(group, timer);
 
-    //////printf("\n\n timer_init I1 7\n\n");
+    //printf("\n\n timer_init I1 7\n\n");
 }
 
 void update_ACT_TimerVAlue(double seconds)
@@ -334,9 +346,9 @@ static bool IRAM_ATTR timer_group_Reset_System_OR_Password_isr_callback(void *ar
  */
 static void inline print_timer_counter(uint64_t counter_value)
 {
-    //////printf("Counter: 0x%08x%08x\r\n", (uint32_t)(counter_value >> 32),(uint32_t)(counter_value));
+    //printf("Counter: 0x%08x%08x\r\n", (uint32_t)(counter_value >> 32),(uint32_t)(counter_value));
 
-    //////printf("Time   : %.8f s\r\n", (double)counter_value / TIMER_SCALE);
+    //printf("Time   : %.8f s\r\n", (double)counter_value / TIMER_SCALE);
 }
 
 /**
@@ -440,51 +452,51 @@ void periodic_timer_callback(void *arg)
 
 void task_Reset_Password_System_Timeout(void *pvParameter)
 {
-    if (label_ResetSystem == 0)
+    if (label_ResetSystem < 5)
     {
-        label_ResetSystem = 1;
-        // ////printf("\n\nlabel_ResetSystem == 012345\n\n");
-        // ////printf("\n\nlabel_ResetSystem == asdfg\n\n");
+        label_ResetSystem = 6;
+        // printf("\n\nlabel_ResetSystem == 012345\n\n");
+        // printf("\n\nlabel_ResetSystem == asdfg\n\n");
         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
-        // ////printf("\n\nlabel_ResetSystem == 54321\n\n");
+        // printf("\n\nlabel_ResetSystem == 54321\n\n");
 
         if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
         {
-            // ////printf("\n\nlabel_ResetSystem == qwerty\n\n");
+            // printf("\n\nlabel_ResetSystem == qwerty\n\n");
             EG91_send_AT_Command(AT_CSQ, "CSQ", 1000);
         }
 
         xTaskCreate(&task_VerifySystem, "task_VerifySystem", 4 * 2048 + 2048, NULL, /* 5 */ 31, &xHandle_Timer_VerSystem);
         update_ACT_TimerVAlue(3);
-        label_Reset_Password_OR_System = 2;
+        label_Reset_Password_OR_System = 6;
         label_initSystem_CALL = 1;
     }
-    else if (label_ResetSystem == 1)
-    {
-        //////printf("\n\nlabel_ResetSystem == 1\n\n");
-        // label_ResetSystem = 2;
+    // else if (label_ResetSystem < 5)
+    // {
+    //     //printf("\n\nlabel_ResetSystem == 1\n\n");
+    //     // label_ResetSystem = 2;
 
-        example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
+    //     example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
 
-        if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
-        {
-            EG91_send_AT_Command(AT_CSQ, "CSQ", 1000);
-        }
+    //     if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
+    //     {
+    //         EG91_send_AT_Command(AT_CSQ, "CSQ", 1000);
+    //     }
 
-        xTaskCreate(&task_VerifySystem, "task_VerifySystem", 4 * 2048 + 2048, NULL, /* 5  */ 31, &xHandle_Timer_VerSystem);
-        update_ACT_TimerVAlue(3);
-        label_Reset_Password_OR_System = 2;
-        label_initSystem_CALL = 1;
-        // example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 60);
-    }
+    //     xTaskCreate(&task_VerifySystem, "task_VerifySystem", 4 * 2048 + 2048, NULL, /* 5  */ 31, &xHandle_Timer_VerSystem);
+    //     update_ACT_TimerVAlue(3);
+    //     label_Reset_Password_OR_System = 6;
+    //     label_initSystem_CALL = 1;
+    //     // example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 60);
+    // }
     // else if (label_ResetSystem == 2)
     // {
-    //     //////printf("\n\nlabel_ResetSystem == 2\n\n");
+    //     //printf("\n\nlabel_ResetSystem == 2\n\n");
     //     /* example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
     //     label_ResetSystem = 3; */
     // }
 
-    //////printf("\n\ntask_Reset_Password_System_Timeout\n\n");
+    //printf("\n\ntask_Reset_Password_System_Timeout\n\n");
     // xTimerStop(xTimers, 100);
     // gpio_set_level(GPIO_OUTPUT_ACT, 0);
     // label_Reset_Password_OR_System = 0;
@@ -517,7 +529,7 @@ void task_I2_Normal_Feedback(void *pvParameter)
     for (;;)
     {
         xSemaphoreTake(rdySem_Timer_Input2_feedback_Timeout, portMAX_DELAY);
-        //////printf("\n\nrdySem_Timer_Input2_feedback_Timeout 0000\n\n");
+        //printf("\n\nrdySem_Timer_Input2_feedback_Timeout 0000\n\n");
 
         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_1);
         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 0;
@@ -533,7 +545,7 @@ void task_VerifySystem(void *pvParameter)
         xQueueReceive(s_timer_queue, &evt, portMAX_DELAY);
         // take_rdySem_Control_SMS_UDP();
 
-        // ////printf("Task  State   Prio    Stack    Num\n");
+        // printf("Task  State   Prio    Stack    Num\n");
 
         if (get_INT8_Data_From_Storage(NVS_QMT_LARGE_DATA_TIMER_LABEL, nvs_System_handle) != 1)
         {
@@ -562,7 +574,7 @@ void task_VerifySystem(void *pvParameter)
                     // TODO: TROCAR ESTE IF e retirar o delay
                     vTaskDelay(pdMS_TO_TICKS(750));
 
-                    //////printf("\n\nSIMPRE INIT NETWORK\n\n");
+                    //printf("\n\nSIMPRE INIT NETWORK\n\n");
                     while (InitNetworkCount < 3)
                     {
 
@@ -588,11 +600,11 @@ void task_VerifySystem(void *pvParameter)
                         // send_UDP_Package("char* data",strlen("char* data"));
 
                         label_timerVerifySystem = 1;
-                        //////printf("\n------- EVENT TIME --------\n");
+                        //printf("\n------- EVENT TIME --------\n");
                         print_timer_counter(evt.timer_counter_value);
 
                         /* Print the timer values as visible by this task */
-                        // ////printf("-------- TASK TIME --------\n");
+                        // printf("-------- TASK TIME --------\n");
                         uint64_t task_counter_value;
                         timer_get_counter_value(evt.info.timer_group, evt.info.timer_idx, &task_counter_value);
                         print_timer_counter(task_counter_value);
@@ -605,7 +617,7 @@ void task_VerifySystem(void *pvParameter)
                     }
                     else
                     {
-                        // ////printf("-------- TASK TIME 000111--------\n");
+                        // printf("-------- TASK TIME 000111--------\n");
                         RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
 
                         gpio_set_level(GPIO_OUTPUT_ACT, 1);
@@ -620,11 +632,11 @@ void task_VerifySystem(void *pvParameter)
                 {
 
                     label_timerVerifySystem = 1;
-                    //////printf("\n------- EVENT TIME --------\n");
+                    //printf("\n------- EVENT TIME --------\n");
                     print_timer_counter(evt.timer_counter_value);
 
                     /* Print the timer values as visible by this task */
-                    //////printf("-------- TASK TIME --------\n");
+                    //printf("-------- TASK TIME --------\n");
                     uint64_t task_counter_value;
                     timer_get_counter_value(evt.info.timer_group, evt.info.timer_idx, &task_counter_value);
                     print_timer_counter(task_counter_value);
@@ -650,7 +662,7 @@ void task_VerifySystem(void *pvParameter)
             ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
             //}
 
-            //////printf("\n\ntask_VerifySystem\n\n");
+            //printf("\n\ntask_VerifySystem\n\n");
             label_timerVerifySystem = 0;
             // give_rdySem_Control_SMS_UDP();
             //   timer_start(TIMER_GROUP_1, TIMER_0);
@@ -666,18 +678,18 @@ void task_I1_Alarm_Timeout(void *pvParameter)
 
         xQueueReceive(alarm_I1_Timeout_queue, &evt, portMAX_DELAY);
 
-        //////printf("\n\ntask_I1_Alarm_Timeout\n\n");
+        //printf("\n\ntask_I1_Alarm_Timeout\n\n");
         //  label_timerVerifySystem = 1;
         //   timer_pause(TIMER_GROUP_1, TIMER_0);
         //    vTaskSuspend( xHandle );
         /* Print information that the timer reported an event */
         if (evt.info.auto_reload)
         {
-            //////printf("Timer Group with auto reload\n");
+            //printf("Timer Group with auto reload\n");
         }
         else
         {
-            //////printf("Timer Group without auto reload\n");
+            //printf("Timer Group without auto reload\n");
         }
 
         if (fd_configurations.alarmMode.A == 1)
@@ -685,22 +697,20 @@ void task_I1_Alarm_Timeout(void *pvParameter)
             if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation == 1)
             {
                 example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
-                memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
+                
                 mqtt_information mqttInfo;
                 sprintf(mqttInfo.data,"%s","?\0");
                 sprintf(mqttInfo.topic,"%s","");
                 //send_UDP_Send(mqttInfo.data,"");
                 //send_UDP_queue(&mqttInfo);
 
-                //send_UDP_Send("?\0","");
-                sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("TIMER_ALARM_HAS_NOT_BEEN_SELECTED_TIME_OUT"));
-                sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
+                 feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
+                 char str[50] = {};
+                 sprintf(str,"? %s",feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                printf("\n\nTIMER FEEDBACK COMUM TIMEOUT\n\n");
+                 send_UDP_Send(str,"");
                 //system_stack_high_water_mark("alarm feedback");
-                if (strlen(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber) > 4)
-                {
-                    xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
-                }
+             
 
                 /* timer_pause(TIMER_GROUP_0, TIMER_1);                           // Pause Timer
                 timer_set_counter_value(TIMER_GROUP_0, TIMER_1, 0x00000000ULL); // Reset Timer value */
@@ -708,20 +718,25 @@ void task_I1_Alarm_Timeout(void *pvParameter)
         }
         else if (fd_configurations.alarmMode.A == 0)
         {
+             printf("\n\nTIMER FEEDBACK COMUM TIMEOUT22\n\n");
             example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
-            //////printf("\n\nTIMER FEEDBACK COMUM TIMEOUT\n\n");
-            memset(&feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters, 0, sizeof(feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters));
+            //
+          
         }
-        //////printf("Group[%d], timer[%d] alarm event\n", evt.info.timer_group, evt.info.timer_idx);
+        //printf("Group[%d], timer[%d] alarm event\n", evt.info.timer_group, evt.info.timer_idx);
         //system_stack_high_water_mark("alarm feedback1");
         /* Print the timer values passed by event */
-        //////printf("\n------- EVENT TIME --------\n");
+        //printf("\n------- EVENT TIME --------\n");
+         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT33\n\n");
         print_timer_counter(evt.timer_counter_value);
 
         /* Print the timer values as visible by this task */
-        //////printf("-------- TASK TIME --------\n");
+        //printf("-------- TASK TIME --------\n");
+         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT44\n\n");
         uint64_t task_counter_value;
+         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT55\n\n");
         timer_get_counter_value(evt.info.timer_group, evt.info.timer_idx, &task_counter_value);
+         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT66\n\n");
         print_timer_counter(task_counter_value);
         // ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
         // ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -739,7 +754,7 @@ uint8_t verify_System()
     uint8_t ACK = 0;
     uint8_t verifyCount = 0;
     uint8_t qmtstatValue = get_INT8_Data_From_Storage(NVS_QMTSTAT_LABEL, nvs_System_handle);
-    //////printf("\n\n\n\n verify_System - %d\n\n\n\n", qmtstat_verifyCounter);
+    //printf("\n\n\n\n verify_System - %d\n\n\n\n", qmtstat_verifyCounter);
 
     if (qmtstat_verifyCounter == 3)
     {
@@ -850,7 +865,7 @@ uint8_t verify_System()
     while (verifyCount < 3)
     {
         ACK = check_NetworkState();
-        // ////printf("\n\n ACK check_NetworkState - %d\n\n",ACK);
+        // printf("\n\n ACK check_NetworkState - %d\n\n",ACK);
 
         if (ACK != 2 || ACK != 3)
         {
@@ -862,12 +877,12 @@ uint8_t verify_System()
     }
 
     // ACK = check_NetworkState();
-    //////printf("\n\ncheck_NetworkState - %d\n\n", ACK);
-    //////printf("\n\n network check = %d\n\n", ACK);
+    //printf("\n\ncheck_NetworkState - %d\n\n", ACK);
+    //printf("\n\n network check = %d\n\n", ACK);
     if (ACK == 2 || ACK == 3)
     {
 
-        // ////printf("\n\n ACK check_NetworkState fail - %d\n\n",ACK);
+        // printf("\n\n ACK check_NetworkState fail - %d\n\n",ACK);
         if (NetworkFail_Counter == 3)
         {
             NetworkFail_Counter = 0;
@@ -898,19 +913,19 @@ uint8_t verify_System()
 void List_Backup_File_Contacts()
 {
     // Open renamed file for reading
-    //////printf("Reading file");
+    //printf("Reading file");
     FILE *f1 = fopen("/spiffs/backup.txt", "r");
 
     if (f1 == NULL)
     {
-        //////printf("Failed to open file for reading");
+        //printf("Failed to open file for reading");
     }
     char ch1[200];
 
     while (fgets(ch1, 256, f1) != NULL)
     {
         // ch = fgetc(f);
-        //////printf("backup - %s", ch1);
+        //printf("backup - %s", ch1);
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 

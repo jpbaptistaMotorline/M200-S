@@ -17,7 +17,7 @@ uint8_t I2C_ReadRegister(uint8_t reg_addr, uint8_t *data, size_t len)
 
     i2c_master_write_read_device(I2C_MASTER_NUM, 0x51, &reg_addr, 1, data, len, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
 
-     //////printf("\n value - %d ", data[0]);
+     //printf("\n value - %d ", data[0]);
 
     return 1;
 }
@@ -135,7 +135,7 @@ uint8_t PCF85_Readnow(uint8_t *buf)
         buf[5] = bcdToDec(bufss[5] & 0x1F);
         buf[6] = bcdToDec(bufss[6]);
 
-        ////printf("\n\n read rtc %s\n\n",buf);
+        printf("\n\n read rtc %s\n\n",buf);
 
         return 1;
     }

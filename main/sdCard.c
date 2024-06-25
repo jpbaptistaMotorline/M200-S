@@ -52,7 +52,7 @@ spi_bus_config_t bus_cfg = {
 void free_SPI_Host()
 {
     esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
-    // ////printf("\n\n unmount 222\n\n");
+    // printf("\n\n unmount 222\n\n");
     //ESP_LOGI("TAG", "Card unmounted");
 
     // deinitialize the bus after all devices are removed
@@ -92,7 +92,7 @@ void mount_SD_CARD()
     char *fileName;
 
     uint8_t lastMonth = get_NVS_Last_Month();
-    //////printf("\nLAST MONTH %d\n", lastMonth);
+    //printf("\nLAST MONTH %d\n", lastMonth);
     FILE *f;
 
     if (get_RTC_System_Time())
@@ -100,7 +100,7 @@ void mount_SD_CARD()
 
         // lastMonth = 5;
         asprintf(&fileName, "/sdcard/%02d.csv", nowTime.month);
-        //////printf("\nfileName sdcard %s\n", fileName);
+        //printf("\nfileName sdcard %s\n", fileName);
 
         if (lastMonth == nowTime.month)
         {
@@ -112,7 +112,7 @@ void mount_SD_CARD()
 
             file_Len = ftell(f);
 
-            //////printf("\nFILE LEN = %s - %ld\n", fileName, file_Len);
+            //printf("\nFILE LEN = %s - %ld\n", fileName, file_Len);
 
             if (file_Len < 10)
             {
@@ -121,9 +121,9 @@ void mount_SD_CARD()
                 fprintf(f, "%s%c%s%c%s%c%s%c%s%c%s%c%s%c%s\n", return_Json_SMS_Data("NAME"), ';', return_Json_SMS_Data("PHONE_NUMBER"), ';', return_Json_SMS_Data("RELAY"), ';', return_Json_SMS_Data("RELAY_STATE"), ';', return_Json_SMS_Data("DATE"), ';', return_Json_SMS_Data("TIME"), ';', return_Json_SMS_Data("TYPE"), ';', return_Json_SMS_Data("ERROR"));
             }
 
-            //////printf("\nsdcard21 \n");
+            //printf("\nsdcard21 \n");
 
-            //////printf("\nsdcard22 \n");
+            //printf("\nsdcard22 \n");
             fclose(f);
         }
         else
@@ -134,7 +134,7 @@ void mount_SD_CARD()
             fprintf(f, "%s%c%s%c%s%c%s%c%s%c%s%c%s%c%s\n", return_Json_SMS_Data("NAME"), ';', return_Json_SMS_Data("PHONE_NUMBER"), ';', return_Json_SMS_Data("RELAY"), ';', return_Json_SMS_Data("RELAY_STATE"), ';', return_Json_SMS_Data("DATE"), ';', return_Json_SMS_Data("TIME"), ';', return_Json_SMS_Data("TYPE"), ';', return_Json_SMS_Data("ERROR"));
 
             fclose(f);
-            //////printf("\nsdcard32 \n");
+            //printf("\nsdcard32 \n");
         }
     }
 
@@ -158,7 +158,7 @@ void init_SDCard()
     // Options for mounting the filesystem.
     // If format_if_mount_failed is set to true, SD card will be partitioned and
     // formatted in case when mounting fails.
-    // ////printf("\n\ntask_Send_LOG_File 11\n\n");
+    // printf("\n\ntask_Send_LOG_File 11\n\n");
     ret = spi_bus_initialize(host.slot, &bus_cfg, SPI_DMA_CHAN);
 
     // spi_bus_free()
@@ -176,7 +176,7 @@ void init_SDCard()
 
     //ESP_LOGI("TAG", "Mounting filesystem");
     ret = esp_vfs_fat_sdspi_mount(mount_point, &host, &slot_config, &mount_config, &card);
-    // ////printf("\n\ntask_Send_LOG_File 12\n\n");
+    // printf("\n\ntask_Send_LOG_File 12\n\n");
     if (ret != ESP_OK)
     {
         if (ret == ESP_FAIL)
@@ -197,7 +197,7 @@ void init_SDCard()
     char *fileName;
 
     uint8_t lastMonth = get_NVS_Last_Month();
-    //////printf("\nLAST MONTH %d\n", lastMonth);
+    //printf("\nLAST MONTH %d\n", lastMonth);
     FILE *f;
 
     if (get_RTC_System_Time())
@@ -205,7 +205,7 @@ void init_SDCard()
 
         // lastMonth = 5;
         asprintf(&fileName, "/sdcard/%02d.csv", nowTime.month);
-        //////printf("\nfileName sdcard %s\n", fileName);
+        //printf("\nfileName sdcard %s\n", fileName);
 
         if (lastMonth == nowTime.month)
         {
@@ -217,7 +217,7 @@ void init_SDCard()
 
             file_Len = ftell(f);
 
-            //////printf("\nFILE LEN = %s - %ld\n", fileName, file_Len);
+            //printf("\nFILE LEN = %s - %ld\n", fileName, file_Len);
 
             if (file_Len < 10)
             {
@@ -226,9 +226,9 @@ void init_SDCard()
                 fprintf(f, "%s%c%s%c%s%c%s%c%s%c%s%c%s%c%s\n", return_Json_SMS_Data("NAME"), ';', return_Json_SMS_Data("PHONE_NUMBER"), ';', return_Json_SMS_Data("RELAY"), ';', return_Json_SMS_Data("RELAY_STATE"), ';', return_Json_SMS_Data("DATE"), ';', return_Json_SMS_Data("TIME"), ';', return_Json_SMS_Data("TYPE"), ';', return_Json_SMS_Data("ERROR"));
             }
 
-            //////printf("\nsdcard21 \n");
+            //printf("\nsdcard21 \n");
 
-            //////printf("\nsdcard22 \n");
+            //printf("\nsdcard22 \n");
             fclose(f);
         }
         else
@@ -239,7 +239,7 @@ void init_SDCard()
             fprintf(f, "%s%c%s%c%s%c%s%c%s%c%s%c%s%c%s\n", return_Json_SMS_Data("NAME"), ';', return_Json_SMS_Data("PHONE_NUMBER"), ';', return_Json_SMS_Data("RELAY"), ';', return_Json_SMS_Data("RELAY_STATE"), ';', return_Json_SMS_Data("DATE"), ';', return_Json_SMS_Data("TIME"), ';', return_Json_SMS_Data("TYPE"), ';', return_Json_SMS_Data("ERROR"));
 
             fclose(f);
-            //////printf("\nsdcard32 \n");
+            //printf("\nsdcard32 \n");
         }
     }
 
@@ -250,14 +250,14 @@ void init_SDCard()
     //ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
     //ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
-    /* //////printf("\n\n unmount 111\n\n");
+    /* //printf("\n\n unmount 111\n\n");
     esp_vfs_fat_sdcard_unmount(mount_point, card);
-    //////printf("\n\n unmount 222\n\n");
+    //printf("\n\n unmount 222\n\n");
     //ESP_LOGI("TAG", "Card unmounted");
 
     // deinitialize the bus after all devices are removed
     spi_bus_free(host.slot);
-    //////printf("\n\n unmount 333\n\n"); */
+    //printf("\n\n unmount 333\n\n"); */
 }
 
 void init_rdySem_Control_SD_Card_Write()
@@ -268,15 +268,15 @@ void init_rdySem_Control_SD_Card_Write()
 
 void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
 {
-    //////printf("\n\n sdcard 11\n\n");
+    //printf("\n\n sdcard 11\n\n");
 
-    //////printf("\n\n sdcard 22\n\n");
+    //printf("\n\n sdcard 22\n\n");
     xSemaphoreTake(rdySem_Control_SD_Card_Write, pdMS_TO_TICKS(10000));
 
     char *data_to_save;
 
-    ////printf("\n\n data to save111 %s\n\n", logs_Struct->name);
-    ////printf("\n\n data to save222 %s\n\n", logs_Struct->phone);
+    printf("\n\n data to save111 %s\n\n", logs_Struct->name);
+    printf("\n\n data to save222 %s\n\n", logs_Struct->phone);
 
     if (!strcmp(logs_Struct->name, "S/N") || strlen(logs_Struct->name) == 0)
     {
@@ -296,15 +296,15 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
     
 
     UDP_logs_label = get_INT8_Data_From_Storage(NVS_NETWORK_LABEL_SEND_LOGS, nvs_System_handle);
-    ////printf("\n\n data to save %s\n\n", data_to_save);
+    printf("\n\n data to save %s\n\n", data_to_save);
 
     if (UDP_logs_label == 1)
     {
         //char *UDP_log;
-        ////printf("\n\n data to save5555 %s\n\n", logs_Struct->phone);
+        printf("\n\n data to save5555 %s\n\n", logs_Struct->phone);
         memset(&logs_Struct->mqttLogs_info,0,sizeof(logs_Struct->mqttLogs_info));
         sprintf(logs_Struct->mqttLogs_info.data, "# %s", data_to_save);
-        ////printf("\n\n data to save 44 %d\n\n", UDP_logs_label);
+        printf("\n\n data to save 44 %d\n\n", UDP_logs_label);
         vTaskDelay(pdMS_TO_TICKS(100));
         //send_UDP_Send(UDP_log);
         send_UDP_queue(&logs_Struct->mqttLogs_info);
@@ -318,12 +318,12 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
             UDP_logs_label = 0;
         }
     }
-    ////printf("\n\n data to save 7567 %s\n\n", data_to_save);
+    printf("\n\n data to save 7567 %s\n\n", data_to_save);
     if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
     {
 
         init_SDCard();
-        ////printf("\n\n sdcard 22\n\n");
+        printf("\n\n sdcard 22\n\n");
 
         //ESP_LOGI("TAG", "xPortGetFreeHeapSize sd write1            : %d", xPortGetFreeHeapSize());
         //ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -332,10 +332,10 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
 
         FILE *f = NULL;
 
-        ////printf("\ndata to save sdcard %s\n", data_to_save);
+        printf("\ndata to save sdcard %s\n", data_to_save);
 
         uint8_t lastMonth = get_NVS_Last_Month();
-        //////printf("\nLAST MONTH %d\n", lastMonth);
+        //printf("\nLAST MONTH %d\n", lastMonth);
 
         if (lastMonth >= 0 && lastMonth <= 12)
         {
@@ -346,13 +346,13 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
                 char *fileName;
                 // lastMonth = 5;
                 asprintf(&fileName, "/sdcard/%02d.csv", nowTime.month);
-                //////printf("\nfileName sdcard %s\n", fileName);
+                //printf("\nfileName sdcard %s\n", fileName);
                 if (lastMonth == nowTime.month)
                 {
                     f = fopen(fileName, "a");
-                    //////printf("\nsdcard21 \n");
+                    //printf("\nsdcard21 \n");
 
-                    //////printf("\nsdcard22 \n");
+                    //printf("\nsdcard22 \n");
                 }
                 else
                 {
@@ -360,9 +360,9 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
                     save_NVS_Last_Month(lastMonth);
                     f = fopen(fileName, "w");
                     fprintf(f, "%s%c%s%c%s%c%s%c%s%c%s%c%s%c%s\n", return_Json_SMS_Data("NAME"), ';', return_Json_SMS_Data("PHONE_NUMBER"), ';', return_Json_SMS_Data("RELAY"), ';', return_Json_SMS_Data("RELAY_STATE"), ';', return_Json_SMS_Data("DATE"), ';', return_Json_SMS_Data("TIME"), ';', return_Json_SMS_Data("TYPE"), ';', return_Json_SMS_Data("ERROR"));
-                    //////printf("\nsdcard31 \n");
+                    //printf("\nsdcard31 \n");
 
-                    //////printf("\nsdcard32 \n");
+                    //printf("\nsdcard32 \n");
                 }
                 free(fileName);
             }
@@ -386,16 +386,16 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
             //ESP_LOGI("TAG", "File written");
 
             fclose(f);
-            //////printf("\nsdcard1 \n");
+            //printf("\nsdcard1 \n");
 
-            //////printf("\nsdcard3 \n");
+            //printf("\nsdcard3 \n");
 
             // !!!!!!!!  APAGAR ISTO  !!!!!!!!
             // nowTime.month = lastMonth;
 
-            //////printf("\n\n unmount 111\n\n");
+            //printf("\n\n unmount 111\n\n");
             esp_vfs_fat_sdcard_unmount(mount_point, card);
-            //////printf("\n\n unmount 222\n\n");
+            //printf("\n\n unmount 222\n\n");
         }
 
         //ESP_LOGI("TAG", "Card unmounted");
@@ -403,7 +403,7 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
         // deinitialize the bus after all devices are removed
         spi_bus_free(host.slot);
 
-        //////printf("\n\n unmount 333\n\n");
+        //printf("\n\n unmount 333\n\n");
     }
     
     free(data_to_save);
@@ -412,7 +412,7 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
     //ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
     //ESP_LOGI("TAG", "heap_caps_get_largest_free_block: %d", heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT));
     //ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-    //////printf("\n\n sdcard 33\n\n");
+    //printf("\n\n sdcard 33\n\n");
 }
 
 esp_err_t format_sdcard()
@@ -457,40 +457,40 @@ esp_err_t format_sdcard()
     size_t allocation_unit_size = 16 * 1024;
 
     workbuf = ff_memalloc(workbuf_size);
-    //////printf("\n\nSDCARD 1\n\n");
+    //printf("\n\nSDCARD 1\n\n");
     if (workbuf == NULL)
     {
-        //////printf("\n\nSDCARD 1.1\n\n");
+        //printf("\n\nSDCARD 1.1\n\n");
         return ESP_ERR_NO_MEM;
     }
-    //////printf("\n\nSDCARD 2\n\n");
+    //printf("\n\nSDCARD 2\n\n");
     size_t alloc_unit_size = esp_vfs_fat_get_allocation_unit_size(
         card->csd.sector_size,
         allocation_unit_size);
 
-    //////printf("\n\nSDCARD 3\n\n");
+    //printf("\n\nSDCARD 3\n\n");
 
     FRESULT res = f_mkfs(drv, FM_ANY, alloc_unit_size, workbuf, workbuf_size);
     if (res != FR_OK)
     {
-        //////printf("\n\nSDCARD 3.1\n\n");
+        //printf("\n\nSDCARD 3.1\n\n");
         err = ESP_FAIL;
         //ESP_LOGE("sdcard", "f_mkfs failed (%d)", res);
     }
-    //////printf("\n\nSDCARD 4\n\n");
+    //printf("\n\nSDCARD 4\n\n");
     free(workbuf);
-    //////printf("\n\nSDCARD 5\n\n");
+    //printf("\n\nSDCARD 5\n\n");
 
     //ESP_LOGI("sdcard", "Successfully formatted the SD card");
 
-    //////printf("\n\n unmount 111\n\n");
+    //printf("\n\n unmount 111\n\n");
     esp_vfs_fat_sdcard_unmount(mount_point, card);
-    //////printf("\n\n unmount 222\n\n");
+    //printf("\n\n unmount 222\n\n");
     //ESP_LOGI("TAG", "Card unmounted");
 
     // deinitialize the bus after all devices are removed
     spi_bus_free(host.slot);
-    //////printf("\n\n unmount 333\n\n");
+    //printf("\n\n unmount 333\n\n");
 
     return err;
 }
@@ -508,7 +508,7 @@ void read_BackupFile()
     }
     else
     {
-        //////printf("\nbackup file open sucess\n");
+        //printf("\nbackup file open sucess\n");
     }
 
     char buffer[256];
@@ -546,7 +546,7 @@ void read_BackupFile()
 
             for (int i = 0; i < 256; i++)
             {
-                //////printf("%02x ", buffer[i]);
+                //printf("%02x ", buffer[i]);
             }
 
             SDCARD_charCounter = 0;
@@ -554,7 +554,7 @@ void read_BackupFile()
 
         if (feof(f))
         {
-            //////printf("\nsd counter %d\n", SDCARD_charCounter);
+            //printf("\nsd counter %d\n", SDCARD_charCounter);
             break;
         }
 

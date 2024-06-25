@@ -140,16 +140,16 @@ typedef void (*spiffs_file_callback)(struct spiffs_t *fs, spiffs_fileop_type op,
 
 #ifndef SPIFFS_DBG
 #define SPIFFS_DBG(...) \
-    //////printf(__VA_ARGS__)
+    //printf(__VA_ARGS__)
 #endif
 #ifndef SPIFFS_GC_DBG
-#define SPIFFS_GC_DBG(...) //////printf(__VA_ARGS__)
+#define SPIFFS_GC_DBG(...) //printf(__VA_ARGS__)
 #endif
 #ifndef SPIFFS_CACHE_DBG
-#define SPIFFS_CACHE_DBG(...) //////printf(__VA_ARGS__)
+#define SPIFFS_CACHE_DBG(...) //printf(__VA_ARGS__)
 #endif
 #ifndef SPIFFS_CHECK_DBG
-#define SPIFFS_CHECK_DBG(...) //////printf(__VA_ARGS__)
+#define SPIFFS_CHECK_DBG(...) //printf(__VA_ARGS__)
 #endif
 
 /* Any write to the filehandle is appended to end of the file */

@@ -96,25 +96,25 @@ void list_remove_node(list_node **list, list_node *node)
 	if (*list == node)
 	{
 		*list = (*list)->next;
-		//////printf("\nlist destroy 11\n");
+		//printf("\nlist destroy 11\n");
 		/* if (node->cron_expression != NULL)
 		{
-			//////printf("\nlist erasee cron - %s\n",node->cron_expression);
+			//printf("\nlist erasee cron - %s\n",node->cron_expression);
 			free(node->cron_expression);
 		}
 
 		if (node->data != NULL)
 		{
-			//////printf("\nlist erasee node->data - %s\n",node->data);
+			//printf("\nlist erasee node->data - %s\n",node->data);
 			free(node->data);
 		} */
 		
 		/* free(node->cron_expression);
-		//////printf("\nlist destroy 12\n");
+		//printf("\nlist destroy 12\n");
 		free(node->data);
-		//////printf("\nlist destroy 13\n");	 */	
+		//printf("\nlist destroy 13\n");	 */	
 		free(node);
-		//////printf("\nlist destroy 14\n");
+		//printf("\nlist destroy 14\n");
 		node = NULL;
 	}
 	else
@@ -125,13 +125,13 @@ void list_remove_node(list_node **list, list_node *node)
 		if (tmp->next)
 		{
 			tmp->next = node->next;
-			//////printf("\nlist destroy 21\n");
+			//printf("\nlist destroy 21\n");
 			free(node->cron_expression);
-			//////printf("\nlist destroy 22\n");
+			//printf("\nlist destroy 22\n");
 			free(node->data);
-			//////printf("\nlist destroy 23\n");			
+			//printf("\nlist destroy 23\n");			
 			free(node);
-			//////printf("\nlist destroy 24\n");
+			//printf("\nlist destroy 24\n");
 			node = NULL;
 		}
 	}
@@ -196,7 +196,7 @@ list_node *list_print(list_node *list)
 {
 	while (list)
 	{
-		//////printf("\n list - %s - %s\n", list->data, list->cron_expression);
+		//printf("\n list - %s - %s\n", list->data, list->cron_expression);
 		list = list->next;
 	}
 	return list;

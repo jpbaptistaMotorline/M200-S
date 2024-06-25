@@ -44,7 +44,7 @@ void task_sendFeedbackData(void *pvParameter)
 
     for (;;)
     {
-        //////printf("\ntask send feedback\n");
+        //printf("\ntask send feedback\n");
         if (xQueueReceive(Feedback_Send_Data_queue, &feedback_Queue_Data, portMAX_DELAY))
         {
             xSemaphoreTake(rdySem_Control_Send_Feedback, portMAX_DELAY);
@@ -59,36 +59,30 @@ void task_sendFeedbackData(void *pvParameter)
 void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 {
     char data_SMS_List[160] = {};
-    //////printf("\n\n send_Normal_Feedback qwqwqw\n\n");
+    //printf("\n\n send_Normal_Feedback qwqwqw\n\n");
     if (fd_configurations.normal_FB_Mode == 1 && feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.user_Have_In_List == 1)
     {
-        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"), inputNumber);
-
-        if (inputNumber == 1)
-        {
-            send_UDP_Send(">\0","");
-        }
-        else if (inputNumber == 2)
-        {
-            send_UDP_Send("<\0","");
-        }
+  
         
         if (inputNumber == 1)
         {
             if (feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation == 1)
             {
-                //////printf("\n\n send_Normal_Feedback qwqwqw 111\n\n");
+                //printf("\n\n send_Normal_Feedback qwqwqw 111\n\n");
                 if (!inputValue)
                 {
                     if (fd_configurations.input_Config & FEEDBACK_I1_NC)
                     {
-                        //////printf("\n\n send_Normal_Feedback 222 %d - %d\n\n", inputValue, inputNumber);
+                        //printf("\n\n send_Normal_Feedback 222 %d - %d\n\n", inputValue, inputNumber);
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
 
+                        char str[50] = {};
+                        sprintf(str,": %s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        send_UDP_Send(str,"");    
                         /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"), inputNumber); */
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         memset(&feedback_SMS_Data, 0, sizeof(feedback_SMS_Data));
                     }
                 }
@@ -97,13 +91,17 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 
                     if (fd_configurations.input_Config & FEEDBACK_I1_NO)
                     {
-                        //////printf("\n\n send_Normal_Feedback 555 %d - %d\n\n", inputValue, inputNumber);
+                        //printf("\n\n send_Normal_Feedback 555 %d - %d\n\n", inputValue, inputNumber);
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
 
+                        char str[50] = {};
+                        sprintf(str,": %s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        send_UDP_Send(str,""); 
+
                         /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"), inputNumber); */
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         memset(&feedback_SMS_Data, 0, sizeof(feedback_SMS_Data));
                     }
                 }
@@ -122,9 +120,13 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_1);
 
+                        char str[50] = {};
+                        sprintf(str,"_ %s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        send_UDP_Send(str,""); 
+
                         /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"), inputNumber); */
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         memset(&feedback_SMS_Data, 0, sizeof(feedback_SMS_Data));
                     }
                 }
@@ -136,9 +138,13 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_1);
 
+                        char str[50] = {};
+                        sprintf(str,"_ %s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        send_UDP_Send(str,""); 
+
                         /*  sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"), inputNumber); */
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number);
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         memset(&feedback_SMS_Data, 0, sizeof(feedback_SMS_Data));
                     }
                     
@@ -150,7 +156,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
     {
 
         
-        //////printf("\n\n send_Normal_Feedback 11 %d - %d\n\n", inputValue, inputNumber);
+        //printf("\n\n send_Normal_Feedback 11 %d - %d\n\n", inputValue, inputNumber);
         if (inputNumber == 1)
         {
             sprintf(data_SMS_List, return_Json_SMS_Data("INPUT_HAS_BEEN_ACTIVATED1"));
@@ -158,8 +164,8 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
             {
                 if (fd_configurations.input_Config & FEEDBACK_I1_NC)
                 {
-                    //////printf("\n\n send_Normal_Feedback 222 %d - %d\n\n", inputValue, inputNumber);
-                    send_SMS_TO_Feedback_List(data_SMS_List);
+                    //printf("\n\n send_Normal_Feedback 222 %d - %d\n\n", inputValue, inputNumber);
+                    send_SMS_TO_Feedback_List("- 1");
                 }
             }
             else if (inputValue == 1)
@@ -167,8 +173,8 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 
                 if (fd_configurations.input_Config & FEEDBACK_I1_NO)
                 {
-                    //////printf("\n\n send_Normal_Feedback 555 %d - %d\n\n", inputValue, inputNumber);
-                    send_SMS_TO_Feedback_List(data_SMS_List);
+                    //printf("\n\n send_Normal_Feedback 555 %d - %d\n\n", inputValue, inputNumber);
+                    send_SMS_TO_Feedback_List("- 1");
                 }
             }
         }
@@ -179,7 +185,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
             {
                 if (fd_configurations.input_Config & FEEDBACK_I2_NC)
                 {
-                    send_SMS_TO_Feedback_List(data_SMS_List);
+                    send_SMS_TO_Feedback_List("- 2");
                 }
             }
             else if (inputValue == 1)
@@ -187,7 +193,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 
                 if (fd_configurations.input_Config & FEEDBACK_I2_NO)
                 {
-                    send_SMS_TO_Feedback_List(data_SMS_List);
+                    send_SMS_TO_Feedback_List("- 2");
                 }
             }
         }
@@ -234,13 +240,13 @@ void send_SMS_TO_Feedback_List(char *msg)
             break;
         }
 
-        //////printf("\n\n feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber %s\n\n", feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber);
+        //printf("\n\n feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber %s\n\n", feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber);
 
         if (strlen(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber) > 4)
         {
-            //////printf("\n\n feedback_SMS_Data 12345\n\n");
-            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
-            vTaskDelay(pdMS_TO_TICKS(500));
+            //printf("\n\n feedback_SMS_Data 12345\n\n");
+           send_UDP_Send(msg,"");
+           break;
         }
     }
     //vTaskDelay(pdMS_TO_TICKS(1500));
@@ -252,142 +258,7 @@ void send_SMS_TO_Feedback_List(char *msg)
 void task_Alarm_CALL(void *pvParameter)
 {
 
-    uint8_t ACK = 0;
-    uint8_t label_Have_feedback_audio = 0;
-    char AT_Command[50] = {};
-    char feedback_Phone_Number_TO_Call[30] = {};
-    EG91_send_AT_Command("AT+QINDCFG=\"ring\",0,0", "OK", 1500);
-    EG91_send_AT_Command("ATS7=0", "OK", 1500);
-    for (;;)
-    {
-        timer_pause(TIMER_GROUP_1, TIMER_0);
-        vTaskSuspend(xHandle_Timer_VerSystem);
-        //vTaskSuspend(handle_SEND_SMS_TASK);
-        //vTaskSuspend(handle_SMS_TASK);
-
-        for (int i = 0; i < 6; i++)
-        {
-            memset(feedback_Phone_Number_TO_Call, 0, sizeof(feedback_Phone_Number_TO_Call));
-
-            switch (i)
-            {
-            case 0:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s", fd_configurations.phone1);
-                break;
-            case 1:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s", fd_configurations.phone2);
-                break;
-            case 2:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s",fd_configurations.phone3);
-                break;
-            case 3:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s",fd_configurations.phone4);
-                break;
-            case 4:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s",fd_configurations.phone5);
-                break;
-            case 5:
-                sprintf(feedback_Phone_Number_TO_Call, "ATD%s",fd_configurations.phone6);
-                break;
-
-            default:
-                break;
-            }
-//system_stack_high_water_mark("call2");
-            if (strlen(feedback_Phone_Number_TO_Call) > 7)
-            {
-                EG91_send_AT_Command(feedback_Phone_Number_TO_Call, "OK", 1000); /* 918712872 936356241 935531736 */
-                //
-                uint8_t counterACK = 13;
-                char dtmp1[600];
-                ACK = 1;
-                for (int j = 0; j < 30; j++)
-                {
-                    ACK = parse_Call(CALL_STATE);
-
-                    if (ACK == 3)
-                    {
-                        break;
-                    }
-                    vTaskDelay(pdMS_TO_TICKS(500));
-                }
-
-                if (ACK == 3)
-                {
-                    while (counterACK > 0)
-                    {
-
-                        ACK = parse_Call(CALL_STATE);
-                        //////printf("\n after parse_Call ACK %d \n", ACK);
-
-                        if (ACK == 0)
-                        {
-
-                            //////printf("\n task_Alarm_CALL %d\n", 1);
-
-                            memset(dtmp1, 0, sizeof(dtmp1));
-                            vTaskDelay(pdMS_TO_TICKS(1200));
-                            // label_Have_feedback_audio = 0;
-
-                            char *sound_AT_Command_file_Name;
-                            uint8_t soundValue = get_INT8_Data_From_Storage(NVS_KEY_FEEDBACK_SOUND_INDEX, nvs_System_handle);
-
-                            if (soundValue >= 1 && soundValue <= 8)
-                            {
-                                asprintf(&sound_AT_Command_file_Name, "AT+QPSND=1,\"UFS:sound_%d.wav\",0,1,0", soundValue);
-                            }
-                            else
-                            {
-                                asprintf(&sound_AT_Command_file_Name, "%s", "AT+QPSND=1,\"UFS:sound_1.wav\",0,1,0");
-                            }
-
-                            //////printf("\n\nsound_AT_Command_file_Name\n%s\n\n", sound_AT_Command_file_Name);
-                            EG91_send_AT_Command(sound_AT_Command_file_Name, "OK", 3000);
-
-                            // xSemaphoreTake(rdySem_QPSND, pdMS_TO_TICKS(15000));
-
-                            receive_NoCarrie_queue();
-
-                            //  xQueueReset(NO_CARRIER_Call_queue);
-                            vTaskDelay(pdMS_TO_TICKS(1000));
-                            //////printf("\n task_Alarm_CALL1212 %d\n", 1);
-                            EG91_send_AT_Command("ATH", "OK", 1000);
-
-                            //vTaskResume(handle_SMS_TASK);
-                            //vTaskResume(handle_SEND_SMS_TASK);
-                            vTaskResume(xHandle_Timer_VerSystem);
-                            timer_start(TIMER_GROUP_1, TIMER_0);
-                            give_rdySem_Control_Send_AT_Command();
-                            //////printf("\n task_Alarm_CALL1212 %d\n", 2);
-                            //system_stack_high_water_mark("parse call3");
-                            EG91_send_AT_Command("AT+QINDCFG=\"ring\",1,0", "OK", 1500);
-                            EG91_send_AT_Command("ATS7=", "OK", 1500);
-                            label_Alarm_I2_Task_Activated = 0;
-                            vTaskDelete(NULL);
-
-                            break;
-                        }
-                        else if (ACK == 255)
-                        {
-                            memset(dtmp1, 0, sizeof(dtmp1));
-
-                            break;
-                        }
-                        else
-                        {
-                            memset(dtmp1, 0, sizeof(dtmp1));
-                        }
-
-                        counterACK--;
-                        memset(dtmp1, 0, sizeof(dtmp1));
-                        vTaskDelay(pdMS_TO_TICKS((1000)));
-                    }
-                }
-
-                EG91_send_AT_Command("ATH", "OK", 1000);
-            }
-        }
-    }
+    
 }
 
 uint8_t alarm_Ativation()
@@ -409,7 +280,7 @@ void alarm_I1_Check_And_Save_Data(char *phone_Number)
     if (fd_configurations.alarmMode.A == 1)
     {
         uint8_t feedbackNumber = check_IF_Feedback_Number(phone_Number);
-        //////printf("\n\n feedback number position %d - %s\n\n", feedbackNumber, phone_Number);
+        //printf("\n\n feedback number position %d - %s\n\n", feedbackNumber, phone_Number);
         if (feedbackNumber > 0 && feedbackNumber < 7)
         {
 
@@ -443,28 +314,28 @@ void alarm_I1_Check_And_Save_Data(char *phone_Number)
 
 void normal_Feedback_Check_And_Save_Data(char *phone_Number, uint8_t releNumber)
 {
-    //////printf("\n\nnormal_Feedback_Check_And_Save_Data 000\n\n");
+    //printf("\n\nnormal_Feedback_Check_And_Save_Data 000\n\n");
     if (fd_configurations.normal_FB_Mode == 1)
     {
         uint8_t feedbackNumber = check_IF_Feedback_Number(phone_Number);
-        //////printf("\n\nnormal_Feedback_Check_And_Save_Data 111\n\n");
+        //printf("\n\nnormal_Feedback_Check_And_Save_Data 111\n\n");
         if (feedbackNumber > 0 && feedbackNumber < 7)
         {
-            //////printf("\n\nnormal_Feedback_Check_And_Save_Data 222\n\n");
+            //printf("\n\nnormal_Feedback_Check_And_Save_Data 222\n\n");
             memset(&feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters, 0, sizeof(feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters));
 
             sprintf(feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.alarm_SMS_Number, "%s",phone_Number);
 
             if (releNumber == 1)
             {
-                //////printf("\n\nnormal_Feedback_Check_And_Save_Data 333\n\n");
+                //printf("\n\nnormal_Feedback_Check_And_Save_Data 333\n\n");
                 feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation = 1;
 
                 example_tg_timer_init(TIMER_GROUP_1, TIMER_1, false, fd_configurations.time_I1);
             }
             else if (releNumber == 2)
             {
-                //////printf("\n\nnormal_Feedback_Check_And_Save_Data 444\n\n");
+                //printf("\n\nnormal_Feedback_Check_And_Save_Data 444\n\n");
                 feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 1;
 
                 example_tg_timer_init(TIMER_GROUP_0, TIMER_1, false, fd_configurations.time_I2);
@@ -693,7 +564,7 @@ char *parse_Alarm_Data(uint8_t BLE_SMS_Indication, uint8_t feedbackNumber, char 
         else
         {
 
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, ERROR_PARAMETER);
         }
     }
@@ -782,13 +653,13 @@ char *parse_Alarm_Data(uint8_t BLE_SMS_Indication, uint8_t feedbackNumber, char 
         else
         {
 
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, ERROR_PARAMETER);
         }
     }
     else
     {
-        //////printf(ERROR_CMD);
+        //printf(ERROR_CMD);
         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_CMD"));
     }
 
@@ -940,7 +811,7 @@ char *parse_FeedbackData(uint8_t BLE_SMS_Indication, uint8_t feedbackNumber, cha
         }
         else
         {
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
@@ -975,7 +846,7 @@ char *parse_FeedbackData(uint8_t BLE_SMS_Indication, uint8_t feedbackNumber, cha
         else
         {
 
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
@@ -1028,14 +899,14 @@ char *parse_FeedbackData(uint8_t BLE_SMS_Indication, uint8_t feedbackNumber, cha
         else
         {
 
-            //////printf(ERROR_PARAMETER);
+            //printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
     else
     {
 
-        //////printf(ERROR_CMD);
+        //printf(ERROR_CMD);
         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_CMD"));
     }
     return return_ERROR_Codes(&rsp, "FEEDBACK ERROR");
@@ -1070,22 +941,22 @@ uint8_t modify_Alarm_Time_configuration(char *payload)
     uint8_t auxTime1 = atoi(timeI1);
     uint8_t auxTime2 = atoi(timeI2);
 
-    //////printf("\n\ntimeI1 %d\n\n", auxTime1);
-    //////printf("\n\ntimeI2 %d\n\n", auxTime2);
+    //printf("\n\ntimeI1 %d\n\n", auxTime1);
+    //printf("\n\ntimeI2 %d\n\n", auxTime2);
 
     if (atoi(timeI1) <= 255 && atoi(timeI2) <= 255)
     {
-        //////printf("\n\ntimeI1 %d\n\n", auxTime1);
-        //////printf("\n\ntimeI2 %d\n\n", auxTime2);
+        //printf("\n\ntimeI1 %d\n\n", auxTime1);
+        //printf("\n\ntimeI2 %d\n\n", auxTime2);
         if (save_INT8_Data_In_Storage(NVS_FB_TIM1, auxTime1, nvs_Feedback_handle) == ESP_OK)
         {
             fd_configurations.time_I1 = atoi(timeI1);
-            //////printf("\n\nfd_configurations.time_I1 %d\n\n", fd_configurations.time_I1);
+            //printf("\n\nfd_configurations.time_I1 %d\n\n", fd_configurations.time_I1);
 
             if (save_INT8_Data_In_Storage(NVS_FB_TIM2, auxTime2, nvs_Feedback_handle) == ESP_OK)
             {
                 fd_configurations.time_I2 = atoi(timeI2);
-                //////printf("\n\nfd_configurations.time_I2 %d\n\n", fd_configurations.time_I2);
+                //printf("\n\nfd_configurations.time_I2 %d\n\n", fd_configurations.time_I2);
                 return 1;
             }
             else
@@ -1112,7 +983,7 @@ uint8_t modify_Alarm_Input_configuration(char *payload)
     char input_Config[5];
     uint8_t input_int_Config = 0;
 
-    //////printf("\nmodify_Alarm_Input_configuration payload - %s\n", payload);
+    //printf("\nmodify_Alarm_Input_configuration payload - %s\n", payload);
 
     memset(input_Config, 0, sizeof(input_Config));
 
@@ -1129,12 +1000,12 @@ uint8_t modify_Alarm_Input_configuration(char *payload)
         }
     }
 
-    //////printf("\nmodify_Alarm_Input_configuration input_int_Config - %d\n", input_int_Config);
+    //printf("\nmodify_Alarm_Input_configuration input_int_Config - %d\n", input_int_Config);
     if (save_INT8_Data_In_Storage(NVS_AL_CONF_IN, input_int_Config, nvs_Feedback_handle) == ESP_OK)
     {
         fd_configurations.input_Config = 0;
         fd_configurations.input_Config = input_int_Config;
-        //////printf("\nmodify_Alarm_Input_configuration alarmMode.input_Config - %d -%d\n", fd_configurations.input_Config,input_int_Config);
+        //printf("\nmodify_Alarm_Input_configuration alarmMode.input_Config - %d -%d\n", fd_configurations.input_Config,input_int_Config);
         return 1;
     }
     else
@@ -1160,7 +1031,7 @@ char *add_Feedback_number(uint8_t line, char *payload)
     memset(phone, 0, sizeof(phone));
     memset(input_Config, 0, sizeof(input_Config));
 
-    //////printf("\nfb payload %s\n", payload);
+    //printf("\nfb payload %s\n", payload);
 
     for (int i = 0; i < strlen(payload); i++)
     {
@@ -1200,7 +1071,7 @@ char *add_Feedback_number(uint8_t line, char *payload)
             }
         }
     }
-    //////printf("\nfb dot_Counter %d\n", dot_Counter);
+    //printf("\nfb dot_Counter %d\n", dot_Counter);
     if (dot_Counter == 1)
     {
         if ((input_Config[0] == '1' && input_Config[1] == '1') || (input_Config[2] == '1' && input_Config[3] == '1') || strlen(input_Config) > 4)
@@ -1217,10 +1088,10 @@ char *add_Feedback_number(uint8_t line, char *payload)
         }
     }
 
-    //////printf("\nfb phone %s\n", phone);
-    //////printf("\nfb str in cfg %s\n", input_Config);
-    //////printf("\nfb int in cfg %d\n\n", input_int_Config);
-    //////printf("\n alarmMode.A = %d \n", fd_configurations.alarmMode.A);
+    //printf("\nfb phone %s\n", phone);
+    //printf("\nfb str in cfg %s\n", input_Config);
+    //printf("\nfb int in cfg %d\n\n", input_int_Config);
+    //printf("\n alarmMode.A = %d \n", fd_configurations.alarmMode.A);
 
     if (strlen(phone) < 20)
     {
@@ -1229,7 +1100,7 @@ char *add_Feedback_number(uint8_t line, char *payload)
 
             if (save_STR_Data_In_Storage(NVS_FB_CONF_P1, phone /* fd_configurations.phone1 */, nvs_Feedback_handle) == ESP_OK)
             {
-                //////printf("\n ENTER FB 11 \n");
+                //printf("\n ENTER FB 11 \n");
                 memset(fd_configurations.phone1, 0, sizeof(fd_configurations.phone1));
                 sprintf(fd_configurations.phone1, "%s", phone);
                 return 1;
@@ -1247,7 +1118,7 @@ char *add_Feedback_number(uint8_t line, char *payload)
 
             if (save_STR_Data_In_Storage(NVS_FB_CONF_P2, phone, nvs_Feedback_handle) == ESP_OK)
             {
-                //////printf("\nfd_configurations.phone2 - %s\n", phone);
+                //printf("\nfd_configurations.phone2 - %s\n", phone);
                 memset(fd_configurations.phone2, 0, sizeof(fd_configurations.phone2));
                 sprintf(fd_configurations.phone2, "%s", phone);
 
@@ -1346,7 +1217,7 @@ char *read_Feedback_number(uint8_t line)
         /* strcpy(readData,"F1 ");
         strcat(readData,fd_configurations.phone1); */
         lenght += sprintf(readData, "F1 %s\n", fd_configurations.phone1);
-        ////printf("\nread data feedback A = %s\n", readData);
+        printf("\nread data feedback A = %s\n", readData);
 
         lenght += sprintf(readData + lenght, "F2 %s\n", fd_configurations.phone2);
 
@@ -1369,7 +1240,7 @@ char *read_Feedback_number(uint8_t line)
 
         lenght += sprintf(readData + lenght, "M %d", fd_configurations.normal_FB_Mode);
 
-        ////printf("\nread data feedback1 = %s\n", readData);
+        printf("\nread data feedback1 = %s\n", readData);
     }
     else if (fd_configurations.alarmMode.A == 1)
     {
@@ -1500,7 +1371,7 @@ void write_FbNumbers_Struct()
 
     get_Data_STR_Feedback_From_Storage(NVS_FB_CONF_P1, &fd_configurations.phone1);
 
-    //////printf("\n\n fd_configurations.phone1 - %s\n\n",  fd_configurations.phone1 );
+    //printf("\n\n fd_configurations.phone1 - %s\n\n",  fd_configurations.phone1 );
 
     /* ***************************** F2 ********************************/
 

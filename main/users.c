@@ -75,7 +75,7 @@ char *return_ERROR_New_Add_User(char *output, uint8_t error_ID)
         break;
 
     case ERROR_WRONG_START_DATE:
-        // ////printf("\n\n case ERROR_WRONG_START_DATE:\n\n");
+        // printf("\n\n case ERROR_WRONG_START_DATE:\n\n");
         asprintf(&output, "%s", return_Json_SMS_Data("ERROR_WRONG_START_DATE"));
         return output;
         break;
@@ -158,11 +158,11 @@ uint8_t erase_Users_With_LastTime(int nowDate)
     MyUser myUser;
 
     memset(&myUser, 0, sizeof(myUser));
-    // ////printf("\nLIST USERS:\n");
+    // printf("\nLIST USERS:\n");
     nvs_iterator_t it;
     it = nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
     char value[200] = {};
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
 
     while (it != NULL)
     {
@@ -170,24 +170,24 @@ uint8_t erase_Users_With_LastTime(int nowDate)
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
         get_Data_Users_From_Storage(info.key, &value);
         parse_ValidateData_User(value, &myUser);
 
-        // ////printf("\n\nerase_Users value %c - %s\n\n", myUser.erase_User_After_Date, value);
+        // printf("\n\nerase_Users value %c - %s\n\n", myUser.erase_User_After_Date, value);
 
         if (myUser.erase_User_After_Date == '1')
         {
             if (myUser.permition == '0')
             {
                 /* code */
-                // ////printf("\n\nerase_Users_With_LastTime 2\n\n");
-                // ////printf("\n\parseDatetoInt %d\n\n", parseDatetoInt(atoi(myUser.start.date), atoi(myUser.end.days)));
-                // ////printf("\n\nowDate %d\n\n", nowDate);
+                // printf("\n\nerase_Users_With_LastTime 2\n\n");
+                // printf("\n\parseDatetoInt %d\n\n", parseDatetoInt(atoi(myUser.start.date), atoi(myUser.end.days)));
+                // printf("\n\nowDate %d\n\n", nowDate);
 
                 if (parseDatetoInt(atoi(myUser.start.date), atoi(myUser.end.days)) < nowDate)
                 {
-                    // ////printf("\n\nerase_Users_With_LastTime 3\n\n");
+                    // printf("\n\nerase_Users_With_LastTime 3\n\n");
                     Myuser_deleteUser(&myUser);
                 }
             }
@@ -195,7 +195,7 @@ uint8_t erase_Users_With_LastTime(int nowDate)
 
         memset(&myUser, 0, sizeof(myUser));
         memset(value, 0, 200);
-        // ////printf("\nvalue: %s\n", value);
+        // printf("\nvalue: %s\n", value);
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 
@@ -248,7 +248,7 @@ char *MyUser_get_ReleRestrition(char *payload, uint8_t BLE_SMS)
         if (BLE_SMS == SMS_INDICATION)
         {
             memset(file_contents_Users, 0, sizeof(file_contents_Users));
-            // ////printf("\n\nBLE LABEL RESTORE 62\n\n");
+            // printf("\n\nBLE LABEL RESTORE 62\n\n");
 
             if (MyUser_relayRestriction.relayPermition == '0')
             {
@@ -274,7 +274,7 @@ char *MyUser_get_ReleRestrition(char *payload, uint8_t BLE_SMS)
 uint8_t checkIf_wiegandExist(char *payload, char *user_contents)
 {
 
-    //printf("\n\nphone= qqqq 098765 - %s -> user_contents - %s\n\n", payload, user_contents);
+   // printf("\n\nphone= qqqq 098765 - %s -> user_contents - %s\n\n", payload, user_contents);
     if (get_STR_Data_In_Storage(payload, nvs_wiegand_codes_users_handle, user_contents) == ESP_OK)
     {
         //printf("\n\nphone= qqqq 11 - %s\n\n", payload);
@@ -283,13 +283,13 @@ uint8_t checkIf_wiegandExist(char *payload, char *user_contents)
 
     if (get_STR_Data_In_Storage(payload, nvs_wiegand_codes_admin_handle, user_contents) == ESP_OK)
     {
-        // //printf("\n\nphone= qqqq 221133 - %s\n\n", payload);
+        // printf("\n\nphone= qqqq 221133 - %s\n\n", payload);
         return 1;
     }
 
     if (get_STR_Data_In_Storage(payload, nvs_wiegand_codes_owner_handle, user_contents) == ESP_OK)
     {
-        // //printf("\n\nphone= qqqq 33\n\n");
+        // printf("\n\nphone= qqqq 33\n\n");
         return 1;
     }
 
@@ -305,7 +305,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
 {
     char *rsp;
     /*memset(&rsp, 0, sizeof(rsp));*/
-    //printf("\n\nPCHANGED_TO 11 - \n\n");
+    printf("\n\nPCHANGED_TO 11 - \n\n");
     /*  if (BLE_SMS_Indication != UDP_INDICATION)
      {
         sprintf(mqttInfo->topic, "%s", "\0");
@@ -316,10 +316,10 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         if (param == ADMIN_PARAMETER)
         {
 
-            // ////printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO 11 - %c\n\n",user_validateData->key);
+            // printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO 11 - %c\n\n",user_validateData->key);
 
-            if (user_validateData->permition != '2')
-            {
+            /* if (user_validateData->permition != '2')
+            { */
                 /* code */
 
                 if (MyUser_newPassword(user_validateData, payload, line))
@@ -333,7 +333,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     else if (BLE_SMS_Indication == SMS_INDICATION)
                     {
                         /*memset(&rsp, 0, sizeof(rsp));*/
-                        // ////printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO\n\n");
+                        // printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO\n\n");
                         asprintf(&rsp, return_Json_SMS_Data("PASSWORD_HAS_BEEN_CHANGED_TO"), payload);
                         return rsp;
                     }
@@ -346,12 +346,12 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 {
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_SET"));
                 }
-            }
+           /*  }
             else
             {
-                // ////printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO 222\n\n");
+                // printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO 222\n\n");
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("OWNER_WRONG_CMD_RESET_PASSWORD"));
-            }
+            } */
         }
         /* else if (param == WIEGAND_USER_PARAMETER)
         {
@@ -362,23 +362,24 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         else if (param == USER_PARAMETER)
         {
 
-            //printf("\n\n\nnew user start1\n\n\n");
+            printf("\n\n\nnew user start1\n\n\n");
             if (user_validateData->permition == '1' || user_validateData->permition == '2')
             {
-                //printf("\n\n\nnew user start111\n\n\n");
+                printf("\n\n\nnew user start111\n\n\n");
                 char aux_USR_Data[300] = {};
                 uint8_t newUser_ACK = MyUser_newUSER(payload, &aux_USR_Data, user_validateData->phone, user_validateData->key);
-                //printf("\n\n\nnew user start222\n\n\n");
+                printf("\n\n\nnew user start222\n\n\n");
                 if (newUser_ACK == 0)
                 {
-                    //printf("\n\n\nnew user start2\n\n\n");
+                    printf("\n\n\nnew user start2\n\n\n");
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
 
                         memset(&file_contents_Users, 0, sizeof(file_contents_Users));
-                        erase_Password_For_Rsp(aux_USR_Data, file_contents_Users);
+                        memcpy(file_contents_Users,aux_USR_Data,strlen(aux_USR_Data));
+                        //erase_Password_For_Rsp(aux_USR_Data, file_contents_Users);
                         asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, file_contents_Users);
-                        //printf("\n\n\nnew user start3\n\n\n");
+                        printf("\n\n\nnew user start3\n\n\n");
                         if (BLE_SMS_Indication == BLE_INDICATION)
                         {
                             send_UDP_Send(rsp, "");
@@ -392,18 +393,18 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                         /*memset(&rsp, 0, sizeof(rsp));*/
                         memset(&file_contents_Users, 0, sizeof(file_contents_Users));
                         memset(&buffer, 0, sizeof(buffer));
-                        //printf("\n\n\nnew user start2222\n\n\n");
+                        printf("\n\n\nnew user start2222\n\n\n");
                         erase_Password_For_Rsp(aux_USR_Data, buffer);
-                        //printf("\n\n\nnew user start3333\n\n\n");
+                        printf("\n\n\nnew user start3333\n\n\n");
                         sprintf(buffer_UDP_users, "%s %c %c %s", USER_ELEMENT, cmd, param, buffer);
                         send_UDP_Send(buffer_UDP_users, "");
                         // memset(&mqttInfo, 0, sizeof(mqttInfo));
-                        // //printf("\n\n\nnew user start4444\n\n\n");
+                        // printf("\n\n\nnew user start4444\n\n\n");
                         // memcpy(mqttInfo->data,buffer_UDP_users,strlen(buffer_UDP_users));
                         // sprintf(mqttInfo->data, "%s", buffer_UDP_users);
-                        //printf("\n\n\nnew user start5555\n\n\n");
+                        printf("\n\n\nnew user start5555\n\n\n");
                         // send_UDP_queue(&mqttInfo);
-                        //printf("\n\n\nnew user start6666\n\n\n");
+                        printf("\n\n\nnew user start6666\n\n\n");
                         asprintf(&rsp, "%s", return_Json_SMS_Data("NEW_USER_HAS_BEEN_ADDED"));
                         return rsp;
                     }
@@ -418,8 +419,8 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 }
                 else
                 {
-                    // ////printf("\n\nnewUser_ACK %d\n\n", newUser_ACK);
-                    //printf("\n\n\nnew user start3333\n\n\n");
+                    // printf("\n\nnewUser_ACK %d\n\n", newUser_ACK);
+                    printf("\n\n\nnew user start3333\n\n\n");
                     return return_ERROR_New_Add_User(&rsp, newUser_ACK);
                 }
             }
@@ -437,7 +438,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     /*memset(&rsp, 0, sizeof(rsp));*/
                     memset(buffer, 0, sizeof(buffer));
                     MyUser_new_MultiUSERS(payload, &buffer);
-                    // ////printf("\n asprintf(&multiRSP,");
+                    // printf("\n asprintf(&multiRSP,");
                     asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, buffer);
                     return rsp;
                 }
@@ -446,7 +447,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     /*memset(&rsp, 0, sizeof(rsp));*/
                     memset(buffer, 0, sizeof(buffer));
                     MyUser_new_MultiUSERS(payload, &buffer);
-                    // ////printf("\n asprintf(&multiRSP,");
+                    // printf("\n asprintf(&multiRSP,");
                     asprintf(&rsp, " Users Add: %s", buffer);
                     return rsp;
                 }
@@ -510,7 +511,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
-                    // //printf("\n\n weekdays change - %s\n\n", payload);
+                    // printf("\n\n weekdays change - %s\n\n", payload);
                     asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, MyUser_new_WeekDays(BLE_SMS_Indication, payload, mqttInfo));
                     return rsp;
                 }
@@ -552,7 +553,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     // send_UDP_queue(file_contents_Users);
                     asprintf(&rsp, "%s", MyUser_new_LimitTime(BLE_SMS_Indication, payload, mqttInfo));
 
-                    // ////printf("\n\n last time 22\n\n");
+                    // printf("\n\n last time 22\n\n");
                     return rsp;
                 }
                 else
@@ -586,7 +587,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     memset(&file_contents_Users, 0, sizeof(file_contents_Users));
 
                     asprintf(&rsp, "%s", MyUser_new_StartDate(BLE_SMS_Indication, payload, &rsp, mqttInfo));
-                    // ////printf("\n\n new start date sms  - %s\n\n", rsp);
+                    // printf("\n\n new start date sms  - %s\n\n", rsp);
                     return rsp;
                 }
                 else
@@ -619,7 +620,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     memset(&file_contents_Users, 0, sizeof(file_contents_Users));
 
                     asprintf(&rsp, "%s", buffer);
-                    // ////printf("\n\n NAME NAME %s\n\n", rsp);
+                    // printf("\n\n NAME NAME %s\n\n", rsp);
                     return rsp;
                 }
                 else
@@ -651,7 +652,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                      asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, file_contents_Users);
                      asprintf(&rsp, "%s", buffer); */
                     asprintf(&rsp, "%s", MyUser_Set_Relay_Restrition(user_validateData, BLE_SMS_Indication, payload, mqttInfo));
-                    // ////printf("\n\n NAME NAME %s\n\n", rsp);
+                    // printf("\n\n NAME NAME %s\n\n", rsp);
                     return rsp;
                 }
                 else
@@ -669,7 +670,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         else
         {
 
-            // ////printf(ERROR_PARAMETER);
+            // printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
@@ -681,14 +682,14 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         //     {
         //         /*memset(&rsp, 0, sizeof(rsp));*/
         //         asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, user_validateData->key);
-        //         ////printf("key key %s\n", user_validateData->key);
+        //         printf("key key %s\n", user_validateData->key);
         //         return rsp;
         //     }
         //     else if (BLE_SMS_Indication == SMS_INDICATION)
         //     {
         //         /*memset(&rsp, 0, sizeof(rsp));*/
         //         asprintf(&rsp, "YOUR KEY IS: %s", user_validateData->key);
-        //         ////printf("key key %s\n", user_validateData->key);
+        //         printf("key key %s\n", user_validateData->key);
         //         return rsp;
         //     }
         //     else
@@ -707,7 +708,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
-                    // ////printf("\n enter get ble user\n");
+                    // printf("\n enter get ble user\n");
                     asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, MyUser_ReadUser(BLE_SMS_Indication, payload, user_validateData->permition, auxPhoneNumber));
 
                     return rsp;
@@ -715,9 +716,9 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 else if (BLE_SMS_Indication == SMS_INDICATION)
                 {
                     /*memset(&rsp, 0, sizeof(rsp));*/
-                    // ////printf("\n enter get sms user payload %s\n", payload);
+                    // printf("\n enter get sms user payload %s\n", payload);
                     asprintf(&rsp, "%s", MyUser_ReadUser(BLE_SMS_Indication, payload, user_validateData->permition, auxPhoneNumber));
-                    // ////printf("end read user");
+                    // printf("end read user");
                     return rsp;
                 }
                 else
@@ -729,7 +730,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
             {
 
                 /*memset(&rsp, 0, sizeof(rsp));*/
-                // ////printf("\n enter get ble user same number\n");
+                // printf("\n enter get ble user same number\n");
                 asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, MyUser_ReadUser(BLE_SMS_Indication, payload, user_validateData->permition, auxPhoneNumber));
                 return rsp;
             }
@@ -769,7 +770,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_THIS_IMPOSSIBLE_CHANGE_OWNER"));
                         }
                     }
-                    // ////printf("read user 1q2w3e %s\n", file_contents_Users);
+                    // printf("read user 1q2w3e %s\n", file_contents_Users);
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -786,14 +787,14 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
                         asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, hour_rsp);
-                        // ////printf("rsp get hour %s\n", rsp);
+                        // printf("rsp get hour %s\n", rsp);
                         //   asprintf(&rsp, "%s%s", user_Hour_ValidateData.start.hour, user_Hour_ValidateData.end.hour);
                         return rsp;
                     }
                     else if (BLE_SMS_Indication == SMS_INDICATION)
                     {
                         asprintf(&rsp, return_Json_SMS_Data("USER_START_HOUR_END_HOUR"), user_Hour_ValidateData.firstName, user_Hour_ValidateData.phone, hour_rsp[0], hour_rsp[1], hour_rsp[2], hour_rsp[3], hour_rsp[4], hour_rsp[5], hour_rsp[6], hour_rsp[7]);
-                        // ////printf("rsp get hour %s\n", rsp);
+                        // printf("rsp get hour %s\n", rsp);
                         //   asprintf(&rsp, "%s%s", user_Hour_ValidateData.start.hour, user_Hour_ValidateData.end.hour);
                         return rsp;
                     }
@@ -881,9 +882,9 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
 
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
-                        // ////printf("read user 1q2w3e %s\n", file_contents_Users);
+                        // printf("read user 1q2w3e %s\n", file_contents_Users);
                         asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, user_Week_ValidateData.week);
-                        // ////printf("rsp get week %s\n", rsp);
+                        // printf("rsp get week %s\n", rsp);
                         //   asprintf(&rsp, "%s%s", user_Hour_ValidateData.start.hour, user_Hour_ValidateData.end.hour);
                         return rsp;
                     }
@@ -910,7 +911,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                         }
 
                         asprintf(&rsp, return_Json_SMS_Data("USER_WEEK_DAYS"), user_Week_ValidateData.firstName, user_Week_ValidateData.phone, auxWeekdays);
-                        // ////printf("rsp get week %s\n", rsp);
+                        // printf("rsp get week %s\n", rsp);
                         //   asprintf(&rsp, "%s%s", user_Hour_ValidateData.start.hour, user_Hour_ValidateData.end.hour);
                         return rsp;
                     }
@@ -987,7 +988,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         else
         {
 
-            // ////printf(ERROR_PARAMETER);
+            // printf(ERROR_PARAMETER);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
         }
     }
@@ -1007,7 +1008,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     if (user_deleteValidateData.permition == '1' || user_deleteValidateData.permition == '2')
                     {
 
-                        // ////printf("este user é admin nao eliminado\n");
+                        // printf("este user é admin nao eliminado\n");
                         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_IS_GUEST"));
                     }
                     else
@@ -1076,13 +1077,13 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                         }
                     }
 
-                    // ////printf("read user 1123 %s\n", file_contents_Users);
+                    // printf("read user 1123 %s\n", file_contents_Users);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_RESET"));
                 }
                 else
                 {
 
-                    // ////printf(ERROR_USER_NOT_FOUND);
+                    // printf(ERROR_USER_NOT_FOUND);
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_FOUND"));
                 }
             }
@@ -1199,21 +1200,21 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
             else
             {
 
-                // ////printf(ERROR_PARAMETER);
+                // printf(ERROR_PARAMETER);
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_PARAMETER"));
             }
         }
         else
         {
 
-            // ////printf(ERROR_USER_NOT_PERMITION);
+            // printf(ERROR_USER_NOT_PERMITION);
             return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
         }
     }
     else
     {
 
-        // ////printf(ERROR_CMD);
+        // printf(ERROR_CMD);
         return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_CMD"));
     }
 
@@ -1228,7 +1229,7 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
     EG915_readDataFile_struct.mode = EG91_FILE_USERS_MODE;
 
     // timer_pause(TIMER_GROUP_1, TIMER_0);
-    //  ////printf("\nsms\n");
+    //  printf("\nsms\n");
     // disableAlarm();
     // vTaskSuspend(xHandle_Timer_VerSystem);
     // xSemaphoreGive(rdySem_Control_Send_AT_Command);
@@ -1274,7 +1275,7 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
     int usersErroCount = 1;
     char saveImportUsers[300] = {};
     memset(totalErrorUsers, 0, sizeof(totalErrorUsers));
-    //printf("\nfile id %d - %s", idFile, fileID);
+    printf("\nfile id %d - %s", idFile, fileID);
 
     char importUsers_data[200] = {};
     sprintf(totalErrorUsers, "%s", "UR S I ");
@@ -1303,22 +1304,22 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                 else
                 {
 
-                    //printf("\nimport users - %s - %d", importUsers_data, strlen(EG915_readDataFile_struct.receiveData));
+                    printf("\nimport users - %s - %d", importUsers_data, strlen(EG915_readDataFile_struct.receiveData));
 
                     sprintf(saveImportUsers, "%s %s %s", ownerNumber, ownerPassword, importUsers_data);
-                    //printf("\n\nimport users data- %s\n\n", saveImportUsers);
+                    printf("\n\nimport users data- %s\n\n", saveImportUsers);
 
                     if (strlen(importUsers_data) > 2)
                     {
-                        //printf("\n\nimport users data421- \n\n");
+                        printf("\n\nimport users data421- \n\n");
                         char *mqttImportUsers_send = parseInputData(&saveImportUsers, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 
-                        //printf("\n\nimport users dat1111- %s\n\n",mqttImportUsers_send);
+                        printf("\n\nimport users dat1111- %s\n\n",mqttImportUsers_send);
 
                         char strCount[10] = {};
                         sprintf(strCount, "%d", usersErroCount);
                         char *newline_position = strchr(mqttImportUsers_send, '\n');
-                        //printf("\n\nimport users data9876- \n\n");
+                        printf("\n\nimport users data9876- \n\n");
                         if (newline_position != NULL)
                         {
                             strcat(totalErrorUsers, strCount);
@@ -1334,14 +1335,14 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                         // free(newline_position);
                         //  send_UDP_Package(mqttImportUsers_send, strlen(mqttImportUsers_send), "");
                         //   send_UDP_Send(mqttImportUsers_send, "");
-                        ////printf("\n\nimport users data6366- %s \n\n",newline_position);
+                        printf("\n\nimport users data6366- %s \n\n",newline_position);
                         
                         strIndex = 0;
                         
-                        //printf("\n\nimport users dataqqwq- \n\n");
+                        printf("\n\nimport users dataqqwq- \n\n");
                         memset(importUsers_data, 0, sizeof(importUsers_data));
                         free(mqttImportUsers_send);
-                        //printf("\n\nimport users datacqawq- \n\n");
+                        printf("\n\nimport users datacqawq- \n\n");
                     }
                 }
                 // vTaskDelay(pdMS_TO_TICKS(5));
@@ -1352,18 +1353,18 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                 }
             }
         }
-        //printf("\n\nimport users data22- %s\n\n", importUsers_data);
+        printf("\n\nimport users data22- %s\n\n", importUsers_data);
         if (strlen(importUsers_data) > 2)
         {
             char saveImportUsers[300] = {};
             sprintf(saveImportUsers, "%s %s %s", ownerNumber, ownerPassword, importUsers_data);
-            //printf("\n\nimport users data232- \n\n");
+            printf("\n\nimport users data232- \n\n");
             char *mqttImportUsers_send = parseInputData(&saveImportUsers, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 
             char strCount[10] = {};
             sprintf(strCount, "%d", usersErroCount);
             char *newline_position = strchr(mqttImportUsers_send, '\n');
-            //printf("\n\nimport users data5656- \n\n");
+            printf("\n\nimport users data5656- \n\n");
             if (newline_position != NULL)
             {
                 strcat(totalErrorUsers, strCount);
@@ -1376,9 +1377,9 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                 usersErroCount++;
             }
             // free(newline_position);
-            //printf("\n\nimport users data888- \n\n");
+            printf("\n\nimport users data888- \n\n");
             //free(newline_position);
-            //printf("\n\nimport users data555- \n\n");
+            printf("\n\nimport users data555- \n\n");
             free(mqttImportUsers_send);
         }
     }
@@ -1428,16 +1429,16 @@ char *reset_Label_BLE_Security(char *payload, uint8_t BLE_SMS)
 
         if (replaceUser(&MyUser_label_BLE_Security) == ESP_OK)
         {
-            // ////printf("\n\nBLE LABEL RESTORE 55\n\n");
+            // printf("\n\nBLE LABEL RESTORE 55\n\n");
             if (BLE_SMS == BLE_INDICATION || BLE_SMS == UDP_INDICATION)
             {
-                // ////printf("\n\nBLE LABEL RESTORE 61\n\n");
+                // printf("\n\nBLE LABEL RESTORE 61\n\n");
                 return "UR R B OK";
             }
             else if (BLE_SMS == SMS_INDICATION)
             {
                 memset(file_contents_Users, 0, sizeof(file_contents_Users));
-                // ////printf("\n\nBLE LABEL RESTORE 62\n\n");
+                // printf("\n\nBLE LABEL RESTORE 62\n\n");
                 sprintf(file_contents_Users, return_Json_SMS_Data("RESET_LABEL_BLE_SECURITY"));
                 return file_contents_Users;
             }
@@ -1466,17 +1467,17 @@ char *MyUser_Restore_Password(char *payload, char permition, uint8_t BLE_SMS)
     if (strlen(payload) < 20)
     {
 
-        // ////printf("\n\nMyUser_Restore_Password 11\n\n");
+        // printf("\n\nMyUser_Restore_Password 11\n\n");
         sprintf(auxPhNumber, "%s", check_IF_haveCountryCode(payload, 0));
-        // ////printf("\n\nMyUser_Restore_Password 22 - %s\n\n", auxPhNumber);
+        // printf("\n\nMyUser_Restore_Password 22 - %s\n\n", auxPhNumber);
         if (MyUser_Search_User(auxPhNumber, &user_Restore_Data) == ESP_OK)
         {
-            // ////printf("\n\nuser_Restore_Data - %s\n\n", user_Restore_Data);
+            // printf("\n\nuser_Restore_Data - %s\n\n", user_Restore_Data);
             parse_ValidateData_User(user_Restore_Data, &user_validateData);
-            // ////printf("\n\nMyUser_Restore_Password 33\n\n");
+            // printf("\n\nMyUser_Restore_Password 33\n\n");
             if (user_validateData.permition < permition)
             {
-                // ////printf("\n\nMyUser_Restore_Password 44\n\n");
+                // printf("\n\nMyUser_Restore_Password 44\n\n");
                 //  memset(user_validateData.key, 0, sizeof(user_validateData.key));
 
                 if (user_validateData.permition == '0')
@@ -1498,19 +1499,19 @@ char *MyUser_Restore_Password(char *payload, char permition, uint8_t BLE_SMS)
                 // user_validateData.week[7] = '\0';
 
                 sprintf(&newline, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.key, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date);
-                // ////printf("new line MyUser_Restore_Password %s\n", newline);
+                // printf("new line MyUser_Restore_Password %s\n", newline);
                 if (replaceUser(&user_validateData) == ESP_OK)
                 {
-                    // ////printf("\n\nMyUser_Restore_Password 55\n\n");
+                    // printf("\n\nMyUser_Restore_Password 55\n\n");
                     if (BLE_SMS == BLE_INDICATION || BLE_SMS == UDP_INDICATION)
                     {
-                        // ////printf("\n\nMyUser_Restore_Password 61\n\n");
+                        // printf("\n\nMyUser_Restore_Password 61\n\n");
                         return "OK";
                     }
                     else if (BLE_SMS == SMS_INDICATION)
                     {
                         memset(file_contents_Users, 0, sizeof(file_contents_Users));
-                        // ////printf("\n\nMyUser_Restore_Password 62\n\n");
+                        // printf("\n\nMyUser_Restore_Password 62\n\n");
                         sprintf(file_contents_Users, return_Json_SMS_Data("RESTORE_PASSWORD"), user_validateData.key);
                         return file_contents_Users;
                     }
@@ -1548,7 +1549,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
     char auxfileContents[200] = {};
 
-    // ////printf("\n\n\nMYNEWUSER FUNCTION\n\n\n");
+    // printf("\n\n\nMYNEWUSER FUNCTION\n\n\n");
 
     for (int i = 0; i < strlen(payload); i++)
     {
@@ -1566,10 +1567,10 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
     uint8_t auxIndex = 0;
     uint8_t aux = 0;
 
-    // ////printf("add user payload-%s len-%d - dotcounter %d\n", payload, strlen(payload), dotCounter);
+    // printf("add user payload-%s len-%d - dotcounter %d\n", payload, strlen(payload), dotCounter);
 
     user_validateData.permition = '0';
-    // ////printf("\n\n\n dot counter %d\n\n\n",dotCounter);
+    // printf("\n\n\n dot counter %d\n\n\n",dotCounter);
     if (dotCounter == 7 || dotCounter == 9)
     {
         for (int i = 0; i < strlen(payload); i++)
@@ -1588,8 +1589,8 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
                     if (auxIndex == 20)
                     {
-                        // ////printf("\nERROR_SET phone\n");
-                        // ////printf(ERROR_SET);
+                        // printf("\nERROR_SET phone\n");
+                        // printf(ERROR_SET);
                         return ERROR_WRONG_PHONE_NUMBER;
                     }
                 }
@@ -1601,7 +1602,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
                     if (auxIndex == 21)
                     {
-                        // ////printf("\nERROR_SET firstname\n");
+                        // printf("\nERROR_SET firstname\n");
                         return ERROR_NAME_LENGTH;
                     }
                 }
@@ -1610,7 +1611,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 8)
                     {
-                        // ////printf("\nERROR_SET start/end hour\n");
+                        // printf("\nERROR_SET start/end hour\n");
                         return ERROR_WRONG_TIME_DATA;
                     }
 
@@ -1630,7 +1631,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 6)
                     {
-                        // ////printf("\nERROR_SET startdate\n");
+                        // printf("\nERROR_SET startdate\n");
                         return ERROR_WRONG_START_DATE;
                     }
 
@@ -1642,7 +1643,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 7)
                     {
-                        // ////printf("\nERROR_SET week\n");
+                        // printf("\nERROR_SET week\n");
                         return ERROR_WRONG_WEEK_DAYS;
                     }
 
@@ -1654,7 +1655,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 2)
                     {
-                        // ////printf("\nERROR_SET end days\n");
+                        // printf("\nERROR_SET end days\n");
                         return ERROR_WRONG_LIMIT_DATE;
                     }
 
@@ -1666,7 +1667,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 1)
                     {
-                        // ////printf("\nERROR_SET end days\n");
+                        // printf("\nERROR_SET end days\n");
                         return ERROR_WRONG_RELAY_PERMITION;
                     }
 
@@ -1678,7 +1679,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex == 1)
                     {
-                        // ////printf("\nERROR_SET end days\n");
+                        // printf("\nERROR_SET end days\n");
                         return ERROR_WRONG_ERASE_USER_AFTER_DATE;
                     }
 
@@ -1698,7 +1699,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex > 0)
                     {
-                        // //printf("\nERROR_SET week\n");
+                        // printf("\nERROR_SET week\n");
                         return 15;
                     }
 
@@ -1710,7 +1711,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 {
                     if (auxIndex > 19)
                     {
-                        // //printf("\nERROR_SET week\n");
+                        // printf("\nERROR_SET week\n");
                         return 15;
                     }
 
@@ -1727,7 +1728,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
             }
         }
 
-        // //printf("phone - %s;start_date - %s,start_hour - %s,days - %s, end hour - %s, week - %s,key - %s,W.Permition - %c wiegand - %s\n", user_validateData.phone, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.week, user_validateData.key, user_validateData.wiegand_rele_permition, user_validateData.wiegand_code);
+        // printf("phone - %s;start_date - %s,start_hour - %s,days - %s, end hour - %s, week - %s,key - %s,W.Permition - %c wiegand - %s\n", user_validateData.phone, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.week, user_validateData.key, user_validateData.wiegand_rele_permition, user_validateData.wiegand_code);
 
         sprintf(user_validateData.key, "%s", DEFAULT_USER_PASSWORD);
 
@@ -1737,7 +1738,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
             if (get_RTC_System_Time() == 0)
             {
-                // ////printf("\n\nERROR_NEW_USER_ADD 2131\n\n");
+                // printf("\n\nERROR_NEW_USER_ADD 2131\n\n");
                 return ERROR_NEW_USER_ADD;
             }
 
@@ -1745,7 +1746,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
         }
 
         user_validateData.ble_security = '0';
-        // ////printf("phone112 - %s;start_date - %s,start_hour - %s,days - %s, end hour - %s, week - %s,key - %s\n", user_validateData.phone, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.week, user_validateData.key);
+        // printf("phone112 - %s;start_date - %s,start_hour - %s,days - %s, end hour - %s, week - %s,key - %s\n", user_validateData.phone, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.week, user_validateData.key);
         memset(newUserData, 0, 200 /* sizeof(newUserData) */);
         sprintf(newUserData, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.key, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date);
 
@@ -1759,12 +1760,12 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
 #endif
 
-        // //printf("new user bff %s\n", newUserData);
+        // printf("new user bff %s\n", newUserData);
 
         if (MyUser_Search_User(user_validateData.phone, auxfileContents) != ESP_OK)
         {
             uint8_t checkUser_ACK = check_NewUser_Data(&user_validateData);
-            // //printf("\n\n checkuser %d\n\n", checkUser_ACK);
+            // printf("\n\n checkuser %d\n\n", checkUser_ACK);
 
             if (checkUser_ACK == 0)
             {
@@ -1800,7 +1801,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
             }
             else if (checkUser_ACK == 8)
             {
-                // //printf("CHECK USER OK\n");
+                // printf("CHECK USER OK\n");
                 uint16_t ACK_Add_User = MyUser_Add(&user_validateData);
                 if (ACK_Add_User == ESP_OK)
                 {
@@ -1812,7 +1813,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
                 }
                 else if (ACK_Add_User == ERROR_WIEGAND_ALREADY_EXIST)
                 {
-                    // //printf("\n\nnew user bff 1999\n\n");
+                    // printf("\n\nnew user bff 1999\n\n");
                     return ERROR_WIEGAND_ALREADY_EXIST;
                 }
                 else
@@ -1822,7 +1823,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
             }
             else
             {
-                // //printf(ERROR_SET);
+                // printf(ERROR_SET);
                 return ERROR_NEW_USER_ADD;
             }
         }
@@ -1851,8 +1852,8 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
                     if (auxIndex == 18)
                     {
-                        // ////printf("\nERROR_SET ERROR_WRONG_PHONE_NUMBER\n");
-                        // ////printf(ERROR_WRONG_PHONE_NUMBER);
+                        // printf("\nERROR_SET ERROR_WRONG_PHONE_NUMBER\n");
+                        // printf(ERROR_WRONG_PHONE_NUMBER);
                         return ERROR_WRONG_PHONE_NUMBER;
                     }
                 }
@@ -1864,7 +1865,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
                     if (auxIndex == 25)
                     {
-                        // ////printf("\nERROR_NAME_LENGTH\n");
+                        // printf("\nERROR_NAME_LENGTH\n");
                         return ERROR_NAME_LENGTH;
                     }
                 }
@@ -1877,7 +1878,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
             {
                 if (user_validateData.phone[i] != '+')
                 {
-                    // ////printf("PHONE NUMBER NAO CORRECTA\n");
+                    // printf("PHONE NUMBER NAO CORRECTA\n");
                     return ERROR_WRONG_PHONE_NUMBER;
                 }
             }
@@ -1920,13 +1921,13 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
 
 #endif
 
-        // ////printf("add default number 4\n");
+        // printf("add default number 4\n");
 
         uint16_t ACK = MyUser_Add(&user_validateData);
 
         if (ACK == ESP_OK)
         {
-            // ////printf("\nuser add with 1 name\n");
+            // printf("\nuser add with 1 name\n");
             return 0; // file_contents_Users;
         }
         else if (ACK == 128)
@@ -1951,7 +1952,7 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
             {
                 if (payload[i] != '+')
                 {
-                    // ////printf("PHONE NUMBER NAO CORRECTA\n");
+                    // printf("PHONE NUMBER NAO CORRECTA\n");
                     return ERROR_WRONG_PHONE_NUMBER;
                 }
             }
@@ -1985,17 +1986,17 @@ uint8_t MyUser_newUSER(char *payload, char *newUserData, char *phNumber, char *p
     else if (dotCounter > 1 && dotCounter < 8 && strlen(payload) > 4)
     {
         memset(&lost_SMS_addUser, 0, sizeof(lost_SMS_addUser));
-        // //printf("\n\n\n lost_SMS_addUser.flag_Lost_SMS_Add_User = 1, %s\n\n\n",phNumber);
+        // printf("\n\n\n lost_SMS_addUser.flag_Lost_SMS_Add_User = 1, %s\n\n\n",phNumber);
         lost_SMS_addUser.flag_Lost_SMS_Add_User = 1;
         sprintf(lost_SMS_addUser.payload, "%s %s UR.S.U %s", phNumber, password, payload);
         sprintf(lost_SMS_addUser.phone, "%s", phNumber);
         lost_SMS_addUser.point_Numbers = (uint8_t)dotCounter;
-        give_rdySem_Control_SMS_Task();
+      
         return 128;
     }
     else
     {
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         return ERROR_NEW_USER_INPUT_DATA;
     }
 
@@ -2009,7 +2010,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
     {
         sprintf(user_validateData->firstName, "%s", "S/N");
         // memset(user_validateData->firstName,("S/N"),strlen("S/N"));
-        // ////printf("NO FIRSTNAME %s\n", user_validateData->firstName);
+        // printf("NO FIRSTNAME %s\n", user_validateData->firstName);
     }
 
     if (strlen(user_validateData->end.days) == 0)
@@ -2028,7 +2029,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
         {
             if (user_validateData->end.days[i] < '0' || user_validateData->end.days[i] > '9')
             {
-                // ////printf("DAYS NAO CORRECTA\n");
+                // printf("DAYS NAO CORRECTA\n");
                 return 0;
             }
         }
@@ -2036,7 +2037,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
 
     if (strlen(user_validateData->key) != 6)
     {
-        // ////printf("PASS ERRO MENOS DE 4 CHARS\n");
+        // printf("PASS ERRO MENOS DE 4 CHARS\n");
         return 1;
     }
     else
@@ -2045,7 +2046,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
         {
             if (user_validateData->key[i] > '9' || user_validateData->key[i] < '0')
             {
-                // ////printf("KEY NAO CORRECTA\n");
+                // printf("KEY NAO CORRECTA\n");
                 return 1;
             }
         }
@@ -2053,7 +2054,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
 
     if (strlen(user_validateData->week) != 7)
     {
-        // ////printf("WEEK ERRO MENOS DE 7 CHARS\n");
+        // printf("WEEK ERRO MENOS DE 7 CHARS\n");
         return 2;
     }
     else
@@ -2069,7 +2070,7 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
 
             if (user_validateData->week[i] > '1' || user_validateData->week[i] < '0')
             {
-                // ////printf("WEEK NAO CORRECTA\n");
+                // printf("WEEK NAO CORRECTA\n");
                 return 2;
             }
         }
@@ -2082,25 +2083,25 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
 
     if (!validate_Hour(user_validateData->end.hour))
     {
-        // ////printf("END HOUR NAO CORRECTA\n");
+        // printf("END HOUR NAO CORRECTA\n");
         return 3;
     }
 
     if (!validate_Hour(user_validateData->start.hour))
     {
-        // ////printf("START HOUR NAO CORRECTA\n");
+        // printf("START HOUR NAO CORRECTA\n");
         return 4;
     }
 
     // if (atoi(user_validateData->end.hour) < atoi(user_validateData->start.hour))
     // {
-    //     ////printf("END HOUR > START HOUR\n");
+    //     printf("END HOUR > START HOUR\n");
     //     return 0;
     // }
 
     if (!check_DateisValid(user_validateData->start.date))
     {
-        // ////printf("START DATE NAO CORRECTA\n");
+        // printf("START DATE NAO CORRECTA\n");
         return 5;
     }
 
@@ -2123,23 +2124,23 @@ uint8_t check_NewUser_Data(MyUser *user_validateData)
         {
             if (!((user_validateData->phone[i] != '+') ^ (user_validateData->phone[i] != '$')))
             {
-                // ////printf("PHONE NUMBER NAO CORRECTA\n");
+                // printf("PHONE NUMBER NAO CORRECTA\n");
                 return 6;
             }
         }
     }
 
-    // ////printf("\nrelayPermition NAO CORRECTA %c\n", user_validateData->relayPermition);
+    // printf("\nrelayPermition NAO CORRECTA %c\n", user_validateData->relayPermition);
     if (user_validateData->relayPermition < '0' || user_validateData->relayPermition > '2')
     {
-        // ////printf("\nrelayPermition NAO CORRECTA\n");
+        // printf("\nrelayPermition NAO CORRECTA\n");
         return 7;
     }
 
     /*  sprintf(buffer, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;", user_validateData->phone, user_validateData->firstName, user_validateData->start.date,
              user_validateData->start.hour, user_validateData->end.days, user_validateData->end.hour, user_validateData->key, user_validateData->permition, user_validateData->week, user_validateData->relayPermition); */
 
-    // //printf("new user bff 1234 %s\n", buffer);
+    // printf("new user bff 1234 %s\n", buffer);
     return 8;
 }
 
@@ -2172,7 +2173,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
         }
     }
 
-    // ////printf(" MyUser_new_MultiUSERS payload %s\n", payload);
+    // printf(" MyUser_new_MultiUSERS payload %s\n", payload);
     for (int i = 0; i < strlen(payload); i++)
     {
         if (payload[i] == ' ')
@@ -2184,7 +2185,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
     if ((UsersCountNumbers + spaceCounter) < LIMIT_USERS_REGISTER_NUMBER)
     {
 
-        // ////printf("\nUsersCountNumbers %d\n", UsersCountNumbers);
+        // printf("\nUsersCountNumbers %d\n", UsersCountNumbers);
         if (dotCounter == 0)
         {
             int str_index = 0;
@@ -2197,7 +2198,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
                     if (payload[i] == ' ')
                     {
                         str_index = 0;
-                        // ////printf(" add multi user num %d, ph =%s\n", i, phone_number);
+                        // printf(" add multi user num %d, ph =%s\n", i, phone_number);
                         if (strlen(phone_number) > 4)
                         {
 
@@ -2225,7 +2226,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
                         str_index++;
                     }
                 }
-                // ////printf(" add multi user num %d, ph =%s\n", 1, phone_number);
+                // printf(" add multi user num %d, ph =%s\n", 1, phone_number);
 
                 if (strlen(phone_number) > 4)
                 {
@@ -2233,15 +2234,15 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
                     {
 
                         // strncat(feedback_AddUsers,' ', 1);
-                        // ////printf("\nstrcat(feedback_AddUsers, phone_number); \n");
+                        // printf("\nstrcat(feedback_AddUsers, phone_number); \n");
                         strcat(feedback_AddUsers, phone_number);
-                        // ////printf("\nstrcat(feedback_AddUsers 11 \n");
+                        // printf("\nstrcat(feedback_AddUsers 11 \n");
                     }
                 }
             }
             else
             {
-                // ////printf("MENOS 1 UTILIZADOR\n");
+                // printf("MENOS 1 UTILIZADOR\n");
                 free(feedback_AddUsers);
                 strcpy(mrsp, return_Json_SMS_Data("ERROR_INPUT_DATA"));
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_INPUT_DATA"));
@@ -2307,7 +2308,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
 
                         // addUser_payload[strlen(addUser_payload)]='\0';
                         char auxSTR_NEWUSER[200] = {};
-                        // ////printf("\n\nadd multi user num %d, ph =%s///\n\n", i, addUser_payload);
+                        // printf("\n\nadd multi user num %d, ph =%s///\n\n", i, addUser_payload);
 
                         if (MyUser_newUSER(addUser_payload, &auxSTR_NEWUSER, "0123", "aasas") == 0)
                         {
@@ -2325,7 +2326,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
                         }
                         else
                         {
-                            // ////printf("\n\n MULTIUSERS - USER EXISTS\n\n");
+                            // printf("\n\n MULTIUSERS - USER EXISTS\n\n");
                         }
 
                         memset(addUser_payload, 0, sizeof(addUser_payload));
@@ -2346,7 +2347,7 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
             else
             {
                 free(feedback_AddUsers);
-                // ////printf("MENOS 1 UTILIZADOR\n");
+                // printf("MENOS 1 UTILIZADOR\n");
                 strcpy(mrsp, return_Json_SMS_Data("ERROR_NEW_USER_ADD"));
                 return return_Json_SMS_Data("ERROR_NEW_USER_ADD");
             }
@@ -2365,12 +2366,12 @@ char *MyUser_new_MultiUSERS(char *payload, char *mrsp)
         return return_Json_SMS_Data("ERROR_MULTIUSERS_LIMIT_USERS");
     }
 
-    // ////printf("\nstrcat(feedback_AddUsers 22 \n");
+    // printf("\nstrcat(feedback_AddUsers 22 \n");
 
     strcpy(mrsp, feedback_AddUsers);
-    // ////printf("\nstrcat(feedback_AddUsers 33 \n");
+    // printf("\nstrcat(feedback_AddUsers 33 \n");
     free(feedback_AddUsers);
-    // ////printf("\n feedback numbers %s\n", payload);
+    // printf("\n feedback numbers %s\n", payload);
     return payload;
 }
 
@@ -2397,13 +2398,13 @@ uint8_t add_defaultUser_wiegand(uint64_t wiegandCode)
 
 #endif
 
-        // //printf("\n\nnew auto user bff 1313 %s\n\n", user_auto_controlAcess.wiegand_code);
+        // printf("\n\nnew auto user bff 1313 %s\n\n", user_auto_controlAcess.wiegand_code);
 
         uint16_t ACK = MyUser_Add(&user_auto_controlAcess);
 
         if (ACK == ESP_OK)
         {
-            // //printf("\n\nWIEGAND GRAVADO - %s\n\n", user_auto_controlAcess.wiegand_code);
+            // printf("\n\nWIEGAND GRAVADO - %s\n\n", user_auto_controlAcess.wiegand_code);
             char *wiegand_MQTT_rsp;
             memset(auxWiegand_str, 0, sizeof(auxWiegand_str));
             MyUser_Search_User(wiegandNumber, &auxWiegand_str);
@@ -2434,8 +2435,8 @@ uint8_t add_defaultUser_wiegand(uint64_t wiegandCode)
 
 uint8_t add_Default_Number(char *number)
 {
-    // ////printf("add default number 1\n");
-    // ////printf("number add=%s len=%d", number, strlen(number));
+    // printf("add default number 1\n");
+    // printf("number add=%s len=%d", number, strlen(number));
     MyUser user_validateData; //= malloc(sizeof(MyUser));
     // memset(&user_validateData, 0, sizeof(user_validateData));
     char td_Date[] = "220215";
@@ -2465,7 +2466,7 @@ uint8_t add_Default_Number(char *number)
             user_validateData.relayPermition = '0';
             user_validateData.ble_security = '0';
             user_validateData.erase_User_After_Date = '0';
-            // ////printf("add default number 4\n");
+            // printf("add default number 4\n");
             char qwerty[200];
             sprintf(qwerty, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.key, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date);
 
@@ -2477,7 +2478,7 @@ uint8_t add_Default_Number(char *number)
 
 #endif
 
-            // ////printf("new user bff 1313 %s\n", qwerty);
+            // printf("new user bff 1313 %s\n", qwerty);
 
             uint16_t ACK = MyUser_Add(&user_validateData);
 
@@ -2508,8 +2509,8 @@ uint8_t MyUser_add_wiegand(char *wiegandCode, char *payload, char permition)
 {
     char auxPayload[200] = {};
     sprintf(auxPayload, "%s", payload);
-    // //printf("\n\nMyUser_add444_wie\n\n");
-    //////printf("\n\nMyUser_add_wiegand - %s - %s - %c\n\n", wiegandCode, payload, *permition);
+    // printf("\n\nMyUser_add444_wie\n\n");
+    //printf("\n\nMyUser_add_wiegand - %s - %s - %c\n\n", wiegandCode, payload, *permition);
 
     if (permition == '0')
     {
@@ -2517,7 +2518,7 @@ uint8_t MyUser_add_wiegand(char *wiegandCode, char *payload, char permition)
     }
     else if (permition == '1')
     {
-        // //printf("\n\nsave admin card %s\n", auxPayload);
+        // printf("\n\nsave admin card %s\n", auxPayload);
         return save_STR_Data_In_Storage(wiegandCode, auxPayload, nvs_wiegand_codes_admin_handle);
     }
     else if (permition == '2')
@@ -2547,19 +2548,19 @@ uint16_t MyUser_Add(MyUser *user)
         nvs_set_u32(nvs_System_handle, NVS_LIMIT_USERS, LIMIT_USERS_REGISTER_NUMBER);
     }
 
-    // //printf("\n\nphone= fffff 11\n\n");
+    // printf("\n\nphone= fffff 11\n\n");
     if (UsersCountNumbers < limit_users)
     {
         /* code */
 
         memset(buffer, 0, 200);
-        // //printf("user->phone = %s\n", user->phone);
-        //  ////printf(" phone add user buffer = %s\n", user->phone);
+        // printf("user->phone = %s\n", user->phone);
+        //  printf(" phone add user buffer = %s\n", user->phone);
         memset(aux_phNumber, 0, sizeof(aux_phNumber));
         sprintf(aux_phNumber, "%s", check_IF_haveCountryCode(user->phone, 1));
         sprintf(aux_search_USER, "%s", user->phone);
-        // ////printf(" phone add user buffer = %s\n", aux_phNumber);
-        // //printf("\nauxphone add = %s\n", user->phone);
+        // printf(" phone add user buffer = %s\n", aux_phNumber);
+        // printf("\nauxphone add = %s\n", user->phone);
 
         for (int i = 0; i < strlen(user->phone); i++)
         {
@@ -2567,7 +2568,7 @@ uint16_t MyUser_Add(MyUser *user)
             {
                 if (user->phone[i] != '+' && user->phone[i] != '$')
                 {
-                    // //printf("phone= ERROR 11\n");
+                    // printf("phone= ERROR 11\n");
                     return ESP_FAIL;
                 }
             }
@@ -2587,9 +2588,9 @@ uint16_t MyUser_Add(MyUser *user)
             strcat(aux_phNumber, user->wiegand_code);
         } */
 
-        // //printf("\n\nphone= fffff 11 - %s\n\n", aux_search_USER);
+        // printf("\n\nphone= fffff 11 - %s\n\n", aux_search_USER);
         sprintf(buffer, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;%c;%s", aux_search_USER, user->firstName, user->start.date, user->start.hour, user->end.days, user->end.hour, user->key, user->permition, user->week, user->relayPermition, user->ble_security, user->erase_User_After_Date, user->wiegand_rele_permition, user->wiegand_code);
-        // //printf("\n\n WIGAND buffer 44 %s\n\n", buffer);
+        // printf("\n\n WIGAND buffer 44 %s\n\n", buffer);
 
         if (strlen(aux_phNumber) < 1 && strlen(user->wiegand_code) > 0)
         {
@@ -2601,26 +2602,26 @@ uint16_t MyUser_Add(MyUser *user)
         sprintf(auxWiegand_number, "$%s", user->wiegand_code);
         if (strlen(user->wiegand_code) > 0 /* user->wiegand_code[0] != '$' */)
         {
-            // //printf("\n\nphone= 4444411 - %s\n\n", auxWiegand_number);
+            // printf("\n\nphone= 4444411 - %s\n\n", auxWiegand_number);
             int UACK = checkIf_wiegandExist(auxWiegand_number, &aaauuxx); /*!get_STR_Data_In_Storage(user->wiegand_code, nvs_wiegand_codes_handle, &aaauuxx);*/
 
-            // //printf("\n\nphone= 4444411hhhh - %d\n\n", UACK);
+            // printf("\n\nphone= 4444411hhhh - %d\n\n", UACK);
             if (!UACK)
             {
-                // //printf("\n\n WIGAND buffers - %c\n\n", user->permition);
+                // printf("\n\n WIGAND buffers - %c\n\n", user->permition);
                 if (MyUser_add_wiegand(auxWiegand_number, aux_phNumber, user->permition) != ESP_OK)
                 {
-                    // //printf("\n\n WIGAND EXIST 798\n\n");
+                    // printf("\n\n WIGAND EXIST 798\n\n");
                     return ESP_FAIL;
                 }
             }
             else
             {
-                // //printf("\n\n WIGAND EXIST222\n\n");
+                // printf("\n\n WIGAND EXIST222\n\n");
                 return ERROR_WIEGAND_ALREADY_EXIST;
             }
 
-            // //printf("\n\nphone= 77777\n\n");
+            // printf("\n\nphone= 77777\n\n");
         }
         else
         {
@@ -2631,15 +2632,15 @@ uint16_t MyUser_Add(MyUser *user)
 
 #endif // 0
 
-        // //printf("add user buffer = %s\n", buffer);
+        // printf("add user buffer = %s\n", buffer);
 
         if (user->permition == '0')
         {
-            // //printf("\n ADD USERS NAMESPACE\n");
+            // printf("\n ADD USERS NAMESPACE\n");
 
             if (save_STR_Data_In_Storage(aux_phNumber, &buffer, nvs_Users_handle) == ESP_OK)
             {
-                // ////printf("\n ADD USERS NAMESPACE1\n");
+                // printf("\n ADD USERS NAMESPACE1\n");
                 UsersCountNumbers++;
                 nvs_get_u32(nvs_System_handle, NVS_KEY_GUEST_COUNTER, &GuestCountNumbers);
                 GuestCountNumbers++;
@@ -2649,16 +2650,16 @@ uint16_t MyUser_Add(MyUser *user)
             }
             else
             {
-                // ////printf("\n ADD USERS ESP_FAIL\n");
+                // printf("\n ADD USERS ESP_FAIL\n");
                 return ESP_FAIL;
             }
         }
         else if (user->permition == '1' && user->phone[0] != '#')
         {
-            // ////printf("\n ADD ADMIN NAMESPACE\n");
+            // printf("\n ADD ADMIN NAMESPACE\n");
             if (save_STR_Data_In_Storage(aux_phNumber, &buffer, nvs_Admin_handle) == ESP_OK)
             {
-                // ////printf("\n ADD ADMIN NAMESPACE1\n");
+                // printf("\n ADD ADMIN NAMESPACE1\n");
                 UsersCountNumbers++;
                 save_User_Counter_In_Storage(UsersCountNumbers);
                 return ESP_OK;
@@ -2670,10 +2671,10 @@ uint16_t MyUser_Add(MyUser *user)
         }
         else if (user->permition == '2' && user->phone[0] != '#')
         {
-            // ////printf("\n ADD OWNER NAMESPACE %s\n", aux_phNumber);
+            // printf("\n ADD OWNER NAMESPACE %s\n", aux_phNumber);
             if (save_STR_Data_In_Storage(aux_phNumber, &buffer, nvs_Owner_handle) == ESP_OK)
             {
-                // ////printf("\n ADD OWNER NAMESPACE1 %s\n", aux_phNumber);
+                // printf("\n ADD OWNER NAMESPACE1 %s\n", aux_phNumber);
                 UsersCountNumbers++;
                 save_User_Counter_In_Storage(UsersCountNumbers);
                 return ESP_OK;
@@ -2690,7 +2691,7 @@ uint16_t MyUser_Add(MyUser *user)
     }
     else
     {
-        // ////printf("%s", ERROR_LIMIT_USERS);
+        // printf("%s", ERROR_LIMIT_USERS);
         return 128;
     }
 
@@ -2708,11 +2709,11 @@ uint32_t MyUser_List_AllUsers()
 {
     int count = 0;
     int guestCount = 0;
-    // ////printf("\nLIST USERS:\n");
+    // printf("\nLIST USERS:\n");
     nvs_iterator_t it;
     it = nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
     char value[200];
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
     //  int64_t start_time = esp_timer_get_time();
     while (it != NULL)
     {
@@ -2723,15 +2724,15 @@ uint32_t MyUser_List_AllUsers()
         it = nvs_entry_next(it);
         // printftf("key '%s', type '%d' \n", info.key, info.type);
         get_Data_Users_From_Storage(info.key, &value);
-        // ////printf("\nvalue: %s\n", value);
+        // printf("\nvalue: %s\n", value);
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 
     nvs_set_u32(nvs_System_handle, NVS_KEY_GUEST_COUNTER, guestCount);
-    // ////printf("\nLIST ADMIN:\n");
+    // printf("\nLIST ADMIN:\n");
     it = nvs_entry_find("keys", NVS_ADMIN_NAMESPACE, NVS_TYPE_STR);
 
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
 
     while (it != NULL)
     {
@@ -2739,16 +2740,16 @@ uint32_t MyUser_List_AllUsers()
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
         get_Data_Users_From_Storage(info.key, &value);
-        // ////printf("\nvalue: %s\n", value);
+        // printf("\nvalue: %s\n", value);
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 
-    // ////printf("\nLIST OWNER:\n");
+    // printf("\nLIST OWNER:\n");
     it = nvs_entry_find("keys", NVS_OWNER_NAMESPACE, NVS_TYPE_STR);
 
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
 
     while (it != NULL)
     {
@@ -2756,18 +2757,18 @@ uint32_t MyUser_List_AllUsers()
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
         get_Data_Users_From_Storage(info.key, &value);
-        // ////printf("\nvalue: %s\n", value);
+        // printf("\nvalue: %s\n", value);
         vTaskDelay(pdMS_TO_TICKS(20));
     }
     UsersCountNumbers = count;
 
     free(it);
     // int64_t time = esp_timer_get_time() - start_time;
-    // ////printf("Iterate NVS END\n");
-    // ////printf("Time: %lld", time);
-    // ////printf("\ncount numbers: %d\n", count);
+    // printf("Iterate NVS END\n");
+    // printf("Time: %lld", time);
+    // printf("\ncount numbers: %d\n", count);
     return UsersCountNumbers;
 }
 
@@ -2791,7 +2792,7 @@ uint8_t Myuser_deleteUser(MyUser *user)
         sprintf(aux_phNumber, "%s", check_IF_haveCountryCode(user->phone, 0));
     }
 
-    // //printf("\n\nMyuser_deleteUser auxphnumber - %s - %c\n\n", aux_phNumber, user->permition);
+    // printf("\n\nMyuser_deleteUser auxphnumber - %s - %c\n\n", aux_phNumber, user->permition);
 
     if (user->permition == '0')
     {
@@ -2802,7 +2803,7 @@ uint8_t Myuser_deleteUser(MyUser *user)
 #ifdef CONFIG_WIEGAND_CODE
 
             sprintf(auxWiegand_code, "$%s", user->wiegand_code);
-            // //printf("\n\nMyuser_deleteUser auxWiegand_code- %s\n\n", auxWiegand_code);
+            // printf("\n\nMyuser_deleteUser auxWiegand_code- %s\n\n", auxWiegand_code);
             nvs_erase_key(nvs_wiegand_codes_users_handle, auxWiegand_code);
 #endif
             UsersCountNumbers--;
@@ -2876,11 +2877,11 @@ char *MyUser_getFromName(char *payload, uint8_t gattsIF, uint16_t connID, uint16
     };
     sprintf(message.payload, "%s", payload);
 
-    // ////printf("queue created\n");
-    // ////printf("MyUser_ReadAllUsers CONN ID %d\n", message.connID);
-    // ////printf("MyUser_ReadAllUsers GATTSIF %d\n", message.gattsIF);
-    // ////printf("MyUser_ReadAllUsers %d\n", message.handle_table);
-    // ////printf("MyUser_ReadAllUsers %s\n", message.payload);
+    // printf("queue created\n");
+    // printf("MyUser_ReadAllUsers CONN ID %d\n", message.connID);
+    // printf("MyUser_ReadAllUsers GATTSIF %d\n", message.gattsIF);
+    // printf("MyUser_ReadAllUsers %d\n", message.handle_table);
+    // printf("MyUser_ReadAllUsers %s\n", message.payload);
     //  readAllUser_Label = 0;
     readAllUser_ConnID = 0;
 
@@ -2911,13 +2912,13 @@ void ReadALLUsersFormName_task(void *pvParameter)
     };
 
     sprintf(cpy_message.payload, "%s", message->payload);
-    // ////printf("cpy_message.payload %s\n", cpy_message.payload);
+    // printf("cpy_message.payload %s\n", cpy_message.payload);
 
     char fullName[50];
     char firstName[20];
     char surname[20];
     char payload[200];
-    // ////printf("cpy_message.payload %s\n", cpy_message.payload);
+    // printf("cpy_message.payload %s\n", cpy_message.payload);
 
     int line = 0;
     uint8_t dotCounter = 0;
@@ -2925,7 +2926,7 @@ void ReadALLUsersFormName_task(void *pvParameter)
     memset(fullName, 0, sizeof(fullName));
     memset(firstName, 0, sizeof(firstName));
     memset(surname, 0, sizeof(surname));
-    // ////printf("cpy_message.payload %s\n", cpy_message.payload);
+    // printf("cpy_message.payload %s\n", cpy_message.payload);
 
     for (int i = 0; i < strlen(cpy_message.payload); i++)
     {
@@ -2984,7 +2985,7 @@ void ReadALLUsersFormName_task(void *pvParameter)
         return;
     }
 
-    // ////printf("fullname %s\n", fullName);
+    // printf("fullname %s\n", fullName);
     int aux_fileContents_Count = 0;
     // ESP_LOGI("TAG", "Reading file");
     FILE *f = fopen("/spiffs/hello.txt", "r");
@@ -2992,14 +2993,14 @@ void ReadALLUsersFormName_task(void *pvParameter)
 
     while (fgets(file_contents_Users, 200, f) != NULL)
     {
-        // ////printf("line: %d\n", line);
+        // printf("line: %d\n", line);
         if ((stristr(file_contents_Users, fullName)) != NULL)
         {
 
-            // ////printf("A match found on line: %d\n", line);
+            // printf("A match found on line: %d\n", line);
             aux_fileContents_Count++;
             esp_ble_gatts_send_indicate(cpy_message.gattsIF, cpy_message.connID, cpy_message.handle_table, strlen(file_contents_Users), (uint8_t *)file_contents_Users, true);
-            // ////printf("\n%s\n", file_contents_Users);
+            // printf("\n%s\n", file_contents_Users);
             memset(file_contents_Users, 0, 200);
             // vTaskDelay(pdMS_TO_TICKS((30)));
             xSemaphoreTake(rdySem, portMAX_DELAY); // Wait until slave is ready
@@ -3068,12 +3069,12 @@ uint8_t MyUser_Search_User(char *phoneNumber, char *file_contents_Users)
     char auxPhone[50];
     char auxfileContents[200];
     int file_contents_lengh = 0;
-    // //printf("\n search user 1\n");
+    // printf("\n search user 1\n");
     sprintf(auxPhone, "%s", check_IF_haveCountryCode(phoneNumber, 0));
-    // ////printf("\n search user 2 - %s\n",aux);
-    // //printf("\n aux PhoneNumber %s\n", auxPhone);
+    // printf("\n search user 2 - %s\n",aux);
+    // printf("\n aux PhoneNumber %s\n", auxPhone);
     ACK = get_Data_Users_From_Storage(auxPhone, &auxfileContents);
-    // //printf("\n MyUser_Search_User %s\n", auxfileContents);
+    // printf("\n MyUser_Search_User %s\n", auxfileContents);
     sprintf(file_contents_Users, "%s", auxfileContents);
 
     return ACK;
@@ -3095,12 +3096,12 @@ uint8_t MyUser_Search_User_AUX_Call(char *phoneNumber, char *file_contents_Users
         return ESP_FAIL;
     }
 
-    // ////printf("\n search user 1\n");
+    // printf("\n search user 1\n");
     sprintf(auxPhone, "%s", check_IF_haveCountryCode_AUX_Call(phoneNumber));
-    // ////printf("\n search user 2\n");
-    // ////printf("\n aux PhoneNumber %s\n", auxPhone);
+    // printf("\n search user 2\n");
+    // printf("\n aux PhoneNumber %s\n", auxPhone);
     ACK = get_Data_Users_From_Storage(auxPhone, &auxfileContents);
-    // ////printf("\n MyUser_Search_User %s\n", auxfileContents);
+    // printf("\n MyUser_Search_User %s\n", auxfileContents);
     sprintf(file_contents_Users, "%s", auxfileContents);
 
     return ACK;
@@ -3115,7 +3116,7 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
 
     char aux_payload[200] = {};
 
-    // ////printf("\n\n\nMYNEWUSER FUNCTION\n\n\n");
+    // printf("\n\n\nMYNEWUSER FUNCTION\n\n\n");
 
     for (int i = 0; i < strlen(payload); i++)
     {
@@ -3137,7 +3138,7 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
 
     uint8_t owner_Label = get_INT8_Data_From_Storage(NVS_KEY_OWNER_LABEL, nvs_System_handle);
 
-    // ////printf("\n\n owner label %d\n\n", owner_Label);
+    // printf("\n\n owner label %d\n\n", owner_Label);
 
     if (owner_Label != 1)
     {
@@ -3168,7 +3169,7 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
             }
         }
 
-        // ////printf("\n\naux_payload - %s", aux_payload);
+        // printf("\n\naux_payload - %s", aux_payload);
         dotCounter = 0;
         strIndex = 0;
 
@@ -3252,46 +3253,15 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
 
         sprintf(user_validateData.phone, "%s", auxPhoneNumber);
 
-        // ////printf("\n\nuser_validateData.phone before - %s", user_validateData.phone);
-        // ////printf("\n\nuser_validateData.firstName before - %s", user_validateData.firstName);
-        // ////printf("\n\n user_validateData.key before - %s", user_validateData.key);
+        // printf("\n\nuser_validateData.phone before - %s", user_validateData.phone);
+        // printf("\n\nuser_validateData.firstName before - %s", user_validateData.firstName);
+        // printf("\n\n user_validateData.key before - %s", user_validateData.key);
         sprintf(aux_PhoneNumber, "%s", check_IF_haveCountryCode(user_validateData.phone, 1));
-        // ////printf("\n\aux_PhoneNumber before - %s", aux_PhoneNumber);
+        // printf("\n\aux_PhoneNumber before - %s", aux_PhoneNumber);
 
-        if (BLE_SMS_Indication == SMS_INDICATION)
-        {
+        
 
-            if ((SMS_phoneNumber[0] == '0') && SMS_phoneNumber[1] != '0')
-            {
-
-                // ////printf("\n  payload phnumber sms 33 %s \n", SMS_phoneNumber);
-                for (size_t i = 1; i < strlen(SMS_phoneNumber); i++)
-                {
-                    SMS_phoneNumber[i - 1] = SMS_phoneNumber[i];
-                }
-
-                SMS_phoneNumber[strlen(SMS_phoneNumber) - 1] = 0;
-            }
-
-            if ((aux_PhoneNumber[0] == '0') && aux_PhoneNumber[1] != '0')
-            {
-
-                // ////printf("\n  payload phnumber sms 33 %s \n", aux_PhoneNumber);
-                for (size_t i = 1; i < strlen(aux_PhoneNumber); i++)
-                {
-                    aux_PhoneNumber[i - 1] = aux_PhoneNumber[i];
-                }
-
-                aux_PhoneNumber[strlen(aux_PhoneNumber) - 1] = 0;
-            }
-
-            if (strcmp(aux_PhoneNumber, SMS_phoneNumber))
-            {
-                return return_Json_SMS_Data("ERROR_ADD_OWNER");
-            }
-        }
-
-        // ////printf("\n\n\n owner aux_PhoneNumber - %s\n\n", aux_PhoneNumber);
+        // printf("\n\n\n owner aux_PhoneNumber - %s\n\n", aux_PhoneNumber);
 
         if (MyUser_Add(&user_validateData) == ESP_OK)
         {
@@ -3300,7 +3270,7 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
             memset(new_Owner_Data, 0, 200 /* sizeof(newUserData) */);
             sprintf(new_Owner_Data, "%s;%s;%s;%s;%s;%s;%s;%c;%s;%c;%c;%c;", user_validateData.phone, user_validateData.firstName, user_validateData.start.date, user_validateData.start.hour, user_validateData.end.days, user_validateData.end.hour, user_validateData.key, user_validateData.permition, user_validateData.week, user_validateData.relayPermition, user_validateData.ble_security, user_validateData.erase_User_After_Date);
 
-            // ////printf("\n\nnew owner data - %s\n\n", new_Owner_Data);
+            // printf("\n\nnew owner data - %s\n\n", new_Owner_Data);
 
             if (save_STR_Data_In_Storage(NVS_KEY_OWNER_INFORMATION, new_Owner_Data, nvs_System_handle) != ESP_OK)
             {
@@ -3314,8 +3284,11 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
                 nvs_erase_key(nvs_System_handle, NVS_KEY_OWNER_INFORMATION);
                 return return_Json_SMS_Data("ERROR_ADD_OWNER");
             }
-
-            return return_Json_SMS_Data("OWNER_ADD");
+            
+            memset(file_contents_Users, 0, 300);
+            sprintf(file_contents_Users,"%s.%s.%s",user_validateData.phone,user_validateData.firstName,user_validateData.key);
+            printf("\n\n\n ownerNewData - %s\n\n", file_contents_Users);
+            return file_contents_Users;
         }
         else
         {
@@ -3348,49 +3321,49 @@ void parse_ValidateData_User(char *file_contents_Users, MyUser *user_validateDat
                 user_validateData->phone[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr11\n\n");
+            // printf(" \n\nfrfrfrfr11\n\n");
             if (aux == 1)
             {
                 user_validateData->firstName[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr22\n\n");
+            // printf(" \n\nfrfrfrfr22\n\n");
             if (aux == 2)
             {
                 user_validateData->start.date[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr33\n\n");
+            // printf(" \n\nfrfrfrfr33\n\n");
             if (aux == 3)
             {
                 user_validateData->start.hour[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr44\n\n");
+            // printf(" \n\nfrfrfrfr44\n\n");
             if (aux == 4)
             {
                 user_validateData->end.days[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr55\n\n");
+            // printf(" \n\nfrfrfrfr55\n\n");
             if (aux == 5)
             {
                 user_validateData->end.hour[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr66\n\n");
+            // printf(" \n\nfrfrfrfr66\n\n");
             if (aux == 6)
             {
                 user_validateData->key[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr77\n\n");
+            // printf(" \n\nfrfrfrfr77\n\n");
             if (aux == 7)
             {
                 user_validateData->permition = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr88\n\n");
+            // printf(" \n\nfrfrfrfr88\n\n");
             if (aux == 8)
             {
                 if (file_contents_Users[i] == '0' || file_contents_Users[i] == '1')
@@ -3400,7 +3373,7 @@ void parse_ValidateData_User(char *file_contents_Users, MyUser *user_validateDat
                 }
             }
 
-            // ////printf(" \n\nfrfrfrfr99\n\n");
+            // printf(" \n\nfrfrfrfr99\n\n");
             if (aux == 9)
             {
                 if (file_contents_Users[i] >= '0' || file_contents_Users[i] <= '2')
@@ -3410,7 +3383,7 @@ void parse_ValidateData_User(char *file_contents_Users, MyUser *user_validateDat
                 }
             }
 
-            // ////printf(" \n\nfrfrfrfr100\n\n");
+            // printf(" \n\nfrfrfrfr100\n\n");
             if (aux == 10)
             {
                 if (file_contents_Users[i] >= '0' || file_contents_Users[i] <= '1')
@@ -3418,7 +3391,7 @@ void parse_ValidateData_User(char *file_contents_Users, MyUser *user_validateDat
                     user_validateData->ble_security = file_contents_Users[i];
                 }
             }
-            //  ////printf(" \n\nfrfrfrfr101\n\n");
+            //  printf(" \n\nfrfrfrfr101\n\n");
             if (aux == 11)
             {
                 if (file_contents_Users[i] >= '0' || file_contents_Users[i] <= '1')
@@ -3439,19 +3412,19 @@ void parse_ValidateData_User(char *file_contents_Users, MyUser *user_validateDat
                     user_validateData->wiegand_rele_permition = file_contents_Users[i];
                 }
             }
-            // ////printf(" \n\nfrfrfrfr103\n\n");
+            // printf(" \n\nfrfrfrfr103\n\n");
             if (aux == 13)
             {
 
                 user_validateData->wiegand_code[auxIndex] = file_contents_Users[i];
                 auxIndex++;
             }
-            // ////printf(" \n\nfrfrfrfr104\n\n");
+            // printf(" \n\nfrfrfrfr104\n\n");
 #endif
         }
     }
-    // ////printf(" \n\nfrfrfrfr105\n\n");
-    //  ////printf("%s\n", user_validateData->week);
+    // printf(" \n\nfrfrfrfr105\n\n");
+    //  printf("%s\n", user_validateData->week);
 }
 
 uint8_t verify_WeekAcess(MyUser *user_validateData)
@@ -3463,7 +3436,7 @@ uint8_t verify_WeekAcess(MyUser *user_validateData)
 
     tdweek = pow(2, calculate_weekDay(nowTime.year, nowTime.month, nowTime.day));
 
-    // ////printf("tdweek = %d", tdweek);
+    // printf("tdweek = %d", tdweek);
 
     for (int i = 0; i < 7; i++)
     {
@@ -3473,18 +3446,18 @@ uint8_t verify_WeekAcess(MyUser *user_validateData)
         }
     }
 
-    // ////printf("\nuser week1111 %s\n", user_validateData->week);
-    // ////printf("\nuser week %d\n", weekUser);
+    // printf("\nuser week1111 %s\n", user_validateData->week);
+    // printf("\nuser week %d\n", weekUser);
     access = (tdweek & weekUser);
 
     if (access == tdweek)
     {
-        // ////printf("acess %d\n", access);
+        // printf("acess %d\n", access);
         return 1;
     }
     else
     {
-        // ////printf("not acess %d\n", access);
+        // printf("not acess %d\n", access);
         return 0;
     }
 
@@ -3508,32 +3481,32 @@ uint8_t verify_TimeAcess(MyUser *user_validateData)
         if (user_validateData->end.days[0] != '*')
         {
             int v_date = parseDatetoInt(atoi(user_validateData->start.date), atoi(user_validateData->end.days));
-            // ////printf("v_date %d\n", v_date);
+            // printf("v_date %d\n", v_date);
 
             if ((nowTime.date >= atoi(user_validateData->start.date)) && (nowTime.date <= v_date))
             {
-                // ////printf("data ok\n");
+                // printf("data ok\n");
                 if (start_Hour > end_Hour)
                 {
-                    // ////printf("\natoi(user_validateData->start.hour) %d\n", start_Hour);
-                    // ////printf("\natoi(user_validateData->end.hour) %d\n", end_Hour);
-                    // ////printf("nowTime.time %d\n", nowTime.time);
-                    // ////printf("\n START HOUR > END HOUR1\n");
+                    // printf("\natoi(user_validateData->start.hour) %d\n", start_Hour);
+                    // printf("\natoi(user_validateData->end.hour) %d\n", end_Hour);
+                    // printf("nowTime.time %d\n", nowTime.time);
+                    // printf("\n START HOUR > END HOUR1\n");
                     if (start_Hour <= nowTime.time)
                     {
-                        // ////printf("\n START HOUR > END HOUR2\n");
+                        // printf("\n START HOUR > END HOUR2\n");
                         return 1;
                     }
 
-                    // ////printf("\n START HOUR > END HOUR1.2\n");
+                    // printf("\n START HOUR > END HOUR1.2\n");
                     if (end_Hour >= nowTime.time)
                     {
-                        // ////printf("\n START HOUR > END HOUR2\n");
+                        // printf("\n START HOUR > END HOUR2\n");
                         return 1;
                     }
                     else
                     {
-                        // ////printf("\n START HOUR > END HOUR4\n");
+                        // printf("\n START HOUR > END HOUR4\n");
                         return 0;
                     }
                 }
@@ -3541,19 +3514,19 @@ uint8_t verify_TimeAcess(MyUser *user_validateData)
                 {
                     if ((nowTime.time >= start_Hour) && (nowTime.time <= end_Hour))
                     {
-                        // //printf("**** hora ok\n");
+                        // printf("**** hora ok\n");
                         return 1;
                     }
                     else
                     {
-                        // //printf("**** hora errada\n");
+                        // printf("**** hora errada\n");
                         return 0;
                     }
                 }
             }
             else
             {
-                // //printf("data errada\n");
+                // printf("data errada\n");
                 return 0;
             }
         }
@@ -3566,20 +3539,20 @@ uint8_t verify_TimeAcess(MyUser *user_validateData)
 
             if (start_Hour > end_Hour)
             {
-                // ////printf("\n START HOUR > END HOUR1\n");
+                // printf("\n START HOUR > END HOUR1\n");
                 if (start_Hour <= nowTime.time)
                 {
-                    // ////printf("\n START HOUR > END HOUR2\n");
+                    // printf("\n START HOUR > END HOUR2\n");
                     return 1;
                 }
                 else if (end_Hour >= nowTime.time)
                 {
-                    // ////printf("\n START HOUR > END HOUR2\n");
+                    // printf("\n START HOUR > END HOUR2\n");
                     return 1;
                 }
                 else
                 {
-                    // ////printf("\n START HOUR > END HOUR4\n");
+                    // printf("\n START HOUR > END HOUR4\n");
                     return 0;
                 }
             }
@@ -3587,12 +3560,12 @@ uint8_t verify_TimeAcess(MyUser *user_validateData)
             {
                 if ((nowTime.time >= start_Hour) && (nowTime.time <= end_Hour))
                 {
-                    // ////printf("**** hora ok\n");
+                    // printf("**** hora ok\n");
                     return 1;
                 }
                 else
                 {
-                    // ////printf("**** hora errada\n");
+                    // printf("**** hora errada\n");
                     return 0;
                 }
             }
@@ -3600,7 +3573,7 @@ uint8_t verify_TimeAcess(MyUser *user_validateData)
     }
     else
     {
-        // ////printf("**** week error ****\n");
+        // printf("**** week error ****\n");
         return 0;
     }
     return 0;
@@ -3626,7 +3599,7 @@ uint8_t validate_DataUser(MyUser *user_validateData, char *password)
     }
     else
     {
-        // ////printf("pass errada\n");
+        // printf("pass errada\n");
         return 0;
     }
 
@@ -3684,7 +3657,7 @@ int parseDatetoInt(int date, int days)
         }
     }
     int finalDate = year * 10000 + month * 100 + day;
-    // ////printf("new year %d\n", finalDate);
+    // printf("new year %d\n", finalDate);
 
     return finalDate;
 }
@@ -3695,23 +3668,23 @@ uint8_t validate_Hour(char *str)
     {
         return 0;
     }
-    // ////printf("\nstr  len\n");
+    // printf("\nstr  len\n");
     if (str[0] < '0' || str[0] > '2')
     {
         return 0;
     }
-    // ////printf("\nstr  11\n");
+    // printf("\nstr  11\n");
     if (str[1] < '0' || str[1] > '9')
     {
         return 0;
     }
-    // ////printf("\nstr  22\n");
+    // printf("\nstr  22\n");
     if (str[2] < '0' || str[2] > '5')
     {
         return 0;
     }
 
-    // ////printf("\nstr  33\n");
+    // printf("\nstr  33\n");
     if (str[3] < '0' || str[3] > '9')
     {
         return 0;
@@ -3732,7 +3705,7 @@ uint8_t check_DateisValid(char *date)
     char month[3] = {};
     char day[3] = {};
 
-    // ////printf("start date %s\n", date);
+    // printf("start date %s\n", date);
     for (int i = 0; i < strlen(date); i++)
     {
         if ((date[i] > '9' || date[i] < '0') || strlen(date) != 6)
@@ -3751,32 +3724,32 @@ uint8_t check_DateisValid(char *date)
     day[1] = date[5];
 
     int auxYear = 2000 + atoi(year);
-    // ////printf("auxyear %d, year %s\n", auxYear, year);
-    // ////printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
+    // printf("auxyear %d, year %s\n", auxYear, year);
+    // printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
     //   check year
     if (auxYear >= 2022 && auxYear < 2100)
     {
 
-        // ////printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
+        // printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
         //   check month
         if (atoi(month) >= 1 && atoi(month) <= 12)
         {
             // check days
             if ((atoi(day) >= 1 && atoi(day) <= 31) && (atoi(month) == 1 || atoi(month) == 3 || atoi(month) == 5 || atoi(month) == 7 || atoi(month) == 8 || atoi(month) == 10 || atoi(month) == 12))
             {
-                // ////printf("Date is valid.%d %d %d\n", auxYear, atoi(month), atoi(day));
+                // printf("Date is valid.%d %d %d\n", auxYear, atoi(month), atoi(day));
             }
             else if ((atoi(day) >= 1 && atoi(day) <= 30) && (atoi(month) == 4 || atoi(month) == 6 || atoi(month) == 9 || atoi(month) == 11))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else if ((atoi(day) >= 1 && atoi(day) <= 28) && (atoi(month) == 2))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else if ((atoi(day) == 29 && atoi(month) == 2) && ((auxYear % 400 == 0) || ((auxYear % 4 == 0) && (auxYear % 100 != 0))))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else
             {
@@ -3812,7 +3785,7 @@ uint8_t MyUser_newPassword(MyUser *user_validateData, char *password, int line)
         memset(user_validateData->key, 0, sizeof(user_validateData->key));
         sprintf(user_validateData->key, "%s", password);
 
-        // ////printf("CHANGE PASS 1\n");
+        // printf("CHANGE PASS 1\n");
 
         if (replaceUser(user_validateData) == ESP_OK)
         {
@@ -3911,11 +3884,11 @@ uint8_t replaceUser(MyUser *user_validateData)
 
 #endif
 
-    //printf("new line replaceUser %s - %c\n", newline, user_validateData->wiegand_rele_permition);
+    printf("new line replaceUser %s - %c\n", newline, user_validateData->wiegand_rele_permition);
 
     if (user_validateData->permition == '0')
     {
-        // //printf("\n\nnew line replaceUser1\n\n");
+        // printf("\n\nnew line replaceUser1\n\n");
 
         if (save_STR_Data_In_Storage(auxPhone, &newline, nvs_Users_handle) == ESP_OK)
         {
@@ -3959,7 +3932,7 @@ uint8_t replaceUser(MyUser *user_validateData)
     {
         if (save_STR_Data_In_Storage(auxPhone, &newline, nvs_Owner_handle) == ESP_OK)
         {
-            if (save_STR_Data_In_Storage(NVS_KEY_OWNER_INFORMATION, newline, nvs_System_handle))
+            if (save_STR_Data_In_Storage(NVS_KEY_OWNER_INFORMATION, newline, nvs_System_handle) == ESP_OK)
             {
 
                 /* #ifdef CONFIG_WIEGAND_CODE
@@ -3997,17 +3970,17 @@ char *MyUser_ReadUser(uint8_t BLE_SMS_Indication, char *payload, char usrPermiti
     MyUser user_Get_ValidateData;
     memset(file_contents_Users, 0, sizeof(file_contents_Users));
     memset(aux_FileContens, 0, sizeof(aux_FileContens));
-    // ////printf("read user 11 payload %s\n", payload);
+    // printf("read user 11 payload %s\n", payload);
 
     if (MyUser_Search_User(payload, file_contents_Users) == ESP_OK)
     {
         memset(&user_Get_ValidateData, 0, sizeof(user_Get_ValidateData));
         parse_ValidateData_User(file_contents_Users, &user_Get_ValidateData);
-        // ////printf("read user after parse user\n");
+        // printf("read user after parse user\n");
 
         if (BLE_SMS_Indication == BLE_INDICATION)
         {
-            // ////printf("read user 1123 %s\n", file_contents_Users);
+            // printf("read user 1123 %s\n", file_contents_Users);
             //   parse_ValidateData_User(file_contents_Users, &user_Get_ValidateData);
             if (user_Get_ValidateData.ble_security == '0')
             {
@@ -4015,7 +3988,7 @@ char *MyUser_ReadUser(uint8_t BLE_SMS_Indication, char *payload, char usrPermiti
                 {
                     if (!strcmp(phNumber_Get, check_IF_haveCountryCode(user_Get_ValidateData.phone, 0)))
                     {
-                        // ////printf("\n\n enter change ble security\n\n");
+                        // printf("\n\n enter change ble security\n\n");
                         user_Get_ValidateData.ble_security = '1';
                         replaceUser(&user_Get_ValidateData);
                     }
@@ -4037,7 +4010,7 @@ char *MyUser_ReadUser(uint8_t BLE_SMS_Indication, char *payload, char usrPermiti
                 memset(auxWeekdays, 0, sizeof(auxWeekdays));
                 uint8_t weekdays_Count = 0;
 
-                // ////printf("\nuser_Get_ValidateData.permition %c\n", user_Get_ValidateData.permition);
+                // printf("\nuser_Get_ValidateData.permition %c\n", user_Get_ValidateData.permition);
                 if (user_Get_ValidateData.permition == '1' || user_Get_ValidateData.permition == '2')
                 {
                     strcpy(auxWeekdays, return_Json_SMS_Data("ALL DAYS"));
@@ -4070,7 +4043,7 @@ char *MyUser_ReadUser(uint8_t BLE_SMS_Indication, char *payload, char usrPermiti
                         sprintf(file_contents_Users, return_Json_SMS_Data("OWNER_ADMIN_READ_SMS"), return_Json_SMS_Data("NO_NAME"), user_Get_ValidateData.phone, permitionSTR);
                     }
 
-                    // ////printf("read user SMS %s\n", file_contents_Users);
+                    // printf("read user SMS %s\n", file_contents_Users);
                     return file_contents_Users;
                 }
                 else if (user_Get_ValidateData.permition == '0')
@@ -4185,7 +4158,7 @@ uint8_t Myuser_delete_ALLUser()
     nvs_iterator_t it;
     it = nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
 
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
 
     while (it != NULL)
     {
@@ -4193,15 +4166,15 @@ uint8_t Myuser_delete_ALLUser()
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
         get_Data_Users_From_Storage(info.key, &value);
 
-        // ////printf("  * value: %s\n", value);
+        // printf("  * value: %s\n", value);
     }
 
     it = nvs_entry_find("keys", NVS_WIEGAND_CODES_GUEST_NAMESPACE, NVS_TYPE_STR);
 
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
 
     while (it != NULL)
     {
@@ -4310,7 +4283,7 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
             else
             {
                 free(myUser_newHour);
-                // ////printf(ERROR_INPUT_DATA);
+                // printf(ERROR_INPUT_DATA);
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
         }
@@ -4318,11 +4291,11 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
     else
     {
         free(myUser_newHour);
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
-    // ////printf("startHour  new date %s, %d\n", startHour, strlen(startHour));
-    // ////printf("endHour  new date %s, %d\n", endHour, strlen(endHour));
+    // printf("startHour  new date %s, %d\n", startHour, strlen(startHour));
+    // printf("endHour  new date %s, %d\n", endHour, strlen(endHour));
     if (((strlen(endHour) + strlen(startHour)) == 8) /* && (atoi(endHour) < 2400) && (atoi(startHour) < 2400) */)
     {
 
@@ -4331,7 +4304,7 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
         int final_H = (endHour[0] - '0') * 10 + (endHour[1] - '0');
         int final_M = (endHour[2] - '0') * 10 + (endHour[3] - '0');
 
-        // ////printf("\n\n inicial_H - %d, inicial_M - %d, final_H - %d,final_M - %d\n\n", inicial_H, inicial_M, final_H, final_M);
+        // printf("\n\n inicial_H - %d, inicial_M - %d, final_H - %d,final_M - %d\n\n", inicial_H, inicial_M, final_H, final_M);
 
         if (final_H < 0 || final_H > 23 || final_M < 0 || final_M > 59)
         {
@@ -4341,7 +4314,7 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
 
         if (inicial_H < 0 || inicial_H > 23 || inicial_M < 0 || inicial_M > 59)
         {
-            // ////printf("\n\n starthour tttt - %c, %c, %c, %c\n\n", startHour[0], startHour[1], startHour[2], startHour[3]);
+            // printf("\n\n starthour tttt - %c, %c, %c, %c\n\n", startHour[0], startHour[1], startHour[2], startHour[3]);
             free(myUser_newHour);
             return return_Json_SMS_Data("ERROR_WRONG_START_TIME");
         }
@@ -4349,18 +4322,18 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
         if (!strcmp(endHour, startHour))
         {
             free(myUser_newHour);
-            // ////printf(ERROR_INPUT_DATA);
+            // printf(ERROR_INPUT_DATA);
             return return_Json_SMS_Data("ERROR_INPUT_DATA");
         }
 
-        // ////printf("phone number new date %s\n", phone_Number);
-        // ////printf("startHour  new date %s\n", startHour);
-        // ////printf("endHour  new date %s\n", endHour);
+        // printf("phone number new date %s\n", phone_Number);
+        // printf("startHour  new date %s\n", startHour);
+        // printf("endHour  new date %s\n", endHour);
 
         memset(file_contents_Users, 0, sizeof(file_contents_Users));
         if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
         {
-            // ////printf("endHour  filecontents %s\n", file_contents_Users);
+            // printf("endHour  filecontents %s\n", file_contents_Users);
             parse_ValidateData_User(file_contents_Users, myUser_newHour);
 
             if (myUser_newHour->permition == '1' || myUser_newHour->permition == '2')
@@ -4378,7 +4351,7 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
                 }
             }
 
-            // ////printf("myUser_newDate week  %s\n", myUser_newHour->week);
+            // printf("myUser_newDate week  %s\n", myUser_newHour->week);
 
             memset(myUser_newHour->start.hour, 0, sizeof(myUser_newHour->start.hour));
             memset(myUser_newHour->end.hour, 0, sizeof(myUser_newHour->end.hour));
@@ -4386,15 +4359,15 @@ char *MyUser_new_hour(uint8_t BLE_SMS_Indication, char *payload, mqtt_informatio
             memcpy(myUser_newHour->start.hour, startHour, sizeof(startHour));
             memcpy(myUser_newHour->end.hour, endHour, sizeof(endHour));
 
-            // ////printf("myUser_newDate startHour   %s\n", myUser_newHour->start.hour);
-            // ////printf("myUser_newDate.end %s\n", myUser_newHour->end.hour);
+            // printf("myUser_newDate startHour   %s\n", myUser_newHour->start.hour);
+            // printf("myUser_newDate.end %s\n", myUser_newHour->end.hour);
 
             replaceUser(myUser_newHour);
             memset(file_contents_Users, 0, sizeof(file_contents_Users));
             memset(aux_FileContens, 0, sizeof(aux_FileContens));
             MyUser_Search_User(phone_Number, aux_FileContens);
 
-            // ////printf("file contents new pass %s\n", file_contents_Users);
+            // printf("file contents new pass %s\n", file_contents_Users);
 
             if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
             {
@@ -4488,7 +4461,7 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
             else
             {
                 free(myUser_newHour);
-                // ////printf(ERROR_INPUT_DATA);
+                // printf(ERROR_INPUT_DATA);
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
         }
@@ -4496,11 +4469,11 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
     else
     {
         free(myUser_newHour);
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
 
-    // ////printf("weekdays %s\n", weekdays);
+    // printf("weekdays %s\n", weekdays);
     for (int i = 0; i < 7; i++)
     {
         if ((weekdays[i] != '0' && weekdays[i] != '1') || strlen(weekdays) != 7)
@@ -4514,9 +4487,9 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
 
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
-        // ////printf("endHour  filecontents %s\n", file_contents_Users);
+        // printf("endHour  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, myUser_newHour);
-        // ////printf("myUser_newDate week  %s\n", myUser_newHour->week);
+        // printf("myUser_newDate week  %s\n", myUser_newHour->week);
 
         if (myUser_newHour->permition == '1' || myUser_newHour->permition == '2')
         {
@@ -4537,7 +4510,7 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
 
         memcpy(myUser_newHour->week, weekdays, sizeof(weekdays));
 
-        // //printf("myUser_newDate weekdays %s\n", myUser_newHour->week);
+        // printf("myUser_newDate weekdays %s\n", myUser_newHour->week);
 
         replaceUser(myUser_newHour);
         memset(file_contents_Users, 0, sizeof(file_contents_Users));
@@ -4550,7 +4523,7 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
 
             // MyUser_Search_User(phone_Number, aux_FileContens);
             erase_Password_For_Rsp(aux_FileContens, file_contents_Users);
-            // ////printf("file contents new pass %s\n", file_contents_Users);
+            // printf("file contents new pass %s\n", file_contents_Users);
             return file_contents_Users;
         }
         else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -4577,7 +4550,7 @@ char *MyUser_new_WeekDays(uint8_t BLE_SMS_Indication, char *payload, mqtt_inform
 
             sprintf(file_contents_Users, return_Json_SMS_Data("DAYS_OF_THE_WEEK_WITH_ACCESS_HAS_BEEN_UPDATED_TO"), phone_Number, auxWeekdays);
 
-            // ////printf("\nweekdays file cont %s\n", file_contents_Users);
+            // printf("\nweekdays file cont %s\n", file_contents_Users);
             free(myUser_newHour);
             return file_contents_Users;
         }
@@ -4623,7 +4596,7 @@ char *MyUser_new_UserName(uint8_t BLE_SMS_Indication, char *payload, char *mrsp,
 
     uint8_t aux = 0;
     uint8_t strIndex = 0;
-    // ////printf("set name 1111 %s\n", firstName);
+    // printf("set name 1111 %s\n", firstName);
 
     if (dotCounter == 1)
     {
@@ -4663,7 +4636,7 @@ char *MyUser_new_UserName(uint8_t BLE_SMS_Indication, char *payload, char *mrsp,
             else
             {
                 sprintf(mrsp, "%s", return_Json_SMS_Data("ERROR_INPUT_DATA"));
-                // ////printf(ERROR_INPUT_DATA);
+                // printf(ERROR_INPUT_DATA);
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
         }
@@ -4677,11 +4650,11 @@ char *MyUser_new_UserName(uint8_t BLE_SMS_Indication, char *payload, char *mrsp,
     else
     {
         sprintf(mrsp, "%s", return_Json_SMS_Data("ERROR_INPUT_DATA"));
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
 
-    // ////printf("firsname %s\n", firstName);
+    // printf("firsname %s\n", firstName);
 
     memset(file_contents_Users, 0, sizeof(file_contents_Users));
     /*  char auxPhoneNumber[20];
@@ -4690,12 +4663,12 @@ char *MyUser_new_UserName(uint8_t BLE_SMS_Indication, char *payload, char *mrsp,
 
      sprintf(phone_Number,"%s",check_IF_haveCountryCode(auxPhoneNumber));
 
-     //////printf("") */
+     //printf("") */
 
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
 
-        // ////printf("endHour  filecontents %s\n", file_contents_Users);
+        // printf("endHour  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, myUser_newName);
 
         if (myUser_newName->permition >= permition && permition != '2')
@@ -4704,24 +4677,24 @@ char *MyUser_new_UserName(uint8_t BLE_SMS_Indication, char *payload, char *mrsp,
             return return_Json_SMS_Data("ERROR_USER_NOT_PERMITION");
         }
 
-        // ////printf("aux_line_user2 %d\n", line);
+        // printf("aux_line_user2 %d\n", line);
         memset(myUser_newName->firstName, 0, sizeof(myUser_newName->firstName));
         sprintf(myUser_newName->firstName, "%s", firstName);
 
-        // ////printf("myUser_newName->firstName %s\n", myUser_newName->firstName);
+        // printf("myUser_newName->firstName %s\n", myUser_newName->firstName);
 
         replaceUser(myUser_newName);
-        // ////printf("aux_line_user2 11\n");
+        // printf("aux_line_user2 11\n");
         memset(file_contents_Users, 0, sizeof(file_contents_Users));
         memset(aux_FileContens, 0, sizeof(aux_FileContens));
-        // ////printf("aux_line_user2 11\n");
+        // printf("aux_line_user2 11\n");
 
         if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
         {
             MyUser_Search_User(phone_Number, aux_FileContens);
 
             erase_Password_For_Rsp(aux_FileContens, file_contents_Users);
-            // ////printf("file contents new pass %s\n", file_contents_Users);
+            // printf("file contents new pass %s\n", file_contents_Users);
             sprintf(mrsp, "%s", file_contents_Users);
         }
         else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -4836,7 +4809,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
             }
             else
             {
-                // ////printf(ERROR_INPUT_DATA);
+                // printf(ERROR_INPUT_DATA);
                 strcpy(mrsp, return_Json_SMS_Data("ERROR_INPUT_DATA"));
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
@@ -4844,7 +4817,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
     }
     else
     {
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         strcpy(mrsp, return_Json_SMS_Data("ERROR_INPUT_DATA"));
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
@@ -4892,7 +4865,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
         }
     }
 
-    // ////printf("start date %s\n", startDate);
+    // printf("start date %s\n", startDate);
 
     if (strlen(startDate) != 6)
     {
@@ -4921,32 +4894,32 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
     day[1] = startDate[5];
 
     int auxYear = 2000 + atoi(year);
-    // ////printf("auxyear %d, year %s\n", auxYear, year);
-    // ////printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
+    // printf("auxyear %d, year %s\n", auxYear, year);
+    // printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
     //   check year
     if (auxYear >= 2021 && auxYear < 2100)
     {
 
-        // ////printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
+        // printf("Date --.%d %d %d\n", auxYear, atoi(month), atoi(day));
         //   check month
         if (atoi(month) >= 1 && atoi(month) <= 12)
         {
             // check days
             if ((atoi(day) >= 1 && atoi(day) <= 31) && (atoi(month) == 1 || atoi(month) == 3 || atoi(month) == 5 || atoi(month) == 7 || atoi(month) == 8 || atoi(month) == 10 || atoi(month) == 12))
             {
-                // ////printf("Date is valid.%d %d %d\n", auxYear, atoi(month), atoi(day));
+                // printf("Date is valid.%d %d %d\n", auxYear, atoi(month), atoi(day));
             }
             else if ((atoi(day) >= 1 && atoi(day) <= 30) && (atoi(month) == 4 || atoi(month) == 6 || atoi(month) == 9 || atoi(month) == 11))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else if ((atoi(day) >= 1 && atoi(day) <= 28) && (atoi(month) == 2))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else if ((atoi(day) == 29 && atoi(month) == 2) && ((auxYear % 400 == 0) || ((auxYear % 4 == 0) && (auxYear % 100 != 0))))
             {
-                // ////printf("Date is valid.\n");
+                // printf("Date is valid.\n");
             }
             else
             {
@@ -4956,14 +4929,14 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
         }
         else
         {
-            // ////printf("Month is not valid.\n");
+            // printf("Month is not valid.\n");
             //  strcpy(mrsp, return_Json_SMS_Data("ERROR_MONTH_IS_NOT_VALID"));
             return return_Json_SMS_Data("ERROR_MONTH_IS_NOT_VALID");
         }
     }
     else
     {
-        // ////printf("Year is not valid.\n");
+        // printf("Year is not valid.\n");
         //  strcpy(mrsp, return_Json_SMS_Data("ERROR_YEAR_IS_NOT_VALID"));
         return return_Json_SMS_Data("ERROR_YEAR_IS_NOT_VALID");
     }
@@ -4971,7 +4944,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
 
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
-        // ////printf("limit time  filecontents %s\n", file_contents_Users);
+        // printf("limit time  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, &myUser_newDate);
 
         if (myUser_newDate.permition == '1' || myUser_newDate.permition == '2')
@@ -4989,7 +4962,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
             }
         }
 
-        // ////printf("myUser_newDate.end.hour 1  %s\n", myUser_newDate.end.hour);
+        // printf("myUser_newDate.end.hour 1  %s\n", myUser_newDate.end.hour);
 
         if (dotCounter == 2)
         {
@@ -4998,19 +4971,19 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
             // endDays[2] = '\0';
             sprintf(myUser_newDate.end.days, "%s", endDays);
             // myUser_newDate.end.days[2] = '\0';
-            // ////printf("\n\n change date time limit time - %s - %s \n\n", endDays, myUser_newDate.end.days);
+            // printf("\n\n change date time limit time - %s - %s \n\n", endDays, myUser_newDate.end.days);
         }
 
         memset(myUser_newDate.start.date, 0, sizeof(myUser_newDate.start.date));
 
         memcpy(myUser_newDate.start.date, startDate, sizeof(startDate));
 
-        // ////printf("myUser_newDate->start.date %s\n", myUser_newDate->start.date);
+        // printf("myUser_newDate->start.date %s\n", myUser_newDate->start.date);
 
         replaceUser(&myUser_newDate);
 
         MyUser_Search_User(phone_Number, file_contents_Users);
-        // ////printf("file contents new pass %s\n", file_contents_Users);
+        // printf("file contents new pass %s\n", file_contents_Users);
         //   parse_ValidateData_User(file_contents_Users, &myUser_newHour);
 
         if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
@@ -5018,7 +4991,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
             memset(aux_FileContens, 0, sizeof(aux_FileContens));
             erase_Password_For_Rsp(file_contents_Users, aux_FileContens);
             // asprintf(&mrsp, "%s", aux_FileContens);
-            //  ////printf("file contents new date ble%s\n", file_contents_Users);
+            //  printf("file contents new date ble%s\n", file_contents_Users);
             return aux_FileContens;
         }
         else if (BLE_SMS_Indication == SMS_INDICATION)
@@ -5058,7 +5031,7 @@ char *MyUser_new_StartDate(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
 
             memset(file_contents_Users, 0, sizeof(file_contents_Users));
             sprintf(&file_contents_Users, return_Json_SMS_Data("START_DATE_HAS_BEEN_CHANGED_TO"), USR_name, phone_Number, startDate[0], startDate[1], startDate[2], startDate[3], startDate[4], startDate[5], endDate);
-            // ////printf("file contents new pass %s\n", file_contents_Users);
+            // printf("file contents new pass %s\n", file_contents_Users);
             //   free(myUser_newDate);
             return file_contents_Users;
         }
@@ -5136,14 +5109,14 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
             }
             else
             {
-                // ////printf("erro payload 11 new date\n");
+                // printf("erro payload 11 new date\n");
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
         }
     }
     else
     {
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
 
@@ -5153,7 +5126,7 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
 
-    // ////printf("limit time %s\n", Limit_Time);
+    // printf("limit time %s\n", Limit_Time);
     for (int i = 0; i < strlen(Limit_Time); i++)
     {
         if ((Limit_Time[i] > '9' || Limit_Time[i] < '0') || strlen(Limit_Time) > 2)
@@ -5174,7 +5147,7 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
 
-        // ////printf("limit time  filecontents %s\n", file_contents_Users);
+        // printf("limit time  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, myUser_newHour);
 
         if (myUser_newHour->permition == '1' || myUser_newHour->permition == '2')
@@ -5193,7 +5166,7 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
         }
 
         memset(myUser_newHour->end.days, 0, strlen(myUser_newHour->end.days));
-        // ////printf("myUser_newHour->end.hour %s\n", myUser_newHour->end.hour);
+        // printf("myUser_newHour->end.hour %s\n", myUser_newHour->end.hour);
         char endHour[5];
         sprintf(endHour, "%s", myUser_newHour->end.hour);
         sprintf(myUser_newHour->end.days, "%s", Limit_Time);
@@ -5205,7 +5178,7 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
         replaceUser(myUser_newHour);
 
         MyUser_Search_User(phone_Number, file_contents_Users);
-        // ////printf("file contents new pass %s\n", file_contents_Users);
+        // printf("file contents new pass %s\n", file_contents_Users);
         //   parse_ValidateData_User(file_contents_Users, &myUser_newHour);
 
         if (BLE_SMS_INDICATION == BLE_INDICATION || BLE_SMS_INDICATION == UDP_INDICATION)
@@ -5230,7 +5203,7 @@ char *MyUser_new_LimitTime(uint8_t BLE_SMS_INDICATION, char *payload, mqtt_infor
 
             sprintf(file_contents_Users, return_Json_SMS_Data("USER_WITH_LIMITED_TIME_UP_TO"), myUser_newHour->firstName, phone_Number, feedback_String_Date[0], feedback_String_Date[1], feedback_String_Date[2], feedback_String_Date[3], feedback_String_Date[4], feedback_String_Date[5]);
             free(myUser_newHour);
-            // ////printf("\n\nlast time 11\n\n");
+            // printf("\n\nlast time 11\n\n");
             return file_contents_Users;
         }
         else
@@ -5266,14 +5239,14 @@ char *MyUser_reset_LimitTime(uint8_t BLE_SMS_Indication, char *payload, mqtt_inf
         }
         else
         {
-            // ////printf(ERROR_INPUT_DATA);
+            // printf(ERROR_INPUT_DATA);
             return return_Json_SMS_Data("ERROR_WRONG_PHONE_NUMBER");
         }
     }
 
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
-        // ////printf("limit time  filecontents %s\n", file_contents_Users);
+        // printf("limit time  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, myUser_newHour);
 
         if (myUser_newHour->permition == '1' || myUser_newHour->permition == '2')
@@ -5290,14 +5263,14 @@ char *MyUser_reset_LimitTime(uint8_t BLE_SMS_Indication, char *payload, mqtt_inf
                 return return_Json_SMS_Data("ERROR_THIS_IMPOSSIBLE_CHANGE_OWNER");
             }
         }
-        // ////printf("myUser_newDate limit days  %s\n", myUser_newHour->end.days);
+        // printf("myUser_newDate limit days  %s\n", myUser_newHour->end.days);
 
         memset(myUser_newHour->end.days, 0, sizeof(myUser_newHour->end.days));
 
         myUser_newHour->end.days[0] = '*';
         myUser_newHour->end.days[1] = 0;
 
-        // ////printf("myUser_newHour->end.days %s\n", myUser_newHour->end.days);
+        // printf("myUser_newHour->end.days %s\n", myUser_newHour->end.days);
 
         replaceUser(myUser_newHour);
 
@@ -5358,7 +5331,7 @@ char *MyUser_get_startDate(uint8_t BLE_SMS_Indication, char *payload)
         }
         else
         {
-            // ////printf(ERROR_INPUT_DATA);
+            // printf(ERROR_INPUT_DATA);
             return return_Json_SMS_Data("ERROR_INPUT_DATA");
         }
     }
@@ -5366,7 +5339,7 @@ char *MyUser_get_startDate(uint8_t BLE_SMS_Indication, char *payload)
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
         memset(myUser_newDate.start.date, 0, sizeof(myUser_newDate.start.date));
-        // ////printf("limit time  filecontents %s\n", file_contents_Users);
+        // printf("limit time  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, &myUser_newDate);
 
         if (myUser_newDate.permition == '1' || myUser_newDate.permition == '2')
@@ -5385,7 +5358,7 @@ char *MyUser_get_startDate(uint8_t BLE_SMS_Indication, char *payload)
         if (BLE_SMS_Indication == BLE_INDICATION)
         {
 
-            // ////printf("myUser_get date  %s\n", myUser_newDate.start.date);
+            // printf("myUser_get date  %s\n", myUser_newDate.start.date);
             sprintf(file_contents_Users, "%s", myUser_newDate.start.date);
 
             return file_contents_Users;
@@ -5432,7 +5405,7 @@ char *MyUser_get_LimitTime(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
         }
         else
         {
-            // ////printf(ERROR_INPUT_DATA);
+            // printf(ERROR_INPUT_DATA);
             sprintf(mrsp, "%s", return_Json_SMS_Data("ERROR_INPUT_DATA"));
             return mrsp;
         }
@@ -5440,7 +5413,7 @@ char *MyUser_get_LimitTime(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
 
     if (MyUser_Search_User(phone_Number, file_contents_Users) == ESP_OK)
     {
-        // ////printf("limit time  filecontents %s\n", file_contents_Users);
+        // printf("limit time  filecontents %s\n", file_contents_Users);
         parse_ValidateData_User(file_contents_Users, myUser_newHour);
 
         if (myUser_newHour->permition == '1' || myUser_newHour->permition == '2')
@@ -5482,8 +5455,8 @@ char *MyUser_get_LimitTime(uint8_t BLE_SMS_Indication, char *payload, char *mrsp
                 int limitDay = parseDatetoInt(atoi(myUser_newHour->start.date), atoi(myUser_newHour->end.days));
                 char feedback_String_Date[10];
                 sprintf(feedback_String_Date, "%d", limitDay);
-                // ////printf("\nstruct date - %d , struct day - %d\n", atoi(myUser_newHour->start.date), atoi(myUser_newHour->end.days));
-                // ////printf("\n limit day %d\n", limitDay);
+                // printf("\nstruct date - %d , struct day - %d\n", atoi(myUser_newHour->start.date), atoi(myUser_newHour->end.days));
+                // printf("\n limit day %d\n", limitDay);
 
                 if (!strcmp(myUser_newHour->firstName, "S/N"))
                 {
@@ -5557,29 +5530,29 @@ uint8_t sendUDP_all_User_funtion()
     uint8_t label_usersUDP_send = 0;
 
     int count = 0;
-    // ////printf("\nLIST USERS:\n");
+    // printf("\nLIST USERS:\n");
     nvs_iterator_t it = NULL; //= nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
     char value[200];
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
     int64_t start_time = esp_timer_get_time();
     int file_senddata_Index = 1;
 
     if (!send_UDP_Send((char *)("*"), ""))
     {
-        // ////printf("\n\n\n send udp ççççç \n\n\n");
+        // printf("\n\n\n send udp ççççç \n\n\n");
         return 0;
     }
 
     vTaskDelay(pdMS_TO_TICKS(500));
-    // ////printf("\n\n\n send udp 44llll44 \n\n\n");
+    // printf("\n\n\n send udp 44llll44 \n\n\n");
     for (int i = 3; i > 0; i--)
     {
-        // ////printf("\n\n\n send udp 4444 \n\n\n");
+        // printf("\n\n\n send udp 4444 \n\n\n");
 
         if (i - 1 == 1)
         {
 
-            // //printf("\n\n\n send udp 1234 admin \n\n\n");
+            // printf("\n\n\n send udp 1234 admin \n\n\n");
             it = nvs_entry_find("keys", NVS_ADMIN_NAMESPACE, NVS_TYPE_STR);
 
             /* else
@@ -5590,14 +5563,14 @@ uint8_t sendUDP_all_User_funtion()
         else if (i - 1 == 2)
         {
 
-            // ////printf("\n\n\n send udp 4566 \n\n\n");
+            // printf("\n\n\n send udp 4566 \n\n\n");
             it = nvs_entry_find("keys", NVS_OWNER_NAMESPACE, NVS_TYPE_STR);
         }
         else if (i - 1 == 0)
         {
-            // ////printf("\n NVS_USERS_NAMESPACE 1 \n");
+            // printf("\n NVS_USERS_NAMESPACE 1 \n");
 
-            // ////printf("\n NVS_USERS_NAMESPACE 2 \n");
+            // printf("\n NVS_USERS_NAMESPACE 2 \n");
             it = nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
         }
 
@@ -5606,7 +5579,7 @@ uint8_t sendUDP_all_User_funtion()
 
             nvs_entry_info(it, &info);
             it = nvs_entry_next(it);
-            // ////printf("key '%s', type '%d' \n", info.key, info.type);
+            // printf("key '%s', type '%d' \n", info.key, info.type);
             get_Data_Users_From_Storage(info.key, &value);
 
             if (cpy_message.BLE_UDP_Indication == UDP_INDICATION)
@@ -5614,10 +5587,10 @@ uint8_t sendUDP_all_User_funtion()
 
                 if (file_senddata_Index == 1)
                 {
-                    // ////printf("\n\n send udp index = 1\n\n");
+                    // printf("\n\n send udp index = 1\n\n");
                     sprintf(ch, "%s", "UR.G.* ");
                     erase_Password_For_Rsp(value, aux_data);
-                    // ////printf("\n\n send udp index = 2 - %s\n\n", aux_data);
+                    // printf("\n\n send udp index = 2 - %s\n\n", aux_data);
                     sprintf(ch + strlen(ch), "%s", aux_data);
                     sprintf(ch + strlen(ch), "%s", "\n\0");
                     file_senddata_Index++;
@@ -5631,14 +5604,14 @@ uint8_t sendUDP_all_User_funtion()
                     sprintf(temp, "%s", ch);
                     sprintf(temp + strlen(temp), "%s", aux_data);
                     sprintf(temp + strlen(temp), "%s", "\n\0");
-                    // ////printf("\n\n send udp index = 3 - %s\n\n", aux_data);
-                    //  ////printf("\n\n send udp jjjjj - %s\n\n", temp);
+                    // printf("\n\n send udp index = 3 - %s\n\n", aux_data);
+                    //  printf("\n\n send udp jjjjj - %s\n\n", temp);
                     memset(value, 0, 200);
                     memset(aux_data, 0, 509);
 
                     if (file_senddata_Index == 5)
                     {
-                        // ////printf("\n\n send udp all users\n\n");
+                        // printf("\n\n send udp all users\n\n");
                         if (strlen(temp) > 0)
                         {
                             file_senddata_Index = 1;
@@ -5659,7 +5632,7 @@ uint8_t sendUDP_all_User_funtion()
 
                     memset(ch, 0, 512);
                     strcpy(ch, temp); // Copiar o conteúdo concatenado para ch
-                    // ////printf("\n\n send udp ch - %s\n\n", ch);
+                    // printf("\n\n send udp ch - %s\n\n", ch);
                     memset(temp, 0, 512); // Limpar o buffer temporário
                     // ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
                     // ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -5667,7 +5640,7 @@ uint8_t sendUDP_all_User_funtion()
                     // ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
                     //  vTaskDelay(pdMS_TO_TICKS((30)));
 
-                    // ////printf("filee %s\n", ch);
+                    // printf("filee %s\n", ch);
                 }
             }
         }
@@ -5676,7 +5649,7 @@ uint8_t sendUDP_all_User_funtion()
         {
             if (strlen(ch) > 0 && file_senddata_Index > 1)
             {
-                // ////printf("filee tmp 123 %s\n", ch);
+                // printf("filee tmp 123 %s\n", ch);
                 if (!send_UDP_Send(ch, ""))
                 {
                     free(it);
@@ -5724,10 +5697,10 @@ void ReadALLUsers_task(void *pvParameter)
     uint8_t label_usersUDP_send = 0;
 
     int count = 0;
-    // ////printf("\nLIST USERS:\n");
+    // printf("\nLIST USERS:\n");
     nvs_iterator_t it = NULL; //= nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
     char value[200];
-    // ////printf("Iterate NVS\n");
+    // printf("Iterate NVS\n");
     int64_t start_time = esp_timer_get_time();
     int file_senddata_Index = 1;
 
@@ -5757,10 +5730,10 @@ void ReadALLUsers_task(void *pvParameter)
         }
         else if (i - 1 == 0)
         {
-            // ////printf("\n NVS_USERS_NAMESPACE 1 \n");
+            // printf("\n NVS_USERS_NAMESPACE 1 \n");
             if (((i - 1) + 48) < cpy_message.usr_perm)
             {
-                // ////printf("\n NVS_USERS_NAMESPACE 2 \n");
+                // printf("\n NVS_USERS_NAMESPACE 2 \n");
                 it = nvs_entry_find("keys", NVS_USERS_NAMESPACE, NVS_TYPE_STR);
             }
             /*  else
@@ -5774,7 +5747,7 @@ void ReadALLUsers_task(void *pvParameter)
 
             nvs_entry_info(it, &info);
             it = nvs_entry_next(it);
-            // //printf("key '%s', type '%d' \n", info.key, info.type);
+            // printf("key '%s', type '%d' \n", info.key, info.type);
             get_Data_Users_From_Storage(info.key, &value);
 
             if (cpy_message.BLE_UDP_Indication == UDP_INDICATION)
@@ -5782,10 +5755,10 @@ void ReadALLUsers_task(void *pvParameter)
 
                 if (file_senddata_Index == 1)
                 {
-                    // ////printf("\n\n send udp index = 1\n\n");
+                    // printf("\n\n send udp index = 1\n\n");
                     sprintf(ch, "%s", "UR.G.* ");
                     erase_Password_For_Rsp(value, aux_data);
-                    // ////printf("\n\n send udp index = 2 - %s\n\n", aux_data);
+                    // printf("\n\n send udp index = 2 - %s\n\n", aux_data);
                     sprintf(ch + strlen(ch), "%s", aux_data);
                     sprintf(ch + strlen(ch), "%s", "\n\0");
                     file_senddata_Index++;
@@ -5799,14 +5772,14 @@ void ReadALLUsers_task(void *pvParameter)
                     sprintf(temp, "%s", ch);
                     sprintf(temp + strlen(temp), "%s", aux_data);
                     sprintf(temp + strlen(temp), "%s", "\n\0");
-                    // ////printf("\n\n send udp index = 3 - %s\n\n", aux_data);
-                    // ////printf("\n\n send udp jjjjj - %s\n\n", temp);
+                    // printf("\n\n send udp index = 3 - %s\n\n", aux_data);
+                    // printf("\n\n send udp jjjjj - %s\n\n", temp);
                     memset(value, 0, 200);
                     memset(aux_data, 0, 509);
 
                     if (file_senddata_Index == 5)
                     {
-                        // ////printf("\n\n send udp all users\n\n");
+                        // printf("\n\n send udp all users\n\n");
                         if (strlen(temp) > 0)
                         {
                             file_senddata_Index = 1;
@@ -5826,7 +5799,7 @@ void ReadALLUsers_task(void *pvParameter)
 
                     memset(ch, 0, 512);
                     strcpy(ch, temp); // Copiar o conteúdo concatenado para ch
-                    // ////printf("\n\n send udp ch - %s\n\n", ch);
+                    // printf("\n\n send udp ch - %s\n\n", ch);
                     memset(temp, 0, 512); // Limpar o buffer temporário
                     // ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
                     // ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -5834,7 +5807,7 @@ void ReadALLUsers_task(void *pvParameter)
                     // ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
                     //  vTaskDelay(pdMS_TO_TICKS((30)));
 
-                    // ////printf("filee %s\n", ch);
+                    // printf("filee %s\n", ch);
                 }
             }
             else
@@ -5864,7 +5837,7 @@ void ReadALLUsers_task(void *pvParameter)
                         break;
                     }
 
-                    // ////printf("%s", ch);
+                    // printf("%s", ch);
 
                     memset(ch, 0, 512);
                     // ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
@@ -5873,21 +5846,21 @@ void ReadALLUsers_task(void *pvParameter)
                     // ESP_LOGI("TAG", "free heap memory                : %d", heap_caps_get_free_size(MALLOC_CAP_8BIT));
                     //  vTaskDelay(pdMS_TO_TICKS((30)));
                     xSemaphoreTake(rdySem, pdMS_TO_TICKS(3500)); // Wait until slave is ready
-                    // ////printf("filee %s\n", ch);
+                    // printf("filee %s\n", ch);
                 }
-                // ////printf("\nvalue: %s\n", value);
+                // printf("\nvalue: %s\n", value);
                 vTaskDelay(pdMS_TO_TICKS(50));
             }
         }
 
-        // ////printf("filee tmp %s\n", ch);
-        // ////printf("filee file_senddata_Index %d\n", file_senddata_Index);
+        // printf("filee tmp %s\n", ch);
+        // printf("filee file_senddata_Index %d\n", file_senddata_Index);
 
         if (cpy_message.BLE_UDP_Indication == UDP_INDICATION)
         {
             if (strlen(ch) > 0 && file_senddata_Index > 1 /* && file_senddata_Index < 5 */)
             {
-                // ////printf("filee tmp 123 %s\n", ch);
+                // printf("filee tmp 123 %s\n", ch);
                 if (!send_UDP_Send(ch, ""))
                 {
                     label_BLE_UDP_send = 1;
@@ -5908,7 +5881,7 @@ void ReadALLUsers_task(void *pvParameter)
 
         file_senddata_Index = 1;
 
-        // ////printf("%s", ch);
+        // printf("%s", ch);
 
         memset(ch, 0, 200);
         // vTaskDelay(pdMS_TO_TICKS((30)));
@@ -5980,7 +5953,7 @@ char *MyUser_Set_Relay_Restrition(MyUser *user_validateData, uint8_t BLE_SMS_Ind
             {
                 if (strIndex >= 1)
                 {
-                    // ////printf(ERROR_INPUT_DATA);
+                    // printf(ERROR_INPUT_DATA);
                     free(myUser_new_Relay_Restriction);
                     return return_Json_SMS_Data("ERROR_INPUT_DATA");
                 }
@@ -5989,7 +5962,7 @@ char *MyUser_Set_Relay_Restrition(MyUser *user_validateData, uint8_t BLE_SMS_Ind
             }
             else
             {
-                // ////printf(ERROR_INPUT_DATA);
+                // printf(ERROR_INPUT_DATA);
                 free(myUser_new_Relay_Restriction);
                 return return_Json_SMS_Data("ERROR_INPUT_DATA");
             }
@@ -5997,12 +5970,12 @@ char *MyUser_Set_Relay_Restrition(MyUser *user_validateData, uint8_t BLE_SMS_Ind
     }
     else
     {
-        // ////printf(ERROR_INPUT_DATA);
+        // printf(ERROR_INPUT_DATA);
         free(myUser_new_Relay_Restriction);
         return return_Json_SMS_Data("ERROR_INPUT_DATA");
     }
 
-    // ////printf("\n\nMyUser_Set_Relay_Restrition phone %s\n\n", phone_Number);
+    // printf("\n\nMyUser_Set_Relay_Restrition phone %s\n\n", phone_Number);
 
     if (MyUser_Search_User(phone_Number, dataContents) == ESP_OK)
     {
@@ -6031,7 +6004,7 @@ char *MyUser_Set_Relay_Restrition(MyUser *user_validateData, uint8_t BLE_SMS_Ind
         else
         {
             myUser_new_Relay_Restriction->relayPermition = permition;
-            // ////printf("CHANGE RELAY RECTRITION 1\n");
+            // printf("CHANGE RELAY RECTRITION 1\n");
             if (replaceUser(myUser_new_Relay_Restriction) == ESP_OK)
             {
                 if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)

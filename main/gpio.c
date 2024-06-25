@@ -47,14 +47,14 @@ static QueueHandle_t gpio_evt_queue = NULL;
 static void IRAM_ATTR gpio_isr_handler(void *arg)
 {
     uint32_t gpio_num = (uint32_t)arg;
-    // ////printf("GPIO[%d]\n", gpio_num);
+    // printf("GPIO[%d]\n", gpio_num);
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
 
 static void gpio_task_example(void *arg)
 {
     uint32_t io_num;
-    // ////printf("gpio_task_example\n");
+    // printf("gpio_task_example\n");
     label_Alarm_I2_Task_Activated = 0;
     last_Input_SIMPRE = gpio_get_level(GPIO_INPUT_IO_SIMPRE);
 
@@ -62,7 +62,7 @@ static void gpio_task_example(void *arg)
     {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY))
         {
-            // ////printf("GPIO[%d] \n", io_num);
+            // printf("GPIO[%d] \n", io_num);
             Input_GPIO_Debounce(io_num);
         }
     }
@@ -79,7 +79,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
 
     switch (io_num)
     {
-        ////////printf("GPIO[%d] intr, val: %d\n", io_num, input_nowState);
+        ////printf("GPIO[%d] intr, val: %d\n", io_num, input_nowState);
     case CONFIG_GPIO_INPUT_0:
 
         break;
@@ -90,11 +90,11 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
 
     case GPIO_INPUT_IO_EG91_STATUS:
 
-        // ////printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+        // printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
         if (((now - debounce_Time_Input2) / 1000) > INPUT_GPIO_TIME_DEBOUNCE)
         {
             debounce_Time_Input2 = now;
-            // ////printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+            // printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
         }
 
         break;
@@ -106,7 +106,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
         if (((now - debounce_Time_Input3) / 1000) > INPUT_GPIO_TIME_DEBOUNCE)
         {
 
-            // ////printf("\n\nGPIO_INPUT_IO_CD_SDCARD\n\n");
+            // printf("\n\nGPIO_INPUT_IO_CD_SDCARD\n\n");
 
             last_Input_SDCARD = SDCard_Value;
         }
@@ -115,19 +115,19 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
 
     case GPIO_INPUT_RTC_ALARM:
 
-        // ////printf("fafasfasf GPIO[%d] intr, val: %d\n", GPIO_INPUT_RTC_ALARM, gpio_get_level(GPIO_INPUT_RTC_ALARM));
+        // printf("fafasfasf GPIO[%d] intr, val: %d\n", GPIO_INPUT_RTC_ALARM, gpio_get_level(GPIO_INPUT_RTC_ALARM));
         if (((now - debounce_Time_Input_RTC_ALARM) / 1000) > INPUT_GPIO_TIME_DEBOUNCE)
         {
             debounce_Time_Input_RTC_ALARM = now;
-            // ////printf("GPIO[%d] intr, val: %d\n", GPIO_INPUT_RTC_ALARM, gpio_get_level(GPIO_INPUT_RTC_ALARM));
+            // printf("GPIO[%d] intr, val: %d\n", GPIO_INPUT_RTC_ALARM, gpio_get_level(GPIO_INPUT_RTC_ALARM));
             if (!gpio_get_level(GPIO_INPUT_RTC_ALARM))
             {
 
-                // ////printf("\n\nGPIO_INPUT_RTC_ALARM 11\n\n");
+                // printf("\n\nGPIO_INPUT_RTC_ALARM 11\n\n");
                 xSemaphoreGive(rdySem_Control_refreshSystemTime_task);
                 // uint8_t data[7];
                 // PCF85_Readnow(data);
-                //  //////printf("\nRESET ALARM\n");
+                //  //printf("\nRESET ALARM\n");
                 //  EG91_send_AT_Command("AT+QLTS=1", "QLTS", 3000);
 
                 // EG91_send_AT_Command("AT+CCLK?", "OK", 1000);
@@ -140,7 +140,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
 
                 // enableAlarm();  // setAlarm(time, 99, 99, 99, 99);
             }
-            // ////printf("\n\nGPIO_INPUT_RTC_ALARM 22\n\n");
+            // printf("\n\nGPIO_INPUT_RTC_ALARM 22\n\n");
             break;
         }
 
@@ -150,24 +150,24 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
         {
             if (label_initSystem_SIMPRE == 1)
             {
-                //system_stack_high_water_mark("simpre0");
-                //printf("\n\nGPIO_INPUT_IO_SIMPRE = %d\n\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
+                // system_stack_high_water_mark("simpre0");
+                printf("\n\nGPIO_INPUT_IO_SIMPRE = %d\n\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
                 debounce_Time_Input_SIMPRE = now;
                 if (gpio_get_level(GPIO_INPUT_IO_SIMPRE) != last_Input_SIMPRE)
                 {
                     last_Input_SIMPRE = gpio_get_level(GPIO_INPUT_IO_SIMPRE);
 
-                    // ////printf("\n\n ENTER SIM CARD INSERT123\n\n");
+                    // printf("\n\n ENTER SIM CARD INSERT123\n\n");
                     if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
                     {
                         timer_pause(TIMER_GROUP_1, TIMER_0);
-                        ////////printf("\nsms or call %s\n", atcmd);
+                        ////printf("\nsms or call %s\n", atcmd);
                         // vTaskSuspend(xHandle_Timer_VerSystem);
                         give_rdySem_Control_Send_AT_Command();
                         update_ACT_TimerVAlue((double)RSSI_NOT_DETECT);
                         gpio_set_level(GPIO_OUTPUT_ACT, 1);
 
-                        // ////printf("\n\n ENTER SIM CARD INSERT\n\n");
+                        // printf("\n\n ENTER SIM CARD INSERT\n\n");
 
                         if (!gpio_get_level(GPIO_INPUT_IO_EG91_STATUS))
                         {
@@ -198,7 +198,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
                         RSSI_LED_TOOGLE = RSSI_NOT_DETECT;
                         update_ACT_TimerVAlue((double)RSSI_NOT_DETECT);
                         save_INT8_Data_In_Storage(NVS_QMTSTAT_LABEL, 0, nvs_System_handle);
-                        // ////printf("\n\n ENTER SIM CARD INSERT4444\n\n");
+                        // printf("\n\n ENTER SIM CARD INSERT4444\n\n");
 
                         last_Input_SIMPRE = gpio_get_level(GPIO_INPUT_IO_SIMPRE);
                         EG91_Power_OFF();
@@ -219,7 +219,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
             //     {
             //         uint8_t data[7];
             //         PCF85_Readnow(data);
-            //         //////printf("\nRESET ALARM\n");
+            //         //printf("\nRESET ALARM\n");
             //         time = data[0] + 3;
             //         if (time > 59)
             //         {
@@ -259,14 +259,14 @@ void task_refresh_SystemTime(void *pvParameter)
     for (;;)
     {
         xSemaphoreTake(rdySem_Control_refreshSystemTime_task, portMAX_DELAY);
-        // ////printf("\n\ntask_refresh_SystemTime 01 %d\n\n",label_Reset_Password_OR_System);
+        // printf("\n\ntask_refresh_SystemTime 01 %d\n\n",label_Reset_Password_OR_System);
 
-        // ////printf("\n\n pingTimeout aa %d\n\n",pingTimeout); //55
+        // printf("\n\n pingTimeout aa %d\n\n",pingTimeout); //55
 
         /*  if (label_Reset_Password_OR_System == 2)
          {
               pingTimeout++;
-             //////printf("\n\n pingTimeout ff %d\n\n",pingTimeout); //55
+             //printf("\n\n pingTimeout ff %d\n\n",pingTimeout); //55
              if (pingTimeout == 2)
              {
                 // EG91_UDP_Ping();
@@ -277,7 +277,7 @@ void task_refresh_SystemTime(void *pvParameter)
          } */
 
         get_RTC_System_Time();
-        // ////printf("\n\ntask_refresh_SystemTime 0 - %d\n\n", nowTime.time);
+        // printf("\n\ntask_refresh_SystemTime 0 - %d\n\n", nowTime.time);
 
         if (nvs_get_u32(nvs_System_handle, NVS_KEY_RESTART_SYSTEM, &restartSystem_time) != ESP_OK)
         {
@@ -285,11 +285,11 @@ void task_refresh_SystemTime(void *pvParameter)
             restartSystem_time = 303;
         }
 
-        // ////printf("\n\ntask_refresh_SystemTime 0 - %d - %d\n\n", nowTime.time, restartSystem_time);
+        // printf("\n\ntask_refresh_SystemTime 0 - %d - %d\n\n", nowTime.time, restartSystem_time);
 
-        // ////printf("\n\nR1 - %d R2 - %d I1 - %d I2 - %d\n\n",gpio_get_level(GPIO_OUTPUT_IO_0),gpio_get_level(GPIO_OUTPUT_IO_1),!gpio_get_level(CONFIG_GPIO_INPUT_0),!gpio_get_level(CONFIG_GPIO_INPUT_1));
+        // printf("\n\nR1 - %d R2 - %d I1 - %d I2 - %d\n\n",gpio_get_level(GPIO_OUTPUT_IO_0),gpio_get_level(GPIO_OUTPUT_IO_1),!gpio_get_level(CONFIG_GPIO_INPUT_0),!gpio_get_level(CONFIG_GPIO_INPUT_1));
 
-        //TODO: DESCOMENTAR SE NÃO FUNCIONAR NAS NOVAS PCBS
+        // TODO: DESCOMENTAR SE NÃO FUNCIONAR NAS NOVAS PCBS
         if (nowTime.time == restartSystem_time)
         {
             if (label_Routine2_ON == 0 && label_Routine1_ON == 0 && gpio_get_level(GPIO_OUTPUT_IO_0) == 0 && gpio_get_level(GPIO_OUTPUT_IO_1) == 0 && !gpio_get_level(CONFIG_GPIO_INPUT_0) == 0 && !gpio_get_level(CONFIG_GPIO_INPUT_1) == 0)
@@ -305,7 +305,7 @@ void task_refresh_SystemTime(void *pvParameter)
                     restartSystem_time = 3;
                 }
 
-                // ////printf("\n\nrestart system2 - %d\n\n",restartSystem_time);
+                // printf("\n\nrestart system2 - %d\n\n",restartSystem_time);
                 nvs_set_u32(nvs_System_handle, NVS_KEY_RESTART_SYSTEM, restartSystem_time);
             }
         }
@@ -314,7 +314,7 @@ void task_refresh_SystemTime(void *pvParameter)
         {
             if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
             {
-                // ////printf("\n\ntask_refresh_SystemTime 2\n\n");
+                // printf("\n\ntask_refresh_SystemTime 2\n\n");
                 EG91_send_AT_Command("AT+QLTS=1", "QLTS", 3000);
 
                 /*  sprintf(sms_Data.phoneNumber, "%s", "917269448");
@@ -326,7 +326,7 @@ void task_refresh_SystemTime(void *pvParameter)
             }
             else
             {
-                // ////printf("\n\ntask_refresh_SystemTime 3\n\n");
+                // printf("\n\ntask_refresh_SystemTime 3\n\n");
                 refresh_ESP_RTC();
             }
 
@@ -353,7 +353,7 @@ void task_refresh_SystemTime(void *pvParameter)
                     EG91_send_AT_Command("AT+QLTS=1", "QLTS", 3000);
                 }
 
-                // ////printf("\n\nlabel_SMS_Periodic %d\n\n", label_SMS_Periodic);
+                // printf("\n\nlabel_SMS_Periodic %d\n\n", label_SMS_Periodic);
 
                 if (label_SMS_Periodic == 1)
                 {
@@ -362,57 +362,57 @@ void task_refresh_SystemTime(void *pvParameter)
                     char aux_own_Number[30] = {};
                     memset(aux_own_Number, 0, sizeof(aux_own_Number));
 
-                    ////////printf("\nerror 1 %d\n", err);
-                    ////////printf("\nkey 1 %s\n", key);
-                    // //////printf("strlen key %d", strlen(key));
+                    ////printf("\nerror 1 %d\n", err);
+                    ////printf("\nkey 1 %s\n", key);
+                    // //printf("strlen key %d", strlen(key));
 
-                    if (nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, NULL, &required_size) == ESP_OK)
-                    {
-                        // ////printf("\nrequire size %d\n", required_size);
-                        // ////printf("\nGET USERS NAMESPACE\n");
-                        if (nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, aux_own_Number, &required_size) == ESP_OK)
-                        {
-                            // ////printf("\n\nsms_Data.phoneNumber 00\n\n");
+                    // if (nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, NULL, &required_size) == ESP_OK)
+                    // {
+                    //     // printf("\nrequire size %d\n", required_size);
+                    //     // printf("\nGET USERS NAMESPACE\n");
+                    //     if (nvs_get_str(nvs_System_handle, NVS_KEY_OWN_NUMBER, aux_own_Number, &required_size) == ESP_OK)
+                    //     {
+                    //         // printf("\n\nsms_Data.phoneNumber 00\n\n");
 
-                            esp_err_t ack = nvs_get_u32(nvs_System_handle, NVS_KEY_DATE_PERIODIC_SMS, &date_To_Send_Periodic_SMS);
+                    //         esp_err_t ack = nvs_get_u32(nvs_System_handle, NVS_KEY_DATE_PERIODIC_SMS, &date_To_Send_Periodic_SMS);
 
-                            // ////printf("\n\ndate_To_Send_Periodic_SMS %d\n\n", date_To_Send_Periodic_SMS);
+                    //         // printf("\n\ndate_To_Send_Periodic_SMS %d\n\n", date_To_Send_Periodic_SMS);
 
-                            if (nowTime.date >= date_To_Send_Periodic_SMS)
-                            {
+                    //         if (nowTime.date >= date_To_Send_Periodic_SMS)
+                    //         {
 
-                                sprintf(sms_Data.phoneNumber, "%s", aux_own_Number);
+                    //             sprintf(sms_Data.phoneNumber, "%s", aux_own_Number);
 
-                                sprintf(sms_Data.payload, "%s%d", "MOTORLINE", nowTime.time);
+                    //             sprintf(sms_Data.payload, "%s%d", "MOTORLINE", nowTime.time);
 
-                                // ////printf("\n\nsms_Data.phoneNumber 11\n\n");
+                    //             // printf("\n\nsms_Data.phoneNumber 11\n\n");
 
-                                xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
+                    //             xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
 
-                                memset(aux_own_Number, 0, sizeof(aux_own_Number));
+                    //             memset(aux_own_Number, 0, sizeof(aux_own_Number));
 
-                                // sprintf(sms_Data.phoneNumber, "%s", "917269448");
+                    //             // sprintf(sms_Data.phoneNumber, "%s", "917269448");
 
-                                // sprintf(sms_Data.payload, "%s%d", "SMS PERIODICA - ", nowTime.time);
+                    //             // sprintf(sms_Data.payload, "%s%d", "SMS PERIODICA - ", nowTime.time);
 
-                                // ////printf("\n\nsms_Data.phoneNumber 11\n\n");
+                    //             // printf("\n\nsms_Data.phoneNumber 11\n\n");
 
-                                // xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
+                    //             // xQueueSendToBack(queue_EG91_SendSMS, (void *)&sms_Data, pdMS_TO_TICKS(100));
 
-                                label_To_Send_Periodic_SMS = 1;
-                                save_INT8_Data_In_Storage(NVS_KEY_LABEL_PERIODIC_SMS, label_To_Send_Periodic_SMS, nvs_System_handle);
+                    //             label_To_Send_Periodic_SMS = 1;
+                    //             save_INT8_Data_In_Storage(NVS_KEY_LABEL_PERIODIC_SMS, label_To_Send_Periodic_SMS, nvs_System_handle);
 
-                                date_To_Send_Periodic_SMS = parseDatetoInt(nowTime.date, 60);
-                                nvs_set_u32(nvs_System_handle, NVS_KEY_DATE_PERIODIC_SMS, date_To_Send_Periodic_SMS);
-                            }
-                        }
-                    }
+                    //             date_To_Send_Periodic_SMS = parseDatetoInt(nowTime.date, 60);
+                    //             nvs_set_u32(nvs_System_handle, NVS_KEY_DATE_PERIODIC_SMS, date_To_Send_Periodic_SMS);
+                    //         }
+                    //     }
+                    // }
                 }
             }
 
             memset(&sms_Data, 0, sizeof(sms_Data));
 
-            // ////printf("\n\ntask_refresh_SystemTime 2\n\n");
+            // printf("\n\ntask_refresh_SystemTime 2\n\n");
 
             /* sprintf(sms_Data.phoneNumber, "%s", "917269448");
 
@@ -466,6 +466,7 @@ void gpio_init()
     // gpio_set_intr_type(GPIO_INPUT_IO_0, GPIO_INTR_ANYEDGE);
 
     // create a queue to handle gpio event from isr
+    resetProcess();
     gpio_evt_queue = xQueueCreate(4, sizeof(uint32_t));
     // start gpio task
     xTaskCreate(gpio_task_example, "gpio_task_example", 11000, NULL, 21, NULL);
@@ -489,7 +490,7 @@ void gpio_init()
 
     gpio_isr_handler_add(GPIO_INPUT_RTC_ALARM, gpio_isr_handler, (void *)GPIO_INPUT_RTC_ALARM);
 
-    // ////printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
+    // printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 }
 
 #define TAG "BUTTON"
@@ -569,8 +570,8 @@ static void button_task(void *pvParameter)
             if (button_up(&debounce[idx]))
             {
                 debounce[idx].down_time = 0;
-                //ESP_LOGI(TAG, "%d UP", debounce[idx].pin);
-                // send_event(debounce[idx], BUTTON_UP);
+                // ESP_LOGI(TAG, "%d UP", debounce[idx].pin);
+                //  send_event(debounce[idx], BUTTON_UP);
             } /*else if (debounce[idx].down_time && millis() >= debounce[idx].next_long_time) {
                 //ESP_LOGI(TAG, "%d LONG", debounce[idx].pin);
                 debounce[idx].next_long_time = debounce[idx].next_long_time + CONFIG_ESP32_BUTTON_LONG_PRESS_REPEAT_MS;
@@ -579,12 +580,12 @@ static void button_task(void *pvParameter)
             else if (button_down(&debounce[idx]) && debounce[idx].down_time == 0)
             {
                 debounce[idx].down_time = millis();
-                //ESP_LOGI(TAG, "%d DOWN", debounce[idx].pin);
+                // ESP_LOGI(TAG, "%d DOWN", debounce[idx].pin);
                 debounce[idx].next_long_time = debounce[idx].down_time + CONFIG_ESP32_BUTTON_LONG_PRESS_DURATION_MS;
                 // send_event(debounce[idx], BUTTON_DOWN);
             }
         }
-        // ////printf("gpio input\n");
+        // printf("gpio input\n");
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
@@ -598,7 +599,7 @@ QueueHandle_t pulled_button_init(unsigned long long pin_select, gpio_pull_mode_t
 {
     if (pin_count != -1)
     {
-        //ESP_LOGI(TAG, "Already initialized");
+        // ESP_LOGI(TAG, "Already initialized");
         return NULL;
     }
 
@@ -632,7 +633,7 @@ QueueHandle_t pulled_button_init(unsigned long long pin_select, gpio_pull_mode_t
     {
         if ((1ULL << pin) & pin_select)
         {
-            //ESP_LOGI(TAG, "Registering button input: %d", pin);
+            // ESP_LOGI(TAG, "Registering button input: %d", pin);
             debounce[idx].pin = pin;
             debounce[idx].down_time = 0;
             debounce[idx].inverted = true;
@@ -674,7 +675,7 @@ void task_readInputs(void *pvParameter)
             }
         }
 
-        if (fd_configurations.alarmMode.A < 2 || label_ResetSystem == 0)
+        if (fd_configurations.alarmMode.A < 2 || label_ResetSystem < 5)
         {
             Input1_value = !gpio_get_level(CONFIG_GPIO_INPUT_0);
             Input2_value = !gpio_get_level(CONFIG_GPIO_INPUT_1);
@@ -725,7 +726,7 @@ void task_readInputs(void *pvParameter)
                 count_I2 = 0;
             }
 
-            // ////printf("\n\n last input1 %d, input 1 %d - last input2 %d, input 2 %d\n\n", last_Input1_value, Input1_value, last_Input2_value, Input2_value);
+            // printf("\n\n last input1 %d, input 1 %d - last input2 %d, input 2 %d\n\n", last_Input1_value, Input1_value, last_Input2_value, Input2_value);
 
             if (Input1_value != last_Input1_value || Input2_value != last_Input2_value)
             {
@@ -733,69 +734,64 @@ void task_readInputs(void *pvParameter)
                 sprintf(input_Data_IO, "%s %d", "I1 G I", Input1_value);
                 BLE_Broadcast_Notify(input_Data_IO);
 
-               
-
                 memset(input_Data_IO, 0, 50);
                 sprintf(input_Data_IO, "%s %d", "I2 G I", Input2_value);
                 BLE_Broadcast_Notify(input_Data_IO);
 
-               
-
-                if (label_ResetSystem == 0)
+                printf("\n\ncount_ResetSystem00 - %d\n\n", label_ResetSystem);
+                if (label_ResetSystem < 5)
                 {
-                    if (Input1_value != last_Input1_value && Input2_value != last_Input2_value)
-                    {
 
-                        if (Input1_value == 0 && Input2_value == 0)
-                        {
-                            // ////printf("\n\ncount_ResetSystem\n\n");
-                            count_ResetSystem++;
-                        }
+                    // printf("\n\ncount_ResetSystem11 - %d\n\n", count_ResetSystem);
+                    // if (Input1_value != last_Input1_value && Input2_value != last_Input2_value)
+                    // {
+                    //     printf("\n\ncount_ResetSystem22 - %d\n\n", label_ResetSystem);
+                    //     if (Input1_value == 0 && Input2_value == 0)
+                    //     {
 
-                        if (count_ResetSystem == 2)
-                        {
-                            label_Reset_Password_OR_System = 1;
-                            label_ResetSystem = 1;
-                            // ////printf("\n\ncount_ResetSystem11\n\n");
-                            example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
-                            // ////printf("\n\ncount_ResetSystem22\n\n");
-                            example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 60);
-                            // ////printf("\n\ncount_ResetSystem33\n\n");
-                            xTimerChangePeriod(xTimers, pdMS_TO_TICKS(1000), 100);
-                            // ////printf("\n\ncount_ResetSystem44\n\n");
-                        }
-                    }
+                    //         count_ResetSystem++;
+                    //         printf("\n\ncount_ResetSystem - %d\n\n", count_ResetSystem);
+                    //         if (count_ResetSystem > 0 && count_ResetSystem < 5)
+                    //         {
+                    //             label_Reset_Password_OR_System++;
+                    //             label_ResetSystem++;
+                    //             // printf("\n\ncount_ResetSystem11\n\n");
+                    //             /* example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
+                    //             // printf("\n\ncount_ResetSystem22\n\n");
+                    //             example_tg_timer_init(TIMER_GROUP_0, TIMER_0, false, 60);
+                    //             // printf("\n\ncount_ResetSystem33\n\n");
+                    //             xTimerChangePeriod(xTimers, pdMS_TO_TICKS(1000), 100); */
+                    //             // printf("\n\ncount_ResetSystem44\n\n");
+                    //         }
+                    //     }
+                    // }
 
-                    // ////printf("\n\n input 1 - %d / input 2 - %d\n\n", Input1_value, Input2_value);
+                    // printf("\n\n input 1 - %d / input 2 - %d\n\n", Input1_value, Input2_value);
                 }
-                else if (label_ResetSystem == 1 && label_Reset_Password_OR_System == 2)
+                else if (label_ResetSystem == 6 && label_Reset_Password_OR_System == 6)
                 {
 
                     if (Input1_value != last_Input1_value)
                     {
-                        if (label_network_portalRegister == 1)
-                        {
-                            char input_Data_IO[50] = {};
-                            sprintf(input_Data_IO, "%s %d", "& I1", Input1_value);
-                            send_UDP_Send(input_Data_IO,"");
-                        }
+
+                        char input_Data_IO[50] = {};
+                        sprintf(input_Data_IO, "%s %d", "& I1", Input1_value);
+                        send_UDP_Send(input_Data_IO, "");
 
                         input1_Alarme_Feedbacks_processing(Input1_value);
                     }
 
                     if (Input2_value != last_Input2_value)
                     {
-                        if (label_network_portalRegister == 1)
-                        {
-                            char input_Data_IO[50] = {};
-                            sprintf(input_Data_IO, "%s %d", "& I2", Input2_value);
-                            send_UDP_Send(input_Data_IO,"");
-                        }
+
+                        char input_Data_IO[50] = {};
+                        sprintf(input_Data_IO, "%s %d", "& I2", Input2_value);
+                        send_UDP_Send(input_Data_IO, "");
 
                         input2_Alarme_Feedbacks_processing(Input2_value);
                     }
 
-                    // ////printf("\n\n input 1 - %d / input 2 - %d\n\n", Input1_value, Input2_value);
+                    // printf("\n\n input 1 - %d / input 2 - %d\n\n", Input1_value, Input2_value);
                 }
             }
 
@@ -812,13 +808,13 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
     // sprintf(input_Data_IO, "%s %d", "I1 G I", inputLevel);
     // BLE_Broadcast_Notify(input_Data_IO);
     uint64_t now = esp_timer_get_time();
-    ////////printf("GPIO[%d] intr, val: %d\n", io_num, input_nowState);
+    ////printf("GPIO[%d] intr, val: %d\n", io_num, input_nowState);
 
-    // ////printf("\n\nfeedback alarm time now %d - %lld - %lld - %d", (fd_configurations.time_I1 * 1000000), feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime, now, fd_configurations.alarmMode.A);
+    // printf("\n\nfeedback alarm time now %d - %lld - %lld - %d", (fd_configurations.time_I1 * 1000000), feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime, now, fd_configurations.alarmMode.A);
 
     if (!inputLevel)
     {
-        // ////printf("\n\n send_Normal_Feedback 565\n\n");
+        // printf("\n\n send_Normal_Feedback 565\n\n");
 
         if (fd_configurations.alarmMode.A == 1)
         {
@@ -832,22 +828,22 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 aux_Alarm_Send_FB_Other_USR = 0;
             }
 
-            // ////printf("\n\n aux_Alarm_Send_FB_Other_USR 11 %d \n\n", aux_Alarm_Send_FB_Other_USR);
+            // printf("\n\n aux_Alarm_Send_FB_Other_USR 11 %d \n\n", aux_Alarm_Send_FB_Other_USR);
 
             if (fd_configurations.input_Config & FEEDBACK_I1_NC)
             {
 
                 if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation == 1)
                 {
-                    
+
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-                        
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
+
+                        /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         // TODO: ADICIONAR CASO O NUMERO SEJA INVALIDO ENVIAR PARA O OWNER
                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
-                        feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
+                        feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0; */
 
                         if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0 && aux_Alarm_Send_FB_Other_USR == ALARM_OWNER_NOT_WANT_RECEIVE_FEEDBACK_FROM_OTHER_USERS)
                         {
@@ -855,17 +851,28 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1)
                         {
-                            send_UDP_Send("=\0","");
+
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "= %s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                            send_UDP_Send(fb_msg, "");
+
+                            /* send_UDP_Send("=\0", "");
                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0)
                         {
-                            send_UDP_Send("=\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "= %s", fd_configurations.phone1);
+                            send_UDP_Send(fb_msg, "");
+
+                            /*  send_UDP_Send("=\0", "");
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
+                             xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                         } */
                         }
                     }
                 }
@@ -873,13 +880,18 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 {
                     if (get_INT8_Data_From_Storage(NVS_AL_CHANGE_INPUT_STATE_FEEDBACK, nvs_Feedback_handle) == ALARM_OWNER_WANT_RECEIVE_FEEDBACK_INPUT_CHANGE_STATE)
                     {
-                        send_UDP_Send(")\0","");
-                        memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
 
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED"));
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                        // feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        char fb_msg[50] = {};
+                        sprintf(fb_msg, ") %s", fd_configurations.phone1);
+                        send_UDP_Send(fb_msg, "");
+
+                        /*  send_UDP_Send(")\0", "");
+                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
+
+                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED"));
+                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
+                         // feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
+                         xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                     }
                 }
             }
@@ -902,17 +914,26 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1)
                         {
-                            send_UDP_Send("{\0","");
+
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "{ %s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                            send_UDP_Send(fb_msg, "");
+
+                            /* send_UDP_Send("{\0", "");
                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED_BETWEEN_THE_TIMEOUT_SELECTED"));
                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0)
                         {
-                            send_UDP_Send("{\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "{ %s", fd_configurations.phone1);
+                            send_UDP_Send(fb_msg, "");
+
+                            /*  send_UDP_Send("{\0", "");
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED_BETWEEN_THE_TIMEOUT_SELECTED"));
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
+                             xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         }
                     }
                 }
@@ -920,19 +941,24 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 {
                     if (get_INT8_Data_From_Storage(NVS_AL_CHANGE_INPUT_STATE_FEEDBACK, nvs_Feedback_handle) == ALARM_OWNER_WANT_RECEIVE_FEEDBACK_INPUT_CHANGE_STATE)
                     {
-                        memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
-                        send_UDP_Send("(\0","");
+
+                        char fb_msg[50] = {};
+                        sprintf(fb_msg, "( %s", fd_configurations.phone1);
+                        send_UDP_Send(fb_msg, "");
+
+                        /* memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
+                        send_UDP_Send("(\0", "");
                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED"));
                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
                         // feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                     }
                 }
             }
         }
         else if (fd_configurations.alarmMode.A == 0)
         {
-            // ////printf("\n\n send_Normal_Feedback 5676\n\n");
+            // printf("\n\n send_Normal_Feedback 5676\n\n");
             send_Normal_Feedback(0, 1);
         }
     }
@@ -951,17 +977,17 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 aux_Alarm_Send_FB_Other_USR = 0;
             }
 
-            // ////printf("\n\n aux_Alarm_Send_FB_Other_USR 00 %d \n\n", aux_Alarm_Send_FB_Other_USR);
+            // printf("\n\n aux_Alarm_Send_FB_Other_USR 00 %d \n\n", aux_Alarm_Send_FB_Other_USR);
 
             if (fd_configurations.input_Config & FEEDBACK_I1_NC)
             {
-                // ////printf("\n\n fd_configurations.alarmMode.input_Config & FEEDBACK_I1_NO \n\n");
+                // printf("\n\n fd_configurations.alarmMode.input_Config & FEEDBACK_I1_NO \n\n");
                 if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation == 1)
                 {
 
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-                        // ////printf("\n\n now < \n\n");
+                        // printf("\n\n now < \n\n");
 
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
@@ -970,25 +996,27 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
 
                         if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0 && aux_Alarm_Send_FB_Other_USR == ALARM_OWNER_NOT_WANT_RECEIVE_FEEDBACK_FROM_OTHER_USERS)
                         {
-                            // ////printf("\n\n ALARM_OWNER_NOT_WANT_RECEIVE_FEEDBACK_FROM_OTHER_USERS \n\n");
+                            // printf("\n\n ALARM_OWNER_NOT_WANT_RECEIVE_FEEDBACK_FROM_OTHER_USERS \n\n");
 
                             return;
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1)
                         {
-                            // ////printf("\n\n feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1 \n\n");
-                            send_UDP_Send("{\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            // printf("\n\n feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1 \n\n");
+
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "{ %s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                            send_UDP_Send(fb_msg, "");
+
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0)
                         {
-                            // ////printf("\n\n feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0 \n\n");
-                            send_UDP_Send("{\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            // printf("\n\n feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0 \n\n");
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "{ %s", fd_configurations.phone1);
+                            send_UDP_Send(fb_msg, "");
+
+                 
                         }
                     }
                 }
@@ -996,12 +1024,11 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 {
                     if (get_INT8_Data_From_Storage(NVS_AL_CHANGE_INPUT_STATE_FEEDBACK, nvs_Feedback_handle) == ALARM_OWNER_WANT_RECEIVE_FEEDBACK_INPUT_CHANGE_STATE)
                     {
-                        memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
-                        send_UDP_Send("(\0","");
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_DISABLED"));
-                        sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                        // feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        char fb_msg[50] = {};
+                        sprintf(fb_msg, "( %s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                        send_UDP_Send(fb_msg, "");
+
+                 
                     }
                 }
             }
@@ -1024,17 +1051,20 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 1)
                         {
-                            send_UDP_Send("=\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "= %s", feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
+                            send_UDP_Send(fb_msg, "");
+
                         }
                         else if (feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.user_Have_In_List == 0)
                         {
-                            send_UDP_Send("=\0","");
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                            sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                            xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                            char fb_msg[50] = {};
+                            sprintf(fb_msg, "= %s", fd_configurations.phone1);
+                            send_UDP_Send(fb_msg, "");
+                            /*  send_UDP_Send("=\0", "");
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
+                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
+                             xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                         }
                     }
                 }
@@ -1042,13 +1072,15 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                 {
                     if (get_INT8_Data_From_Storage(NVS_AL_CHANGE_INPUT_STATE_FEEDBACK, nvs_Feedback_handle) == ALARM_OWNER_WANT_RECEIVE_FEEDBACK_INPUT_CHANGE_STATE)
                     {
-                        send_UDP_Send(")\0","");
-                        memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
+                        char fb_msg[50] = {};
+                        sprintf(fb_msg, ") %s", fd_configurations.phone1);
+                        send_UDP_Send(fb_msg, "");
+                        /* memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
 
                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED"));
                         sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
                         // feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
-                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000));
+                        xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
                     }
                 }
             }
@@ -1067,7 +1099,7 @@ void input2_Alarme_Feedbacks_processing(uint8_t inputLevel)
     // BLE_Broadcast_Notify(input_Data_IO);
     uint64_t now = esp_timer_get_time();
 
-    // ////printf("GPIO[] intr, val:input 11 \n");
+    // printf("GPIO[] intr, val:input 11 \n");
 
     if (!inputLevel)
     {
@@ -1076,8 +1108,8 @@ void input2_Alarme_Feedbacks_processing(uint8_t inputLevel)
         {
             if ((fd_configurations.input_Config & FEEDBACK_I2_NC) && label_Alarm_I2_Task_Activated == 0)
             {
-                label_Alarm_I2_Task_Activated = 1;
-                xTaskCreate(&task_Alarm_CALL, "task_Alarm_CALL", 5 * 2048 , NULL, 29, &handle_Alarm_Calls_Task);
+                label_Alarm_I2_Task_Activated = 0;
+                send_UDP_Send("<\0", "");
             }
         }
         else if (fd_configurations.alarmMode.A == 0)
@@ -1093,7 +1125,7 @@ void input2_Alarme_Feedbacks_processing(uint8_t inputLevel)
             if (fd_configurations.input_Config & FEEDBACK_I2_NO && label_Alarm_I2_Task_Activated == 0)
             {
                 label_Alarm_I2_Task_Activated = 1;
-                xTaskCreate(&task_Alarm_CALL, "task_Alarm_CALL", 5 * 2048, NULL, 29, &handle_Alarm_Calls_Task);
+                send_UDP_Send("<\0>", "");
             }
         }
         else if (fd_configurations.alarmMode.A == 0)

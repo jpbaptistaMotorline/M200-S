@@ -170,6 +170,8 @@ char *replace_Char_in_String(char *str, char c_to_replace, char c_new);
 
 int add_time(int old_time, int addition);
 
+void resetProcess();
+
 uint8_t refresh_ESP_RTC();
 
 /// @brief

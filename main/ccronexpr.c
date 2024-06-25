@@ -438,7 +438,7 @@ static int do_next(cron_expr* expr, struct tm* calendar, unsigned int dot) {
     minute = calendar->tm_min;
     update_minute = find_next(expr->minutes, CRON_MAX_MINUTES, minute, calendar, CRON_CF_MINUTE,  CRON_CF_HOUR_OF_DAY, resets, &res);
     
-     //////printf("\n minute - %d / update_minute - %d / res - %d\n",minute,update_minute,res);
+     //printf("\n minute - %d / update_minute - %d / res - %d\n",minute,update_minute,res);
     
     if (0 != res) goto return_result;
     if (minute == update_minute) {
@@ -451,7 +451,7 @@ static int do_next(cron_expr* expr, struct tm* calendar, unsigned int dot) {
     hour = calendar->tm_hour;
     update_hour = find_next(expr->hours, CRON_MAX_HOURS, hour, calendar, CRON_CF_HOUR_OF_DAY, CRON_CF_DAY_OF_WEEK, resets, &res);
     
-    //////printf("\n hour - %d / update_hour - %d / res - %d\n",hour,update_hour,res);
+    //printf("\n hour - %d / update_hour - %d / res - %d\n",hour,update_hour,res);
     
     if (0 != res) goto return_result;
     if (hour == update_hour) {
@@ -465,7 +465,7 @@ static int do_next(cron_expr* expr, struct tm* calendar, unsigned int dot) {
     day_of_month = calendar->tm_mday;
     update_day_of_month = find_next_day(calendar, expr->days_of_month, day_of_month, expr->days_of_week, day_of_week, resets, &res);
 
-    //////printf("\n day_of_month - %d / update_day_of_month - %d / res - %d\n",day_of_month,update_day_of_month,res);
+    //printf("\n day_of_month - %d / update_day_of_month - %d / res - %d\n",day_of_month,update_day_of_month,res);
     
     if (0 != res) goto return_result;
     if (day_of_month == update_day_of_month) {
@@ -949,7 +949,7 @@ time_t cron_next(cron_expr* expr, time_t date) {
     time_t original = cron_mktime(calendar);
     
     if (CRON_INVALID_INSTANT == original) return CRON_INVALID_INSTANT;
-//////printf("\n\nCRON TAB 75 %d\n\n",calendar->tm_year);
+//printf("\n\nCRON TAB 75 %d\n\n",calendar->tm_year);
     int res = do_next(expr, calendar, calendar->tm_year);
 
     if (0 != res) return CRON_INVALID_INSTANT;

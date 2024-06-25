@@ -41,7 +41,7 @@ uint8_t routines_ID;
 
 struct list_node *routine_list;
 
-char file_contents_routines[200];
+char file_contents_routines[500];
 char file_contents[200];
 
 char *parse_RoutineData(uint8_t BLE_SMS_Indication, uint8_t gattsIF, uint16_t connID, uint16_t handle_table, char cmd, char param, char *payload)
@@ -99,7 +99,7 @@ char *parse_RoutineData(uint8_t BLE_SMS_Indication, uint8_t gattsIF, uint16_t co
     {
         if (param == ROUTINE_PARAMETER)
         {
-            // ////printf("\n enter get routines 1\n");
+            // printf("\n enter get routines 1\n");
             asprintf(&rsp, "%s", getRoutines(gattsIF, connID, handle_table, BLE_SMS_Indication));
             return rsp;
         }
@@ -113,7 +113,7 @@ char *parse_RoutineData(uint8_t BLE_SMS_Indication, uint8_t gattsIF, uint16_t co
                 /*memset(&rsp, 0, sizeof(rsp));*/
                 asprintf(&rsp, "%s %c %c %s;%s", ROUTINE_ELEMENT, cmd, param, range_InicialTime, range_FinalTime);
 
-                // ////printf("\n\n get_Routine_Range - %s\n\n", rsp);
+                // printf("\n\n get_Routine_Range - %s\n\n", rsp);
                 return rsp;
             }
             else
@@ -131,7 +131,7 @@ char *parse_RoutineData(uint8_t BLE_SMS_Indication, uint8_t gattsIF, uint16_t co
                 /*memset(&rsp, 0, sizeof(rsp));*/
                 asprintf(&rsp, "%s %c %c %s;%s", ROUTINE_ELEMENT, cmd, param, range_InicialTime, range_FinalTime);
 
-                // ////printf("\n\n get_Routine_Range - %s\n\n", rsp);
+                // printf("\n\n get_Routine_Range - %s\n\n", rsp);
                 return rsp;
             }
             else
@@ -199,34 +199,34 @@ char *parse_RoutineData(uint8_t BLE_SMS_Indication, uint8_t gattsIF, uint16_t co
 
 char *set_holidaysDays(uint8_t holidaysDays)
 {
-    // ////printf("\n\n holidaysDays . %d\n\n", holidaysDays);
+    // printf("\n\n holidaysDays . %d\n\n", holidaysDays);
     if (holidaysDays & CARNIVAL_HOLYDAY_DAY)
     {
-        // ////printf("\n\n set carnaval \n\n");
+        // printf("\n\n set carnaval \n\n");
         set_carnival();
     }
 
     if (holidaysDays & EASTER_FRIDAY_HOLYDAY_DAY)
     {
-        // ////printf("\n\n set sexta santa \n\n");
+        // printf("\n\n set sexta santa \n\n");
         set_easter_friday();
     }
 
     if (holidaysDays & EASTER_HOLYDAY_DAY)
     {
-        // ////printf("\n\n set pascoa \n\n");
+        // printf("\n\n set pascoa \n\n");
         set_easter_day();
     }
 
     if (holidaysDays & CORPUS_CHRISTI_HOLYDAY_DAY)
     {
-        // ////printf("\n\n set corpo de cristo \n\n");
+        // printf("\n\n set corpo de cristo \n\n");
         set_corpusChristi();
     }
 
     if (holidaysDays & EASTER_MONDAY_HOLYDAY_DAY)
     {
-        // ////printf("\n\n set corpo de cristo \n\n");
+        // printf("\n\n set corpo de cristo \n\n");
         set_easter_monday();
     }
 
@@ -242,12 +242,12 @@ char *reset_holidaysDays()
         nvs_erase_key(nvs_System_handle, NVS_KEY_LABEL_EASTER);
         nvs_erase_key(nvs_System_handle, NVS_KEY_LABEL_CORPUS_CHRISTI);
         nvs_erase_key(nvs_System_handle, NVS_KEY_LABEL_EASTER_MONDAY);
-        // ////printf("\nreset reset_holidaysDays\n");
+        // printf("\nreset reset_holidaysDays\n");
         return "OK";
     }
     else
     {
-        // ////printf("\nxep days ERROR\n");
+        // printf("\nxep days ERROR\n");
         return "ERROR";
     }
 }
@@ -327,12 +327,12 @@ char *setRoutine(char *payload)
         }
     }
 
-    // ////printf("\nset routine payload - %s\n", payload);
-    // ////printf("\nset routine cron_Expression - %s, %d\n", cron_Expression, strlen(cron_Expression));
-    // ////printf("\nset routine cron_data - %s\n", cron_data);
+    // printf("\nset routine payload - %s\n", payload);
+    // printf("\nset routine cron_Expression - %s, %d\n", cron_Expression, strlen(cron_Expression));
+    // printf("\nset routine cron_data - %s\n", cron_data);
 
     routines_ID = get_INT8_Data_From_Storage(NVS_ROUTINES_ID, nvs_System_handle);
-    // ////printf("\nset routine routines_ID11 - %d\n", routines_ID);
+    // printf("\nset routine routines_ID11 - %d\n", routines_ID);
 
     if (routines_ID == 255)
     {
@@ -343,28 +343,28 @@ char *setRoutine(char *payload)
         routines_ID++;
     }
 
-    // ////printf("\nset routine routines_ID11 - %d\n", routines_ID);
+    // printf("\nset routine routines_ID11 - %d\n", routines_ID);
     //   routine_list->data = &cron_data;
-    // ////printf("\nset routine routines_ID1222 - %d\n", routines_ID);
+    // printf("\nset routine routines_ID1222 - %d\n", routines_ID);
 
     // routine_list = list_insert_beginning(routine_list, cron_Expression, cron_data);
     //   memcpy(routine_list->data,&cron_data,sizeof(cron_data));
-    /* //////printf("\nroutine_list->data - %s\n", routine_list->data);*/
-    // ////printf("\n cron_Expression %s - %s\n", cron_Expression, cron_data);
+    /* //printf("\nroutine_list->data - %s\n", routine_list->data);*/
+    // printf("\n cron_Expression %s - %s\n", cron_Expression, cron_data);
 
     cron_job_create(cron_Expression, test_cron_job_sample_callback, (void *)cron_data);
 
-    // ////printf("\nset routine 22 \n");
+    // printf("\nset routine 22 \n");
     asprintf(&nvs_key, "%d", routines_ID);
     save_STR_Data_In_Storage(nvs_key, payload, nvs_Routines_handle);
-    // ////printf("\nset routine 33 \n");
+    // printf("\nset routine 33 \n");
     save_INT8_Data_In_Storage(NVS_ROUTINES_ID, routines_ID, nvs_System_handle);
-    // ////printf("\nset routine 44 \n");
+    // printf("\nset routine 44 \n");
     free(nvs_key);
     free(cron_Expression);
-    // ////printf("\nset routine 55 \n");
+    // printf("\nset routine 55 \n");
     free(cron_data);
-    // ////printf("\nset routine 66 \n");
+    // printf("\nset routine 66 \n");
     /*  ESP_ERROR_CHECK(heap_trace_stop());
      heap_trace_dump(); */
     return "RT S R OK";
@@ -379,7 +379,7 @@ char *getRoutines(uint8_t gattsIF, uint16_t connID, uint16_t handle_table, uint8
     Routines_message.handle_table = handle_table;
     Routines_message.BLE_UDP_Indication = BLE_UDP_Indication;
 
-    // ////printf("\n enter get routines 3 - %d ; %d ; %d\n", Routines_message.gattsIF, Routines_message.connID, Routines_message.handle_table);
+    // printf("\n enter get routines 3 - %d ; %d ; %d\n", Routines_message.gattsIF, Routines_message.connID, Routines_message.handle_table);
     xQueueSend(send_Routines_queue, (void *)&Routines_message, pdMS_TO_TICKS(1000));
     // xSemaphoreTake(rdySem_Send_Routines,pdMS_TO_TICKS(3000));
 
@@ -390,11 +390,11 @@ char *eraseRoutines()
 {
 
     // ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
-    // ////printf("\nERASE 1\n");
+    // printf("\nERASE 1\n");
 
     if (task_Routine_BiState_RelayState1 != NULL)
     {
-        // ////printf("\nERASE 31\n");
+        // printf("\nERASE 31\n");
 
         // xTaskAbortDelay(task_Routine_BiState_RelayState1);
         // gpio_set_level(GPIO_OUTPUT_IO_0, 0);
@@ -402,7 +402,7 @@ char *eraseRoutines()
 
     if (task_Routine_BiState_RelayState2 != NULL)
     {
-        // ////printf("\nERASE 32\n");
+        // printf("\nERASE 32\n");
 
         // xTaskAbortDelay(task_Routine_BiState_RelayState2);
         // gpio_set_level(GPIO_OUTPUT_IO_1, 0);
@@ -414,9 +414,9 @@ char *eraseRoutines()
     cron_stop();
     cron_job_clear_all();
 
-    /* //////printf("\nERASE 2\n");
+    /* //printf("\nERASE 2\n");
     list_destroy(&routine_list);
-    //////printf("\nERASE 3\n");
+    //printf("\nERASE 3\n");
     list_print(routine_list);
     routine_list = (list_node *)malloc(sizeof(list_node));
     routine_list->next = NULL; */
@@ -425,10 +425,10 @@ char *eraseRoutines()
 
     routines_ID = 0;
     save_INT8_Data_In_Storage(NVS_ROUTINES_ID, routines_ID, nvs_System_handle);
-    // ////printf("\nERASE 4\n");
+    // printf("\nERASE 4\n");
     if (nvs_erase_all(nvs_Routines_handle) == ESP_OK)
     {
-        // ////printf("\nERASE 5\n");
+        // printf("\nERASE 5\n");
         label_Routine2_ON = 0;
         label_Routine1_ON = 0;
         save_INT8_Data_In_Storage(NVS_KEY_ROUTINE1_LABEL, 0, nvs_System_handle);
@@ -439,7 +439,7 @@ char *eraseRoutines()
     }
     else
     {
-        // ////printf("\nERASE 6\n");
+        // printf("\nERASE 6\n");
         return "RT R R ERROR";
     }
 
@@ -457,7 +457,7 @@ char *set_ExeptionDay(char *payload)
     {
         if (payload[i] == ';')
         {
-            // ////printf("\nset_ExeptionDay1 - %s\n", exeption_day);
+            // printf("\nset_ExeptionDay1 - %s\n", exeption_day);
             if (save_INT8_Data_In_Storage(exeption_day, 1, nvs_Exeption_Days_handle) != ESP_OK)
             {
                 return "ERROR";
@@ -471,7 +471,7 @@ char *set_ExeptionDay(char *payload)
             strIndex++;
         }
     }
-    // ////printf("\nset_ExeptionDay2 - %s\n", exeption_day);
+    // printf("\nset_ExeptionDay2 - %s\n", exeption_day);
     if (save_INT8_Data_In_Storage(exeption_day, 1, nvs_Exeption_Days_handle) != ESP_OK)
     {
         return "ERROR";
@@ -487,12 +487,12 @@ char *erase_ExeptionDay()
 
     if (nvs_erase_all(nvs_Exeption_Days_handle) == ESP_OK)
     {
-        // ////printf("\nexep days\n");
+        // printf("\nexep days\n");
         return "OK";
     }
     else
     {
-        // ////printf("\nxep days ERROR\n");
+        // printf("\nxep days ERROR\n");
         return "ERROR";
     }
 }
@@ -602,10 +602,10 @@ void test_cron_job_sample_callback(cron_job *job)
     localtime_r(&(job->next_execution), &timeinfo);
     strftime(buffer2, buffer_len, "%c", &timeinfo);
 
-    // ////printf("\n (char *)job->data - %s\n", (char *)job->data);
+    // printf("\n (char *)job->data - %s\n", (char *)job->data);
 
-    // ////printf("\n\n ex_Day - %s\n\n", ex_Day);
-    // ////printf("\n\n date_Day - %s\n\n", date_Day);
+    // printf("\n\n ex_Day - %s\n\n", ex_Day);
+    // printf("\n\n date_Day - %s\n\n", date_Day);
 
     uint8_t value = 0;
     uint8_t range_Label = 0;
@@ -618,15 +618,15 @@ void test_cron_job_sample_callback(cron_job *job)
     if (get_Routine_Range(&range_InicialTime, &range_FinalTime))
     {
 
-        // ////printf("\n inicial range - %s / final range - %s\n", range_InicialTime, range_FinalTime);
+        // printf("\n inicial range - %s / final range - %s\n", range_InicialTime, range_FinalTime);
         if (atoi(date_Day) >= atoi(range_InicialTime) && atoi(date_Day) <= atoi(range_FinalTime))
         {
             range_Label = 1;
-            // ////printf("\n\n range_Label = 1\n\n");
+            // printf("\n\n range_Label = 1\n\n");
         }
         else
         {
-            // ////printf("\n\n range_Label = 0\n\n");
+            // printf("\n\n range_Label = 0\n\n");
             range_Label = 0;
         }
     }
@@ -641,11 +641,11 @@ void test_cron_job_sample_callback(cron_job *job)
         if (atoi(date_Day) >= atoi(range_holidaysInicialTime) && atoi(date_Day) <= atoi(range_holydaysFinalTime))
         {
             range_holidaysLabel = 0;
-            // ////printf("\n\n range_Label = 1\n\n");
+            // printf("\n\n range_Label = 1\n\n");
         }
         else
         {
-            // ////printf("\n\n range_Label = 0\n\n");
+            // printf("\n\n range_Label = 0\n\n");
             range_holidaysLabel = 1;
         }
     }
@@ -700,7 +700,7 @@ void test_cron_job_sample_callback(cron_job *job)
 
                         uint64_t auxTime_routine = -1;
 
-                        ////printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                        printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
                         while (jobNode != NULL)
                         {
@@ -712,21 +712,21 @@ void test_cron_job_sample_callback(cron_job *job)
                                 }
                             }
 
-                            ////printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                            printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
-                            ////printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
+                            printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
 
                             jobNode = jobNode->next;
                         }
 
-                        ////printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
+                        printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
                         nvs_set_u64(nvs_System_handle, NVS_KEY_ROUTINE1_TIME_ON, auxTime_routine);
 
                         free(jobNode);
 
                         /************************************************************/
                         BLE_Broadcast_Notify("R1 S R 1");
-                        // ////printf("\n\nGPIO_OUTPUT_IO_0 job->data[1] == '1'\n\n");
+                        // printf("\n\nGPIO_OUTPUT_IO_0 job->data[1] == '1'\n\n");
                     }
                     else if (job->data[1] == '2')
                     {
@@ -754,12 +754,12 @@ void test_cron_job_sample_callback(cron_job *job)
                         if (job->data[1] == '0')
                         {
                             sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-                            // ////printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
+                            // printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
                         }
                         else if (job->data[1] == '1')
                         {
                             sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("ON"));
-                            // ////printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
+                            // printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
                         }
                         else if (job->data[1] == '2')
                         {
@@ -801,8 +801,8 @@ void test_cron_job_sample_callback(cron_job *job)
                         save_INT8_Data_In_Storage(NVS_KEY_RELAY2_LAST_VALUE, 1, nvs_System_handle);
                         save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, 1, nvs_System_handle);
 
-                        /* ////printf("\n\nROUTINE TIME AFTER1: %d - %hhn\n\n", job->id, job->expression.minutes); */
-                        ////printf("\n\nROUTINE TIME AFTER2:\n\n");
+                        /* printf("\n\nROUTINE TIME AFTER1: %d - %hhn\n\n", job->id, job->expression.minutes); */
+                        printf("\n\nROUTINE TIME AFTER2:\n\n");
 
                         /**********************************************************/
 
@@ -813,7 +813,7 @@ void test_cron_job_sample_callback(cron_job *job)
 
                         uint64_t auxTime_routine = -1;
 
-                        ////printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                        printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
                         while (jobNode != NULL)
                         {
@@ -825,21 +825,21 @@ void test_cron_job_sample_callback(cron_job *job)
                                 }
                             }
 
-                            ////printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                            printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
-                            ////printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
+                            printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
 
                             jobNode = jobNode->next;
                         }
 
                         nvs_set_u64(nvs_System_handle, NVS_KEY_ROUTINE2_TIME_ON, auxTime_routine);
-                        ////printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
+                        printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
 
                         free(jobNode);
                         /************************************************************/
 
                         BLE_Broadcast_Notify("R2 S R 1");
-                        // ////printf("\n\nGPIO_OUTPUT_IO_1 job->data[1] == '1'\n\n");
+                        // printf("\n\nGPIO_OUTPUT_IO_1 job->data[1] == '1'\n\n");
                     }
                     else if (job->data[1] == '2')
                     {
@@ -866,12 +866,12 @@ void test_cron_job_sample_callback(cron_job *job)
                         if (job->data[1] == '0')
                         {
                             sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("OFF"));
-                            // ////printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
+                            // printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
                         }
                         else if (job->data[1] == '1')
                         {
                             sprintf(logs_struct.relay_state, "%s", return_Json_SMS_Data("ON"));
-                            // ////printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
+                            // printf("\n\n ROUTINES logs_struct.relay_state %s\n\n", logs_struct.relay_state);
                         }
                         else if (job->data[1] == '2')
                         {
@@ -896,19 +896,19 @@ void test_cron_job_sample_callback(cron_job *job)
         {
             /* gpio_set_level(GPIO_OUTPUT_IO_0, 0);
             gpio_set_level(GPIO_OUTPUT_IO_1, 0); */
-            // ////printf("\n OUT OF RANGE\n");
+            // printf("\n OUT OF RANGE\n");
         }
     }
     else
     {
         /* gpio_set_level(GPIO_OUTPUT_IO_0, 0);
         gpio_set_level(GPIO_OUTPUT_IO_1, 0); */
-        // ////printf("\n\n IS EXEPTION DAY\n\n");
+        // printf("\n\n IS EXEPTION DAY\n\n");
     }
 
-    // ////printf("\n\njob->data - %s\n\n", cron_data);
+    // printf("\n\njob->data - %s\n\n", cron_data);
 
-    // ////printf("\n CALLBACK RUNNED AT TIME: %s SHOULD RUN AT: %s WITH DATA: %s \n", buffer, buffer2, (char *)job->data);
+    // printf("\n CALLBACK RUNNED AT TIME: %s SHOULD RUN AT: %s WITH DATA: %s \n", buffer, buffer2, (char *)job->data);
 
     free(cron_data);
 
@@ -928,7 +928,7 @@ char *get_ExeptionDay()
     char value[20] = {};
     size_t required_size = 0;
 
-    memset(file_contents_routines, 0, 200);
+    memset(file_contents_routines, 0, 500);
 
     if (it == NULL)
     {
@@ -940,14 +940,14 @@ char *get_ExeptionDay()
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
-        // ////printf("\naux get str %s\n", value);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("\naux get str %s\n", value);
         strcat(file_contents_routines, info.key);
         strcat(file_contents_routines, ";\0");
     }
 
     file_contents_routines[strlen(file_contents_routines) - 1] = '\0';
-    // ////printf("\n\nget_ExeptionDay - %s \n\n", file_contents_routines);
+    // printf("\n\nget_ExeptionDay - %s \n\n", file_contents_routines);
     free(it);
     return file_contents_routines;
 }
@@ -965,7 +965,7 @@ uint8_t send_udp_routines_funtion()
     // send_Routines_queue = xQueueCreate(2, sizeof(message));
     nvs_entry_info_t info;
 
-    // ////printf("\n task_Send_Routines 001 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+    // printf("\n task_Send_Routines 001 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
 
     routines_Count = 0;
     label_Cron_Init = 0;
@@ -983,27 +983,27 @@ uint8_t send_udp_routines_funtion()
 
     if (it == NULL)
     {
-        // ////printf("\n GET ROTINES !! \n");
+        // printf("\n GET ROTINES !! \n");
         sprintf(buffer_BLE, "%s", "RT G R NO ROUTINES");
     }
 
     routines_Number_exp = 9;
 
-    // ////printf("\n GET ROTINES !! \n");
+    // printf("\n GET ROTINES !! \n");
     while (it != NULL)
     {
 
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("key '%s', type '%d' \n", info.key, info.type);
+        // printf("key '%s', type '%d' \n", info.key, info.type);
 
         if (nvs_get_str(nvs_Routines_handle, info.key, NULL, &required_size) == ESP_OK)
         {
-            // ////printf("\nrequire size %d\n", required_size);
-            // ////printf("\nGET USERS NAMESPACE\n");
+            // printf("\nrequire size %d\n", required_size);
+            // printf("\nGET USERS NAMESPACE\n");
             if (nvs_get_str(nvs_Routines_handle, info.key, value, &required_size) == ESP_OK)
             {
-                // ////printf("\naux get str %s\n", value);
+                // printf("\naux get str %s\n", value);
             }
         }
 
@@ -1059,7 +1059,7 @@ uint8_t send_udp_routines_funtion()
             return 0;
         }
 
-        // ////printf("\nROUTINES SEND2 - %s\n", buffer_BLE);
+        // printf("\nROUTINES SEND2 - %s\n", buffer_BLE);
     }
 
     free(it);
@@ -1078,7 +1078,7 @@ uint8_t send_udp_routines_funtion()
 
 void task_Send_Routines(void *pvParameter)
 {
-    // ////printf("\n task_Send_Routines 0\n");
+    // printf("\n task_Send_Routines 0\n");
 
     allUsers_parameters_Message message;
 
@@ -1097,7 +1097,7 @@ void task_Send_Routines(void *pvParameter)
         if (xQueueReceive(send_Routines_queue, &message, portMAX_DELAY))
         {
 
-            // ////printf("\n task_Send_Routines 001 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+            // printf("\n task_Send_Routines 001 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
 
             routines_Count = 0;
             label_Cron_Init = 0;
@@ -1116,7 +1116,7 @@ void task_Send_Routines(void *pvParameter)
 
             if (it == NULL)
             {
-                // ////printf("\n GET ROTINES !! \n");
+                // printf("\n GET ROTINES !! \n");
                 sprintf(buffer_BLE, "%s", "RT G R NO ROUTINES");
                
             }
@@ -1130,21 +1130,21 @@ void task_Send_Routines(void *pvParameter)
                 routines_Number_exp = 3;
             }
 
-            // ////printf("\n GET ROTINES !! \n");
+            // printf("\n GET ROTINES !! \n");
             while (it != NULL)
             {
 
                 nvs_entry_info(it, &info);
                 it = nvs_entry_next(it);
-                // ////printf("key '%s', type '%d' \n", info.key, info.type);
+                // printf("key '%s', type '%d' \n", info.key, info.type);
 
                 if (nvs_get_str(nvs_Routines_handle, info.key, NULL, &required_size) == ESP_OK)
                 {
-                    // ////printf("\nrequire size %d\n", required_size);
-                    // ////printf("\nGET USERS NAMESPACE\n");
+                    // printf("\nrequire size %d\n", required_size);
+                    // printf("\nGET USERS NAMESPACE\n");
                     if (nvs_get_str(nvs_Routines_handle, info.key, value, &required_size) == ESP_OK)
                     {
-                        // ////printf("\naux get str %s\n", value);
+                        // printf("\naux get str %s\n", value);
                     }
                 }
 
@@ -1168,8 +1168,8 @@ void task_Send_Routines(void *pvParameter)
                 {
                     strcat(buffer_BLE, ":\0");
                     strcat(buffer_BLE, value);
-                    // ////printf("\nROUTINES SEND1 - %s\n", buffer_BLE);
-                    //printf("\n task_Send_Routines 1 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                    // printf("\nROUTINES SEND1 - %s\n", buffer_BLE);
+                    printf("\n task_Send_Routines 1 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                     if (message.BLE_UDP_Indication == UDP_INDICATION)
                     {
                         /* if (!send_UDP_Send(buffer_BLE,""))
@@ -1180,13 +1180,13 @@ void task_Send_Routines(void *pvParameter)
                     }
                     else
                     {
-                        //printf("\n task_Send_Routines 2 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                        printf("\n task_Send_Routines 2 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                         if (esp_ble_gatts_send_indicate(message.gattsIF, message.connID, message.handle_table, strlen(buffer_BLE), (uint8_t *)buffer_BLE, false) != ESP_OK)
                         {
-                            //printf("\n task_Send_Routines 3 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                            printf("\n task_Send_Routines 3 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                             break;
                         }
-                        //printf("\n task_Send_Routines 4 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                        printf("\n task_Send_Routines 4 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                         xSemaphoreTake(rdySem_Send_Routines, pdMS_TO_TICKS(3000));
                     }
 
@@ -1221,7 +1221,7 @@ void task_Send_Routines(void *pvParameter)
                     esp_ble_gatts_send_indicate(message.gattsIF, message.connID, message.handle_table, strlen(buffer_BLE), (uint8_t *)buffer_BLE, false);
                     xSemaphoreTake(rdySem_Send_Routines, pdMS_TO_TICKS(3000));
                 }
-                // ////printf("\nROUTINES SEND2 - %s\n", buffer_BLE);
+                // printf("\nROUTINES SEND2 - %s\n", buffer_BLE);
             }
 
             free(it);
@@ -1244,12 +1244,12 @@ uint8_t get_Routine_Range(char *inicalTime, char *finalTime)
     size_t required_size;
     char aux_Get_Routine_Range_Data[7];
     memset(aux_Get_Routine_Range_Data, 0, sizeof(aux_Get_Routine_Range_Data));
-    // ////printf("\nget_Routine_Range\n");
+    // printf("\nget_Routine_Range\n");
     if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_RANGE_T0, NULL, &required_size) == ESP_OK)
     {
         if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_RANGE_T0, aux_Get_Routine_Range_Data, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
+            // printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
             sprintf(inicalTime, "%s", aux_Get_Routine_Range_Data);
         }
         else
@@ -1269,7 +1269,7 @@ uint8_t get_Routine_Range(char *inicalTime, char *finalTime)
     {
         if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_RANGE_T1, aux_Get_Routine_Range_Data, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
+            // printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
             sprintf(finalTime, "%s", aux_Get_Routine_Range_Data);
         }
         else
@@ -1291,7 +1291,7 @@ void task_Routine_BiState_Send_RelayState1(void *pvParameter)
     while (1)
     {
         xSemaphoreTake(rdySem_Routine_BiState_Send_RelayState1, portMAX_DELAY);
-        // ////printf("\n\n biestavel routine %d\n\n",rele1_Bistate_Time);
+        // printf("\n\n biestavel routine %d\n\n",rele1_Bistate_Time);
         if (label_MonoStableRelay1 != 1)
         {
             label_MonoStableRelay1 = 1;
@@ -1351,21 +1351,21 @@ void initRoutines()
     size_t required_size = 0;
     routines_ID = 0;
     save_INT8_Data_In_Storage(NVS_ROUTINES_ID, routines_ID, nvs_System_handle);
-    // ////printf("\n\n akakak 1000\n\n");
+    // printf("\n\n akakak 1000\n\n");
     while (it != NULL)
     {
         nvs_entry_info_t info;
         nvs_entry_info(it, &info);
         it = nvs_entry_next(it);
-        // ////printf("ROUTINES - key '%s', type '%d' \n", info.key, info.type);
+        // printf("ROUTINES - key '%s', type '%d' \n", info.key, info.type);
 
         if (nvs_get_str(nvs_Routines_handle, info.key, NULL, &required_size) == ESP_OK)
         {
-            // ////printf("\nROUTINES require size %d\n", required_size);
-            // ////printf("\n ROUTINES NAMESPACE\n");
+            // printf("\nROUTINES require size %d\n", required_size);
+            // printf("\n ROUTINES NAMESPACE\n");
             if (nvs_get_str(nvs_Routines_handle, info.key, value, &required_size) == ESP_OK)
             {
-                // ////printf("\naux get str %s\n", value);
+                // printf("\naux get str %s\n", value);
                 setRoutine(value);
             }
         }
@@ -1381,9 +1381,9 @@ void initRoutines()
     {
         cron_start();
     }
-    // ////printf("\n\n akakak 1001\n\n");
+    // printf("\n\n akakak 1001\n\n");
     free(it);
-    // ////printf("\n\n akakak 1002\n\n");
+    // printf("\n\n akakak 1002\n\n");
     // heap_trace_stop();
     // heap_trace_dump();
 }
@@ -1395,7 +1395,7 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
     time_t now;
     time(&now);
 
-    // ////printf("\n activate now time %ld\n", now);
+    // printf("\n activate now time %ld\n", now);
 
     struct timeval epoch = {now, 0};
     struct timeval *tv = &epoch;
@@ -1410,12 +1410,12 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
         {
             if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, NULL, &required_size) == ESP_OK)
             {
-                // ////printf("\nrequire size %d\n", required_size);
+                // printf("\nrequire size %d\n", required_size);
                 if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timezone, &required_size) == ESP_OK)
                 {
                     if (!setenv("TZ", timezone, 1))
                     {
-                        // ////printf("\n activate now time \n");
+                        // printf("\n activate now time \n");
                         tzset();
                     }
                     else
@@ -1434,13 +1434,12 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
                 vTaskDelay(pdMS_TO_TICKS(500));
             }
 
-            if (label_network_portalRegister == 1)
-            {
+           
 
-                label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
+                /* label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle); */
 
                 send_UDP_Send("RT S A OK","");
-                //printf("\n\n\ send routines UDP2\n\n");
+                printf("\n\n\ send routines UDP2\n\n");
 
                 vTaskDelay(pdMS_TO_TICKS(500));
 
@@ -1450,15 +1449,15 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
                 uint8_t label_UDP_fail_and_changed = 0;
                 if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, NULL, &required_size) == ESP_OK)
                 {
-                    // ////printf("\nrequire size %d\n", required_size);
-                    //  ////printf("\nGET OWNER NAMESPACE\n");
+                    // printf("\nrequire size %d\n", required_size);
+                    //  printf("\nGET OWNER NAMESPACE\n");
                     if (nvs_get_str(nvs_System_handle, NVS_KEY_OWNER_INFORMATION, owner_Data, &required_size) == ESP_OK)
                     {
 
                         char *data_register;
 
                         char input_data[100];
-                        // ////printf("\n\n\ send routines UDP3\n\n");
+                        // printf("\n\n\ send routines UDP3\n\n");
                         parse_ValidateData_User(owner_Data, &user_validateData);
 
                         sprintf(input_data, "%s %s RT.G.T", user_validateData.phone, user_validateData.key);
@@ -1466,7 +1465,7 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
                         send_UDP_Send(data_register,"");
                         
                         memset(input_data, 0, 100);
-                        // ////printf("\n\nlabel_UDP_fail_and_changed trete 12122 %d\n\n", label_UDP_fail_and_changed);
+                        // printf("\n\nlabel_UDP_fail_and_changed trete 12122 %d\n\n", label_UDP_fail_and_changed);
                         sprintf(input_data, "%s %s RT.G.D", user_validateData.phone, user_validateData.key);
                         data_register = parseInputData(&input_data, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
                         send_UDP_Send(data_register,"");
@@ -1502,7 +1501,7 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
                         free(data_register);
                     }
                 }
-            }
+            
         }
         else
         {
@@ -1572,10 +1571,10 @@ int subtrairDias(int date, int days)
     }
 
     // Imprimir a nova data
-    // ////printf("\n\nData atual: %02d/%02d/%d\n", day, month, year);
+    // printf("\n\nData atual: %02d/%02d/%d\n", day, month, year);
 
     int finalDate = year * 10000 + month * 100 + day;
-    // ////printf("new year %d\n", finalDate);
+    // printf("new year %d\n", finalDate);
 
     return finalDate;
 }
@@ -1593,7 +1592,7 @@ uint8_t set_easter_day()
     // date = day * 100 + month;
     sprintf(date, "%02d%02d", day, month - 1);
 
-    // ////printf("\n\n pascoa - %s", date);
+    // printf("\n\n pascoa - %s", date);
 
     if (save_INT8_Data_In_Storage(date, 1, nvs_Mobile_Holydays_handle) != ESP_OK)
     {
@@ -1616,7 +1615,7 @@ uint8_t set_easter_monday()
     int date = 0;
     int carnaval_Date = 0;
 
-    // ////printf("\n\n SEGUNDA DE PASCOA nowtime.year %d\n\n", nowTime.year);
+    // printf("\n\n SEGUNDA DE PASCOA nowtime.year %d\n\n", nowTime.year);
     calcularPascoa(nowTime.year + 2000, &day, &month);
 
     date = nowTime.year * 10000 + month * 100 + day;
@@ -1630,7 +1629,7 @@ uint8_t set_easter_monday()
 
     sprintf(easterMondayDate, "%02d%02d", easter_monday_day, easter_monday_month - 1);
 
-    // ////printf("\n\n SEGUNDA DE PASCOA date - %s\n\n", easterMondayDate);
+    // printf("\n\n SEGUNDA DE PASCOA date - %s\n\n", easterMondayDate);
 
     if (save_INT8_Data_In_Storage(easterMondayDate, 1, nvs_Mobile_Holydays_handle) != ESP_OK)
     {
@@ -1653,7 +1652,7 @@ uint8_t set_easter_friday()
     int date = 0;
     int easter_friday_Date = 0;
 
-    // ////printf("\n\n carnaval nowtime.year %d\n\n", nowTime.year);
+    // printf("\n\n carnaval nowtime.year %d\n\n", nowTime.year);
     calcularPascoa(nowTime.year + 2000, &day, &month);
 
     date = nowTime.year * 10000 + month * 100 + day;
@@ -1667,7 +1666,7 @@ uint8_t set_easter_friday()
 
     sprintf(easter_fridayDate, "%02d%02d", easter_friday_day, easter_friday_month - 1);
 
-    // ////printf("\n\n easter_friday date - %s\n\n", easter_fridayDate);
+    // printf("\n\n easter_friday date - %s\n\n", easter_fridayDate);
 
     if (save_INT8_Data_In_Storage(easter_fridayDate, 1, nvs_Mobile_Holydays_handle) != ESP_OK)
     {
@@ -1741,12 +1740,12 @@ uint8_t get_rangeHolidaysDays(char *inicalTime, char *finalTime)
     size_t required_size;
     char aux_Get_Routine_Range_Data[7];
     memset(aux_Get_Routine_Range_Data, 0, sizeof(aux_Get_Routine_Range_Data));
-    // ////printf("\nget_Routine_Range\n");
+    // printf("\nget_Routine_Range\n");
     if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_HOLIDAYS_RANGE_T1, NULL, &required_size) == ESP_OK)
     {
         if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_HOLIDAYS_RANGE_T1, aux_Get_Routine_Range_Data, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
+            // printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
             sprintf(inicalTime, "%s", aux_Get_Routine_Range_Data);
         }
         else
@@ -1766,7 +1765,7 @@ uint8_t get_rangeHolidaysDays(char *inicalTime, char *finalTime)
     {
         if (nvs_get_str(nvs_System_handle, NVS_ROUTINES_HOLIDAYS_RANGE_T2, aux_Get_Routine_Range_Data, &required_size) == ESP_OK)
         {
-            // ////printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
+            // printf("\naux get str %s\n", aux_Get_Routine_Range_Data);
             sprintf(finalTime, "%s", aux_Get_Routine_Range_Data);
         }
         else
@@ -1839,7 +1838,7 @@ uint8_t set_corpusChristi()
     int date = 0;
     int carnaval_Date = 0;
 
-    // ////printf("\n\n corpo cristo nowtime.year %d\n\n", nowTime.year);
+    // printf("\n\n corpo cristo nowtime.year %d\n\n", nowTime.year);
     calcularPascoa(nowTime.year + 2000, &day, &month);
 
     date = nowTime.year * 10000 + month * 100 + day;
@@ -1853,7 +1852,7 @@ uint8_t set_corpusChristi()
 
     sprintf(corpusChristiDate, "%02d%02d", corpusChristi_day, corpusChristi_month - 1);
 
-    // ////printf("\n\n corpo de cristo date - %s\n\n", corpusChristiDate);
+    // printf("\n\n corpo de cristo date - %s\n\n", corpusChristiDate);
 
     if (save_INT8_Data_In_Storage(corpusChristiDate, 1, nvs_Mobile_Holydays_handle) != ESP_OK)
     {
@@ -1876,7 +1875,7 @@ uint8_t set_carnival()
     int date = 0;
     int carnaval_Date = 0;
 
-    // ////printf("\n\n carnaval nowtime.year %d\n\n", nowTime.year);
+    // printf("\n\n carnaval nowtime.year %d\n\n", nowTime.year);
     calcularPascoa(nowTime.year + 2000, &day, &month);
 
     date = nowTime.year * 10000 + month * 100 + day;
@@ -1890,7 +1889,7 @@ uint8_t set_carnival()
 
     sprintf(carnavalDate, "%02d%02d", carnaval_day, carnaval_month - 1);
 
-    // ////printf("\n\n carnaval date - %s\n\n", carnavalDate);
+    // printf("\n\n carnaval date - %s\n\n", carnavalDate);
 
     if (save_INT8_Data_In_Storage(carnavalDate, 1, nvs_Mobile_Holydays_handle) != ESP_OK)
     {

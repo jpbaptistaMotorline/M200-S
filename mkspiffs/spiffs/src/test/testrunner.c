@@ -105,7 +105,7 @@ static void dump_res(test_res **head) {
   test_res *tr = (*head);
   while (tr) {
     test_res *next_tr = tr->_next;
-    //////printf("  %s\n", tr->name);
+    //printf("  %s\n", tr->name);
     free(tr);
     tr = next_tr;
   }
@@ -152,10 +152,10 @@ int run_tests(int argc, char **args) {
       strcpy(test_main.excl_filter, args[arg]);
       excl_filter = 0;
     } else {
-      //////printf("running tests from %s\n", args[arg]);
+      //printf("running tests from %s\n", args[arg]);
       FILE *fd = fopen(args[1], "r");
       if (fd == NULL) {
-        //////printf("%s not found\n", args[arg]);
+        //printf("%s not found\n", args[arg]);
         return -2;
       }
       test_main.spec = fd;
@@ -170,7 +170,7 @@ int run_tests(int argc, char **args) {
   }
 
   if (test_main.test_count == 0) {
-    //////printf("No tests to run\n");
+    //printf("No tests to run\n");
     return 0;
   }
 
@@ -200,17 +200,17 @@ int run_tests(int argc, char **args) {
     switch (res) {
     case TEST_RES_OK:
       ok++;
-      //////printf("  .. ok\n");
+      //printf("  .. ok\n");
       break;
     case TEST_RES_FAIL:
       failed++;
-      //////printf("  .. FAILED\n");
+      //printf("  .. FAILED\n");
       if (test_main.on_stop) test_main.on_stop(cur_t);
       add_res(cur_t, &test_main.failed, &test_main.failed_last);
       break;
     case TEST_RES_ASSERT:
       stopped++;
-      //////printf("  .. ABORTED\n");
+      //printf("  .. ABORTED\n");
       if (test_main.on_stop) test_main.on_stop(cur_t);
       add_res(cur_t, &test_main.stopped, &test_main.stopped_last);
       break;
@@ -222,17 +222,17 @@ int run_tests(int argc, char **args) {
   close(fd_success);
   close(fd_bad);
   DBGT("ran %i tests\n", test_main.test_count);
-  //////printf("Test report, %i tests\n", test_main.test_count);
-  //////printf("%i succeeded\n", ok);
-  //////printf("%i failed\n", failed);
+  //printf("Test report, %i tests\n", test_main.test_count);
+  //printf("%i succeeded\n", ok);
+  //printf("%i failed\n", failed);
   dump_res(&test_main.failed);
-  //////printf("%i stopped\n", stopped);
+  //printf("%i stopped\n", stopped);
   dump_res(&test_main.stopped);
   if (ok < test_main.test_count) {
-    //////printf("\nFAILED\n");
+    //printf("\nFAILED\n");
     return -1;
   } else {
-    //////printf("\nALL TESTS OK\n");
+    //printf("\nALL TESTS OK\n");
     return 0;
   }
 }

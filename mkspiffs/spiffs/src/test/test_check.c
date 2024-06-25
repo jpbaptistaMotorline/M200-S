@@ -27,7 +27,7 @@ static void teardown() {
 
 TEST(evil_write) {
   fs_set_validate_flashing(0);
-  //////printf("writing corruption to block 1 data range (leaving lu intact)\n");
+  //printf("writing corruption to block 1 data range (leaving lu intact)\n");
   u32_t data_range = SPIFFS_CFG_LOG_BLOCK_SZ(FS) -
       SPIFFS_CFG_LOG_PAGE_SZ(FS) * (SPIFFS_OBJ_LOOKUP_PAGES(FS));
   u8_t *corruption = malloc(data_range);
@@ -39,11 +39,11 @@ TEST(evil_write) {
   int size = SPIFFS_DATA_PAGE_SIZE(FS)*3;
   int res = test_create_and_write_file("file", size, size);
 
-  //////printf("CHECK1-----------------\n");
+  //printf("CHECK1-----------------\n");
   SPIFFS_check(FS);
-  //////printf("CHECK2-----------------\n");
+  //printf("CHECK2-----------------\n");
   SPIFFS_check(FS);
-  //////printf("CHECK3-----------------\n");
+  //printf("CHECK3-----------------\n");
   SPIFFS_check(FS);
 
   res = test_create_and_write_file("file2", size, size);
@@ -276,7 +276,7 @@ TEST(index_cons1) {
   res = spiffs_obj_lu_find_id_and_span(FS, s.obj_id | SPIFFS_OBJ_ID_IX_FLAG, 0, 0, &pix);
   TEST_CHECK(res >= 0);
 
-  //////printf("  deleting lu entry pix %04x\n", pix);
+  //printf("  deleting lu entry pix %04x\n", pix);
   // reset lu entry to being erased, but keep page data
   spiffs_obj_id obj_id = SPIFFS_OBJ_ID_DELETED;
   spiffs_block_ix bix = SPIFFS_BLOCK_FOR_PAGE(FS, pix);
@@ -317,7 +317,7 @@ TEST(index_cons2) {
   res = spiffs_obj_lu_find_id_and_span(FS, s.obj_id | SPIFFS_OBJ_ID_IX_FLAG, 0, 0, &pix);
   TEST_CHECK(res >= 0);
 
-  //////printf("  writing lu entry for index page, ix %04x, as data page\n", pix);
+  //printf("  writing lu entry for index page, ix %04x, as data page\n", pix);
   spiffs_obj_id obj_id = 0x1234;
   spiffs_block_ix bix = SPIFFS_BLOCK_FOR_PAGE(FS, pix);
   int entry = SPIFFS_OBJ_LOOKUP_ENTRY_FOR_PAGE(FS, pix);
@@ -357,7 +357,7 @@ TEST(index_cons3) {
   res = spiffs_obj_lu_find_id_and_span(FS, s.obj_id | SPIFFS_OBJ_ID_IX_FLAG, 0, 0, &pix);
   TEST_CHECK(res >= 0);
 
-  //////printf("  setting lu entry pix %04x to another index page\n", pix);
+  //printf("  setting lu entry pix %04x to another index page\n", pix);
   // reset lu entry to being erased, but keep page data
   spiffs_obj_id obj_id = 1234 | SPIFFS_OBJ_ID_IX_FLAG;
   spiffs_block_ix bix = SPIFFS_BLOCK_FOR_PAGE(FS, pix);
@@ -397,7 +397,7 @@ TEST(index_cons4) {
   res = spiffs_obj_lu_find_id_and_span(FS, s.obj_id | SPIFFS_OBJ_ID_IX_FLAG, 0, 0, &pix);
   TEST_CHECK(res >= 0);
 
-  //////printf("  cue objix hdr deletion in page %04x\n", pix);
+  //printf("  cue objix hdr deletion in page %04x\n", pix);
   // set flags as deleting ix header
   u32_t addr = SPIFFS_PAGE_TO_PADDR(FS, pix) + offsetof(spiffs_page_header, flags);
   u8_t flags = 0xff & ~(SPIFFS_PH_FLAG_FINAL | SPIFFS_PH_FLAG_USED | SPIFFS_PH_FLAG_INDEX | SPIFFS_PH_FLAG_IXDELE);

@@ -16,7 +16,7 @@ static void setup(test *t) {}
 static void teardown(test *t) {}
 
 TEST(mytest) {
-  //////printf("mytest runs now..\n");
+  //printf("mytest runs now..\n");
   return 0;
 } TEST_END
 
@@ -35,12 +35,12 @@ static void setup(test *t) {}
 static void teardown(test *t) {}
 
 TEST(mytest2a) {
-  //////printf("mytest2a runs now..\n");
+  //printf("mytest2a runs now..\n");
   return 0;
 } TEST_END
 
 TEST(mytest2b) {
-  //////printf("mytest2b runs now..\n");
+  //printf("mytest2b runs now..\n");
   return 0;
 } TEST_END
 
@@ -87,39 +87,39 @@ typedef struct test_res_s {
 } test_res;
 
 #define TEST_CHECK(x) if (!(x)) { \
-  //////printf("  TEST FAIL %s:%d\n", __FILE__, __LINE__); \
+  //printf("  TEST FAIL %s:%d\n", __FILE__, __LINE__); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_EQ(x, y) if ((x) != (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d != %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d != %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_NEQ(x, y) if ((x) == (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d == %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d == %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_GT(x, y) if ((x) <= (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d <= %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d <= %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_LT(x, y) if ((x) >= (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d >= %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d >= %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_GE(x, y) if ((x) < (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d < %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d < %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_CHECK_LE(x, y) if ((x) > (y)) { \
-  //////printf("  TEST FAIL %s:%d, %d > %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
+  //printf("  TEST FAIL %s:%d, %d > %d\n", __FILE__, __LINE__, (int)(x), (int)(y)); \
   goto __fail_stop; \
 }
 #define TEST_ASSERT(x) if (!(x)) { \
-  //////printf("  TEST ASSERT %s:%d\n", __FILE__, __LINE__); \
+  //printf("  TEST ASSERT %s:%d\n", __FILE__, __LINE__); \
   goto __fail_assert; \
 }
 
-#define DBGT(...) //////printf(__VA_ARGS__)
+#define DBGT(...) //printf(__VA_ARGS__)
 
 #define str(s) #s
 

@@ -10,24 +10,24 @@
 cron_job *cron_job_create(const char *schedule, cron_job_callback callback, void *data)
 {
   cron_job_list_init(); // CALL THIS ON ANY CREATE
-  //////printf("\n\nCRON TAB 45\n\n");
+  //printf("\n\nCRON TAB 45\n\n");
   cron_job *job = calloc(sizeof(cron_job), 1);
-  //////printf("\n\nCRON TAB 46\n\n");
+  //printf("\n\nCRON TAB 46\n\n");
   if (job == NULL)
   {
     goto end;
   }
-  //////printf("\n\nCRON TAB 47\n\n");
+  //printf("\n\nCRON TAB 47\n\n");
   job->callback = callback;
   asprintf(&job->data,"%s",(char*)data);
   //*job->data = *data;
   job->id = -1;
   job->load = NULL;
-  //////printf("\n\nCRON TAB 48\n\n");
+  //printf("\n\nCRON TAB 48\n\n");
   cron_job_load_expression(job, schedule);
-  //////printf("\n\nCRON TAB 49\n\n");
+  //printf("\n\nCRON TAB 49\n\n");
   cron_job_schedule(job);
-  //////printf("\n\nCRON TAB 50\n\n");
+  //printf("\n\nCRON TAB 50\n\n");
   goto end;
 
 end:
@@ -65,22 +65,22 @@ int cron_stop()
 
   if (state.running == 0)
   {
-    //////printf("\ncron_stop 11\n");
+    //printf("\ncron_stop 11\n");
     return -1;
   }
   TaskHandle_t xHandle;
   state.running = 0;
-  ////////printf("\nstate.handle = %d")
+  ////printf("\nstate.handle = %d")
   //xHandle = state.handle;
   //state.handle = NULL;
   if (state.handle != NULL)
   {
-    //////printf("\ncron_stop 22\n");
+    //printf("\ncron_stop 22\n");
     //vTaskSuspend(state.handle);
     vTaskDelete(state.handle);
     state.handle = NULL;
   }
-  //////printf("\ncron_stop 33\n");
+  //printf("\ncron_stop 33\n");
   return 0;
 }
 
@@ -89,10 +89,10 @@ int cron_start()
   BaseType_t xReturned;
   if (state.running == 1 || state.handle != NULL)
   {
-    //////printf("\ncron_start\nrunning = %d\n",(int)state.running);
+    //printf("\ncron_start\nrunning = %d\n",(int)state.running);
     return -1;
   }
-  //////printf("\ncron_start22\nrunning = %d\n",(int)state.running);
+  //printf("\ncron_start22\nrunning = %d\n",(int)state.running);
   /* Create the task, storing the handle. */
   xReturned = xTaskCreatePinnedToCore(
       cron_schedule_task,   /* Function that implements the task. */

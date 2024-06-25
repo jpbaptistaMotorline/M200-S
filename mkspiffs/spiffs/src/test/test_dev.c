@@ -35,7 +35,7 @@ TEST(interrupted_write) {
   u8_t *buf = malloc(sz);
   memrand(buf, sz);
 
-  //////printf("  create reference file\n");
+  //printf("  create reference file\n");
   fd = SPIFFS_open(FS, name, SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(fd > 0);
   clear_flash_ops_log();
@@ -44,10 +44,10 @@ TEST(interrupted_write) {
   SPIFFS_close(FS, fd);
 
   u32_t written = get_flash_ops_log_write_bytes();
-  //////printf("  written bytes: %i\n", written);
+  //printf("  written bytes: %i\n", written);
 
 
-  //////printf("  create error file\n");
+  //printf("  create error file\n");
   fd = SPIFFS_open(FS, name2, SPIFFS_RDWR | SPIFFS_CREAT | SPIFFS_TRUNC, 0);
   TEST_CHECK(fd > 0);
   clear_flash_ops_log();
@@ -65,14 +65,14 @@ TEST(interrupted_write) {
 #endif
 
 
-  //////printf("  read error file\n");
+  //printf("  read error file\n");
   fd = SPIFFS_open(FS, name2, SPIFFS_RDONLY, 0);
   TEST_CHECK(fd > 0);
 
   spiffs_stat s;
   res = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res >= 0);
-  //////printf("  file size: %i\n", s.size);
+  //printf("  file size: %i\n", s.size);
 
   if (s.size > 0) {
     u8_t *buf2 = malloc(s.size);
@@ -82,31 +82,31 @@ TEST(interrupted_write) {
     u32_t ix = 0;
     for (ix = 0; ix < s.size; ix += 16) {
       int i;
-      //////printf("  ");
+      //printf("  ");
       for (i = 0; i < 16; i++) {
-        //////printf("%02x", buf[ix+i]);
+        //printf("%02x", buf[ix+i]);
       }
-      //////printf("  ");
+      //printf("  ");
       for (i = 0; i < 16; i++) {
-        //////printf("%02x", buf2[ix+i]);
+        //printf("%02x", buf2[ix+i]);
       }
-      //////printf("\n");
+      //printf("\n");
     }
     free(buf2);
   }
   SPIFFS_close(FS, fd);
 
 
-  //////printf("  FS check\n");
+  //printf("  FS check\n");
   SPIFFS_check(FS);
 
-  //////printf("  read error file again\n");
+  //printf("  read error file again\n");
   fd = SPIFFS_open(FS, name2, SPIFFS_APPEND | SPIFFS_RDWR, 0);
   TEST_CHECK(fd > 0);
   res = SPIFFS_fstat(FS, fd, &s);
   TEST_CHECK(res >= 0);
-  //////printf("  file size: %i\n", s.size);
-  //////printf("  write file\n");
+  //printf("  file size: %i\n", s.size);
+  //printf("  write file\n");
   res = SPIFFS_write(FS, fd, buf, sz);
   TEST_CHECK(res >= 0);
   SPIFFS_close(FS, fd);

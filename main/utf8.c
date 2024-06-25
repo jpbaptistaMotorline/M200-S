@@ -190,13 +190,13 @@ int utf8_is_valid(const char* data, size_t size)
 //     valid = utf8_verify(buffer);
 
 //     /* if (strcmp(buffer, expected) != 0) {
-//         //////printf("FAILED: %s != %s\n", expected, buffer);
+//         //printf("FAILED: %s != %s\n", expected, buffer);
 //     } else {
-//         //////printf("PASSED: %s == %s\n", expected, buffer);
+//         //printf("PASSED: %s == %s\n", expected, buffer);
 //     } */
 
 //     if (valid != 0) {
-//         //////printf("Buffer contains invalid bytes: %s\n", buffer);
+//         //printf("Buffer contains invalid bytes: %s\n", buffer);
 //     }
 
 //     free(buffer);
@@ -259,7 +259,7 @@ int utf8_is_valid(const char* data, size_t size)
 //         }
 //     }
 
-//      //////printf("\n\nBuffer encode %s\n\n", buffer);
+//      //printf("\n\nBuffer encode %s\n\n", buffer);
 //     buffer[cnt++] = '\0';
  
 //     return cnt;
