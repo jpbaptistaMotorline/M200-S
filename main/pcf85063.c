@@ -135,7 +135,7 @@ uint8_t PCF85_Readnow(uint8_t *buf)
         buf[5] = bcdToDec(bufss[5] & 0x1F);
         buf[6] = bcdToDec(bufss[6]);
 
-        printf("\n\n read rtc %s\n\n",buf);
+        //printf("\n\n read rtc %s\n\n",buf);
 
         return 1;
     }

@@ -33,28 +33,7 @@ feedback_configurations fd_configurations;
 
 TaskHandle_t handle_Alarm_Calls_Task;
 
-void task_sendFeedbackData(void *pvParameter)
-{
 
-    data_EG91_Send_SMS data_SMS;
-    char msg[100];
-    uint8_t feedback_Queue_Data = 0;
-    rdySem_Control_Send_Feedback = xSemaphoreCreateBinary();
-    Feedback_Send_Data_queue = xQueueCreate(1, sizeof(feedback_SMS_Data));
-
-    for (;;)
-    {
-        //printf("\ntask send feedback\n");
-        if (xQueueReceive(Feedback_Send_Data_queue, &feedback_Queue_Data, portMAX_DELAY))
-        {
-            xSemaphoreTake(rdySem_Control_Send_Feedback, portMAX_DELAY);
-
-            sprintf(data_SMS.phoneNumber, "%s", fd_numbers.F1);
-            sprintf(data_SMS.payload, "%s", msg);
-            xQueueSendToBack(queue_EG91_SendSMS, (void *)&data_SMS, pdMS_TO_TICKS(100));
-        }
-    }
-}
 
 void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 {
@@ -74,6 +53,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
                     if (fd_configurations.input_Config & FEEDBACK_I1_NC)
                     {
                         //printf("\n\n send_Normal_Feedback 222 %d - %d\n\n", inputValue, inputNumber);
+                        //printf("\n\n now 4< \n\n");
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
 
@@ -92,6 +72,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
                     if (fd_configurations.input_Config & FEEDBACK_I1_NO)
                     {
                         //printf("\n\n send_Normal_Feedback 555 %d - %d\n\n", inputValue, inputNumber);
+                        //printf("\n\n now 5< \n\n");
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay1_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
 
@@ -117,6 +98,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
                     if (fd_configurations.input_Config & FEEDBACK_I2_NC)
                     {
 
+                        //printf("\n\n now 6< \n\n");
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_1);
 
@@ -135,6 +117,7 @@ void send_Normal_Feedback(uint8_t inputValue, uint8_t inputNumber)
 
                     if (fd_configurations.input_Config & FEEDBACK_I2_NO)
                     {
+                        //printf("\n\n now 7< \n\n");
                         feedback_SMS_Data.Normal_Feedback_Send_SMS_Parameters.relay2_Activation = 0;
                         example_tg_timer_deinit(TIMER_GROUP_0, TIMER_1);
 
@@ -318,7 +301,7 @@ void normal_Feedback_Check_And_Save_Data(char *phone_Number, uint8_t releNumber)
     if (fd_configurations.normal_FB_Mode == 1)
     {
         uint8_t feedbackNumber = check_IF_Feedback_Number(phone_Number);
-        //printf("\n\nnormal_Feedback_Check_And_Save_Data 111\n\n");
+    //printf("\n\nnormal_Feedback_Check_And_Save_Data 111\n\n");
         if (feedbackNumber > 0 && feedbackNumber < 7)
         {
             //printf("\n\nnormal_Feedback_Check_And_Save_Data 222\n\n");
@@ -1217,7 +1200,7 @@ char *read_Feedback_number(uint8_t line)
         /* strcpy(readData,"F1 ");
         strcat(readData,fd_configurations.phone1); */
         lenght += sprintf(readData, "F1 %s\n", fd_configurations.phone1);
-        printf("\nread data feedback A = %s\n", readData);
+        //printf("\nread data feedback A = %s\n", readData);
 
         lenght += sprintf(readData + lenght, "F2 %s\n", fd_configurations.phone2);
 
@@ -1240,7 +1223,7 @@ char *read_Feedback_number(uint8_t line)
 
         lenght += sprintf(readData + lenght, "M %d", fd_configurations.normal_FB_Mode);
 
-        printf("\nread data feedback1 = %s\n", readData);
+        //printf("\nread data feedback1 = %s\n", readData);
     }
     else if (fd_configurations.alarmMode.A == 1)
     {

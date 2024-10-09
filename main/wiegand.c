@@ -39,6 +39,7 @@
 #include <stdlib.h>
 // #include <esp_idf_lib_helpers.h>
 #include "wiegand.h"
+#include "esp_err.h"
 #include "users.h"
 #include "core.h"
 #include "rele.h"
@@ -254,7 +255,7 @@ void wiegand_task(void *arg)
 {
     // Create queue
     queue = xQueueCreate(5, sizeof(data_packet_t));
-    //ESP_ERROR_CHECK( heap_trace_init_standalone(trace_record, NUM_RECORDS) );
+    // ESP_ERROR_CHECK( heap_trace_init_standalone(trace_record, NUM_RECORDS) );
     if (!queue)
     {
         // ESP_LOGE(TAG, "Error creating queue");
@@ -286,9 +287,9 @@ void wiegand_task(void *arg)
         xQueueReceive(queue, &p, portMAX_DELAY);
 
         // dump received data
-        // printf("==========================================\n");
+        //printf("==========================================\n");
         // printf("Bits received: %d\n", p.bits);
-        // printf("Received data: - %d", p.bits);
+         //printf("Received data: - %d", p.bits);
 
         uint8_t bits_to_shift = 0;
         uint64_t wiegandResult = 0;
@@ -326,11 +327,11 @@ void wiegand_task(void *arg)
 
         for (size_t i = 0; i < bytes + (tail ? 1 : 0); i++)
         {
-          //  printf(" 0x%02x", p.data[i]);
+            //  printf(" 0x%02x", p.data[i]);
             wiegandResult = (wiegandResult << 8) | p.data[i];
         }
-        //printf("\nwiegand 1- %lld\n", wiegandResult);
-        // wiegandResult = wiegandResult & 0x03FFFFFF;
+        // printf("\nwiegand 1- %lld\n", wiegandResult);
+        //  wiegandResult = wiegandResult & 0x03FFFFFF;
 
         if (p.bits == 26)
         {
@@ -351,17 +352,17 @@ void wiegand_task(void *arg)
                  {
                      if (xTimerIsTimerActive(xTimer_autoadd_wiegand) == pdFALSE)
                      {
-                         printf("\nwiegand keypadCount 6534\n\n");
+                         //printf("\nwiegand keypadCount 6534\n\n");
                      }
                      else
                      {
-                         printf("\nwiegand keypadCount 1111\n\n");
+                         //printf("\nwiegand keypadCount 1111\n\n");
                      } */
 
             keypadCount = 1;
             wiegandMode = WIEGAND_KEYPAD_MODE_LABEL;
             xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0);
-            //printf("\nwiegand keypadCount 55- %d\n", keypadCount);
+            // printf("\nwiegand keypadCount 55- %d\n", keypadCount);
             memset(keypadCode, 0, sizeof(keypadCode));
             /*    }
            }
@@ -372,147 +373,151 @@ void wiegand_task(void *arg)
                keypadCount = 0;
 
                wiegandMode = WIEGAND_KEYPAD_MODE_LABEL;
-               printf("\nwiegand keypadCount 00- %d\n", keypadCount);
+               //printf("\nwiegand keypadCount 00- %d\n", keypadCount);
                memset(keypadCode, 0, sizeof(keypadCode));
            } */
         }
         else if (wiegandResult == 176 && keypadCount == 1)
         {
-            
+
             ESP_LOG_BUFFER_HEX("keypadCode ", keypadCode, 6);
             uint64_t keyPadValue = ((uint64_t)keypadCode[5] << 40) | ((uint64_t)keypadCode[4] << 32) | ((uint64_t)keypadCode[3] << 24) | ((uint64_t)keypadCode[2] << 16) | ((uint64_t)keypadCode[1] << 8) | keypadCode[0];
             keypadCode[keyPadIndex++] = 34;
-            printf("\n\nhexhex 0x%llx \n\n", keyPadValue);
+            //printf("\n\nhexhex 0x%llx \n\n", keyPadValue);
             // ESP_LOG_BUFFER_HEX("keyPadValue ", keyPadValue, 8);
-            printf("\nwiegand 89898- %lld\n", keyPadValue);
+            //printf("\nwiegand 89898- %lld\n", keyPadValue);
             wiegand_parse_getData(keyPadValue, &keypadCode, WIEGAND_KEYPAD_MODE_LABEL);
             keyPadIndex = 0;
             keypadCount = 0;
             wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-            
         }
 
         // printf("\n==========================================\n");
-        if (wiegandMode == WIEGAND_KEYPAD_MODE_LABEL)
+        if (mqtt_connectLabel)
         {
-            if (keyPadIndex < 6)
+            /* code */
+
+            if (wiegandMode == WIEGAND_KEYPAD_MODE_LABEL)
             {
-                if (wiegandResult != 160)
+                if (keyPadIndex < 6)
                 {
-                    printf("\nwiegand keyPadIndex- %lld\n", wiegandResult);
-                    keypadCode[keyPadIndex++] = (wiegandResult >> 4) + 48;
-                    printf("\nwiegand keyPadIndex-aaaa %lld\n", wiegandResult);
-                }
+                    if (wiegandResult != 160)
+                    {
+                        //printf("\nwiegand keyPadIndex- %lld\n", wiegandResult);
+                        keypadCode[keyPadIndex++] = (wiegandResult >> 4) + 48;
+                        //printf("\nwiegand keyPadIndex-aaaa %lld\n", wiegandResult);
+                    }
 
-                /*  if (xTimerIsTimerActive(xTimer_autoadd_wiegand) == pdFALSE)
-                 {
-                     wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-                     printf("\nwiegand keyp 333- %d\n", keypadCount);
-                     // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
-                 }
-                 else
-                 {
-                     if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) != pdPASS)
+                    /*  if (xTimerIsTimerActive(xTimer_autoadd_wiegand) == pdFALSE)
                      {
-                         xTimerStop(xTimer_autoadd_wiegand, 0);
-                         printf("\nwiegand keyp 888- %d\n", keypadCount);
-                         keyPadIndex = 0;
-                         keypadCount = 0;
                          wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-
-                         // xTimerDelete(xTimer_autoadd_wiegand, 0);
-
+                         //printf("\nwiegand keyp 333- %d\n", keypadCount);
                          // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
                      }
                      else
-                     { */
+                     {
+                         if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) != pdPASS)
+                         {
+                             xTimerStop(xTimer_autoadd_wiegand, 0);
+                             //printf("\nwiegand keyp 888- %d\n", keypadCount);
+                             keyPadIndex = 0;
+                             keypadCount = 0;
+                             wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
 
-                /*    }
-               } */
-            }
-            else
-            {
-                printf("\nwiegand xTimerStop- %lld\n", wiegandResult);
-                xTimerStop(xTimer_autoadd_wiegand, 0);
-                memset(keypadCode, 0, sizeof(keypadCode));
-                keyPadIndex = 0;
-                keypadCount = 0;
-                wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-            }
-        }
-        else if (wiegandMode == WIEGAND_AUTO_SAVE_MODE_LABEL)
-        {
-            uint8_t addDefault_user_result = add_defaultUser_wiegand(wiegandResult);
-            if (addDefault_user_result == 1)
-            {
-                if (xTimerIsTimerActive(xTimer_autoadd_wiegand) == pdFALSE)
-                {
-                    wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-                    // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
+                             // xTimerDelete(xTimer_autoadd_wiegand, 0);
+
+                             // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
+                         }
+                         else
+                         { */
+
+                    /*    }
+                   } */
                 }
                 else
                 {
-                    if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) != pdPASS)
+                    //printf("\nwiegand xTimerStop- %lld\n", wiegandResult);
+                    xTimerStop(xTimer_autoadd_wiegand, 0);
+                    memset(keypadCode, 0, sizeof(keypadCode));
+                    keyPadIndex = 0;
+                    keypadCount = 0;
+                    wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
+                }
+            }
+            else if (wiegandMode == WIEGAND_AUTO_SAVE_MODE_LABEL)
+            {
+                uint8_t addDefault_user_result = add_defaultUser_wiegand(wiegandResult);
+                if (addDefault_user_result == 1)
+                {
+                    if (xTimerIsTimerActive(xTimer_autoadd_wiegand) == pdFALSE)
                     {
-                        xTimerStop(xTimer_autoadd_wiegand, 0);
-
                         wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
-
-                        // xTimerDelete(xTimer_autoadd_wiegand, 0);
-
                         // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
                     }
                     else
                     {
-                        // printf("\n\nWIEGAND GRAVADO - %lld\n\n", wiegandResult);
-                        /*  char *wiegand_MQTT_rsp;
-                         asprintf(&wiegand_MQTT_rsp, "WI G W %lld", wiegandResult);
-                         send_UDP_Send(wiegand_MQTT_rsp);
-                         free(wiegand_MQTT_rsp); */
-                        // TODO: ENVIAR WI G W + WIEGANDRESULT
+                        if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) != pdPASS)
+                        {
+                            xTimerStop(xTimer_autoadd_wiegand, 0);
+
+                            wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
+
+                            // xTimerDelete(xTimer_autoadd_wiegand, 0);
+
+                            // TODO: ENVIAR ERRO QUE NÃO IRA GRAVAR MAIS
+                        }
+                        else
+                        {
+                            // printf("\n\nWIEGAND GRAVADO - %lld\n\n", wiegandResult);
+                            /*  char *wiegand_MQTT_rsp;
+                             asprintf(&wiegand_MQTT_rsp, "WI G W %lld", wiegandResult);
+                             send_UDP_Send(wiegand_MQTT_rsp);
+                             free(wiegand_MQTT_rsp); */
+                            // TODO: ENVIAR WI G W + WIEGANDRESULT
+                        }
                     }
                 }
+                else if (addDefault_user_result == ERROR_NEW_USER_ALREADY_EXISTS)
+                {
+                    // printf("\n\nWIEGAND JA EXISTE - %lld\n\n", wiegandResult);
+                }
+                else
+                {
+                    // printf("\n\nWIEGAND ERROR - %lld\n\n", wiegandResult);
+                }
             }
-            else if (addDefault_user_result == ERROR_NEW_USER_ALREADY_EXISTS)
+            else if (wiegandMode == WIEGAND_NORMAL_MODE_LABEL)
             {
-                // printf("\n\nWIEGAND JA EXISTE - %lld\n\n", wiegandResult);
+                wiegand_parse_getData(wiegandResult, NULL, WIEGAND_NORMAL_MODE_LABEL);
             }
-            else
+            else if (wiegandMode == WIEGAND_READ_MODE_LABEL)
             {
-                // printf("\n\nWIEGAND ERROR - %lld\n\n", wiegandResult);
+                char *wiegandNumber;
+
+                char auxWiegand_str[200] = {};
+
+                asprintf(&wiegandNumber, "WI G W %lld", wiegandResult);
+
+                if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) == pdPASS)
+                {
+                    xTimerStop(xTimer_autoadd_wiegand, 0);
+                }
+
+                send_UDP_Send(wiegandNumber, "");
+
+                wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
             }
-        }
-        else if (wiegandMode == WIEGAND_NORMAL_MODE_LABEL)
-        {
-            wiegand_parse_getData(wiegandResult, NULL, WIEGAND_NORMAL_MODE_LABEL);
-        }
-        else if (wiegandMode == WIEGAND_READ_MODE_LABEL)
-        {
-            char *wiegandNumber;
-
-            char auxWiegand_str[200] = {};
-
-            asprintf(&wiegandNumber, "WI G W %lld", wiegandResult);
-
-            if (xTimerChangePeriod(xTimer_autoadd_wiegand, pdMS_TO_TICKS(10000), 0) == pdPASS)
-            {
-                xTimerStop(xTimer_autoadd_wiegand, 0);
-            }
-
-            send_UDP_Send(wiegandNumber, "");
-
-            wiegandMode = WIEGAND_NORMAL_MODE_LABEL;
         }
     }
 }
 
 uint8_t wiegand_parse_getData(uint64_t wiegand_data, char *keypadValue, uint8_t mode)
 {
-    
+
     MyUser validateData_user;
 
     memset(&validateData_user, 0, sizeof(validateData_user));
- 
+
     char *wiegandData_str;
     char wiegandDataNumber[20] = {};
     char wiegandDataUser[200] = {};
@@ -531,16 +536,14 @@ uint8_t wiegand_parse_getData(uint64_t wiegand_data, char *keypadValue, uint8_t 
 
     if (checkIf_wiegandExist(wiegandData_str, &wiegandDataNumber))
     {
-        printf("\n\nwiegand Number ph2 %s\n\n", wiegandDataNumber);
+        //printf("\n\nwiegand Number ph2 %s\n\n", wiegandDataNumber);
 
         if (MyUser_Search_User(wiegandDataNumber, wiegandDataUser) == ESP_OK)
         {
 
-            
             parse_ValidateData_User(wiegandDataUser, &validateData_user);
             free(wiegandData_str);
-           wiegandData_str = parse_ReleData(WIEGAND_INDICATION, validateData_user.wiegand_rele_permition - 48, 'S', 'R', validateData_user.key, NULL, &validateData_user, NULL, NULL, NULL, NULL, &mqttInfo);
-  
+            wiegandData_str = parse_ReleData(WIEGAND_INDICATION, validateData_user.wiegand_rele_permition - 48, 'S', 'R', validateData_user.key, NULL, &validateData_user, NULL, NULL, NULL, NULL, &mqttInfo);
         }
     }
     else
@@ -548,7 +551,7 @@ uint8_t wiegand_parse_getData(uint64_t wiegand_data, char *keypadValue, uint8_t 
         // printf("\n\nWIEGAND NOT EXIST\n\n");
     }
     free(wiegandData_str);
-   
+
     return 0;
 }
 
@@ -561,7 +564,7 @@ void timer_autoAdd_Callback(TimerHandle_t xTimer)
     keypadCount = 0;
     // TODO:
     // IMPLEMENTAR ENVIO QUE PAROU A GRAVAÇÃO AUTOMATICA OU O MODO READ
-    printf("\n\n parou gravação\n\n");
+    //printf("\n\n parou gravação\n\n");
 }
 
 int countBits(int n)
@@ -658,7 +661,8 @@ char *parseWiegand_data(char cmd, char param, char *phPassword, char *payload, M
                     if (xTimerStart(xTimer_autoadd_wiegand, 0) == pdPASS)
                     {
                         wiegandMode = WIEGAND_AUTO_SAVE_MODE_LABEL;
-                        // printf("\n\n wiegand mode payload - %s\n\n", payload);
+                        //printf("\n\n wiegand mode payload - %s\n\n", payload);
+                        memset(&user_auto_controlAcess,0,sizeof(user_auto_controlAcess));
                         parse_ValidateData_User(payload, &user_auto_controlAcess);
                         sprintf(user_auto_controlAcess.key, "%s", "888888");
                         asprintf(&rsp, "%s", "WI S S OK");
@@ -727,17 +731,17 @@ char *parseWiegand_data(char cmd, char param, char *phPassword, char *payload, M
             char *rsp;
 
             parse_edit_wiegand_relay(payload, wiegandNumber, &wiegand_relayPermition);
-            printf("\n\n WIEGAND RELAY - %s \n\n", rsp);
+            //printf("\n\n WIEGAND RELAY - %s \n\n", rsp);
             asprintf(&rsp, "WI S R %s", edit_wiegand_relay(wiegandNumber, wiegand_relayPermition)); /* "%s", "NTRSP"); */
-            printf("\n\n WIEGAND RELAY11 - %s \n\n", rsp);
-            printf("\n\n WIEGAND RELAY222 - %s \n\n", rsp);
+            //printf("\n\n WIEGAND RELAY11 - %s \n\n", rsp);
+            //printf("\n\n WIEGAND RELAY222 - %s \n\n", rsp);
 
             // sprintf(mqttInfo->data, "WI S R %s",rsp);
             // send_UDP_queue(mqttInfo);
             // send_UDP_Package(mqttInfo->data,strlen(mqttInfo->data),mqttInfo->topic);
             // send_UDP_Send(rsp,mqttInfo->topic);
 
-            printf("\n\n WIEGAND RELAY 555- %s \n\n", rsp);
+            //printf("\n\n WIEGAND RELAY 555- %s \n\n", rsp);
             return rsp;
         }
     }
@@ -870,22 +874,22 @@ char *edit_wiegand_relay(char *wiegandNumber, char relay_wiegandPermition)
 
     if (checkIf_wiegandExist(wiegandNumber, wiegandContent))
     {
-        printf("\n\nwiegand cont %s \n\n", wiegandContent);
+        //printf("\n\nwiegand cont %s \n\n", wiegandContent);
         if (MyUser_Search_User(wiegandContent, userContent) == ESP_OK)
         {
-            printf("\n\nwiegand user cont %s - %c \n\n", userContent, relay_wiegandPermition);
+            //printf("\n\nwiegand user cont %s - %c \n\n", userContent, relay_wiegandPermition);
             parse_ValidateData_User(userContent, &wiegand_myUser_data);
 
             wiegand_myUser_data.wiegand_rele_permition = relay_wiegandPermition;
-            printf("\n\nwiegand user cont 33 %s - %c \n\n", userContent, relay_wiegandPermition);
+            //printf("\n\nwiegand user cont 33 %s - %c \n\n", userContent, relay_wiegandPermition);
 
             if (replaceUser(&wiegand_myUser_data) == ESP_OK)
             {
-                printf("\n\nwiegand user cont 44 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
+                //printf("\n\nwiegand user cont 44 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
                 memset(rsp_pointer, 0, sizeof(rsp_pointer));
-                printf("\n\nwiegand user cont 55 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
+                //printf("\n\nwiegand user cont 55 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
                 sprintf(rsp_pointer, "%s.%c", wiegandNumber, relay_wiegandPermition);
-                printf("\n\nwiegand user cont 66 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
+                //printf("\n\nwiegand user cont 66 %s - %c \n\n", wiegandNumber, relay_wiegandPermition);
                 return rsp_pointer;
             }
             else
@@ -917,15 +921,17 @@ char *erase_wiegand_number(char *payload)
         parse_ValidateData_User(file_contents_Users, &wiegand_myUser_data);
         sprintf(aux_wiegandNumber, "$%s", wiegand_myUser_data.wiegand_code);
 
-        for (size_t i = 0; i < 20; i++)
-        {
-            wiegand_myUser_data.wiegand_code[i] = 0;
-        }
+        
 
         if (erase_only_wiegand(aux_wiegandNumber, wiegand_myUser_data.permition) == ESP_OK)
         {
-            wiegand_myUser_data.permition = 0;
-            if (replaceUser(&wiegand_myUser_data))
+            wiegand_myUser_data.wiegand_rele_permition = 0;
+           for (size_t i = 0; i < 20; i++)
+        {
+            wiegand_myUser_data.wiegand_code[i] = 0;
+        }
+            
+            if (replaceUser(&wiegand_myUser_data) == ESP_OK)
             {
 
                 sprintf(rsp_pointer, "WI R W %s", aux_wiegandNumber);

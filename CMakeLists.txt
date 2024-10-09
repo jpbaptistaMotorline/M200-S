@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.5)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 idf_build_set_property(COMPILE_OPTIONS "-DCRON_USE_LOCAL_TIME" APPEND)
 #add_compile_definitions(-DCRON_USE_LOCAL_TIME)
+
+
+
 project(M200)
 
 

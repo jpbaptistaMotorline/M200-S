@@ -21,6 +21,7 @@
 #include "stdlib.h"
 #include <time.h>
 #include <sys/time.h>
+#include "esp_gattc_api.h"
 
 #include "esp_gap_ble_api.h"
 #include "esp_gatts_api.h"
@@ -78,7 +79,7 @@
 #define SPP_PROFILE_NUM 1
 #define SPP_PROFILE_APP_IDX 0
 #define ESP_SPP_APP_ID 0x56
-#define SAMPLE_DEVICE_NAME "MOTORLINE M200" // The Device Name Characteristics in GAP
+#define SAMPLE_DEVICE_NAME "MOTORLINE M250" // The Device Name Characteristics in GAP
 #define SPP_SVC_INST_ID 0
 
 /// SPP Service
@@ -190,7 +191,7 @@ static esp_ble_adv_data_t spp_adv_config = {
     .service_data_len = sizeof(sec_service_uuid),
     .p_service_data = &sec_service_uuid,
     .service_uuid_len = 2,
-    .p_service_uuid = {0xFE, 0xF0},
+    .p_service_uuid = {0xBE, 0xB0},
     .flag = (ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
 
 };
@@ -1184,7 +1185,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                 if (strlen((char *)p_data->write.value) > 6)
                 {
 
-                    printf("\n write len11 %s - %d\n", (char *)p_data->write.value, strlen((char *)p_data->write.value));
+                    //printf("\n write len11 %s - %d\n", (char *)p_data->write.value, strlen((char *)p_data->write.value));
                     //   ESP_ERROR_CHECK(heap_trace_start(HEAP_TRACE_LEAKS));
                     output_Data = parseInputData(p_data->write.value, BLE_INDICATION, spp_gatts_if, p_data->write.conn_id, spp_handle_table[SPP_IDX_SPP_DATA_NTY_VAL], NULL,NULL);
 
@@ -1335,8 +1336,9 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         // printf("\n ESP_GATTS_STOP_EVT \n");
         break;
     case ESP_GATTS_CONNECT_EVT:
+    
         spp_conn_id = p_data->connect.conn_id;
-
+        
         if (spp_conn_id < 7)
         {
             // printf("\n conect conn id %d\n", spp_conn_id);
@@ -1797,7 +1799,7 @@ char *change_BLE_Name(char *payload, char *rsp_BLE_Name)
         /* Flags */
         0x02, 0x01, 0x06,
         /* Complete List of 16-bit Service Class UUIDs */
-        0x03, 0x03, 0xF0, 0xFE,
+        0x03, 0x03, 0xB0, 0xBE,
         /* Complete Local Name in advertising */
         0x16, 0x09};
 

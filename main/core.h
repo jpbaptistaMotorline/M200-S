@@ -39,7 +39,7 @@ extern nvs_handle_t nvs_Routines_handle;
 extern nvs_handle_t nvs_Exeption_Days_handle;
 nvs_handle_t nvs_Mobile_Holydays_handle;
 
-#define FW_VERSION "V1.REV008"
+#define FW_VERSION "V2.REV009"
 #define HW_VERSION_PROD "0.4.4"
 
 #define BLE_INDICATION 1

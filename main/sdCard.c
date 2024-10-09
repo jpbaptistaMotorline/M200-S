@@ -275,8 +275,8 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
 
     char *data_to_save;
 
-    printf("\n\n data to save111 %s\n\n", logs_Struct->name);
-    printf("\n\n data to save222 %s\n\n", logs_Struct->phone);
+    //printf("\n\n data to save111 %s\n\n", logs_Struct->name);
+    //printf("\n\n data to save222 %s\n\n", logs_Struct->phone);
 
     if (!strcmp(logs_Struct->name, "S/N") || strlen(logs_Struct->name) == 0)
     {
@@ -296,20 +296,20 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
     
 
     UDP_logs_label = get_INT8_Data_From_Storage(NVS_NETWORK_LABEL_SEND_LOGS, nvs_System_handle);
-    printf("\n\n data to save %s\n\n", data_to_save);
+    //printf("\n\n data to save %s\n\n", data_to_save);
 
-    if (UDP_logs_label == 1)
-    {
+    /* if (UDP_logs_label == 1)
+    { */
         //char *UDP_log;
-        printf("\n\n data to save5555 %s\n\n", logs_Struct->phone);
+        //printf("\n\n data to save5555 %s\n\n", logs_Struct->phone);
         memset(&logs_Struct->mqttLogs_info,0,sizeof(logs_Struct->mqttLogs_info));
         sprintf(logs_Struct->mqttLogs_info.data, "# %s", data_to_save);
-        printf("\n\n data to save 44 %d\n\n", UDP_logs_label);
+        //printf("\n\n data to save 44 %d\n\n", UDP_logs_label);
         vTaskDelay(pdMS_TO_TICKS(100));
         //send_UDP_Send(UDP_log);
         send_UDP_queue(&logs_Struct->mqttLogs_info);
         //free(UDP_log);
-    }
+   /*  }
     else
     {
         if (UDP_logs_label == 255)
@@ -317,13 +317,13 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
             save_INT8_Data_In_Storage(NVS_NETWORK_LABEL_SEND_LOGS, 0, nvs_System_handle);
             UDP_logs_label = 0;
         }
-    }
-    printf("\n\n data to save 7567 %s\n\n", data_to_save);
+    } */
+    //printf("\n\n data to save 7567 %s\n\n", data_to_save);
     if (!gpio_get_level(GPIO_INPUT_IO_CD_SDCARD))
     {
 
         init_SDCard();
-        printf("\n\n sdcard 22\n\n");
+        //printf("\n\n sdcard 22\n\n");
 
         //ESP_LOGI("TAG", "xPortGetFreeHeapSize sd write1            : %d", xPortGetFreeHeapSize());
         //ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());
@@ -332,7 +332,7 @@ void sdCard_Write_LOGS(sdCard_Logs_struct *logs_Struct)
 
         FILE *f = NULL;
 
-        printf("\ndata to save sdcard %s\n", data_to_save);
+        //printf("\ndata to save sdcard %s\n", data_to_save);
 
         uint8_t lastMonth = get_NVS_Last_Month();
         //printf("\nLAST MONTH %d\n", lastMonth);

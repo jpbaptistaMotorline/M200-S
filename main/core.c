@@ -774,13 +774,13 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
 
     // //printf("\n\ncore input data - %s - %d\n\n", inputData, strlen(inputData));
 
-    if (inputData[0] == 'M' && inputData[1] == 'E' && inputData[2] == '.' && inputData[3] == 'S' && inputData[4] == '.' && inputData[5] == 'O' && BLE_SMS_Indication == BLE_INDICATION )
+    if (inputData[0] == 'M' && inputData[1] == 'E' && inputData[2] == '.' && inputData[3] == 'S' && inputData[4] == '.' && inputData[5] == 'O' && BLE_SMS_Indication == BLE_INDICATION)
     {
 
         asprintf(&output_Data, "ME S O %s", MyUser_add_Owner(inputData, 0, BLE_INDICATION));
         free(inputData);
-        send_UDP_Send(output_Data,"");
-        //send_UDP_queue(output_Data);
+        //send_UDP_Send(output_Data, "");
+        // send_UDP_queue(output_Data);
         return output_Data;
     }
 
@@ -857,7 +857,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             Input_Command[i] = toupper(Input_Command[i]);
         }
 
-        printf("\n\n input comand3232 %s \n\n", Input_Command);
+        // printf("\n\n input comand3232 %s \n\n", Input_Command);
 
         // ESP_LOGW("tag", "Input_Command input %s yyy \n", "hello world" /* Input_Command) */);
 
@@ -874,8 +874,6 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
             free(inputData);
             return return_ERROR_Codes(&output_Data, return_Json_SMS_Data("ERROR_CMD"));
         }
-
-       
 
         // printf("phNumber %s ok\n", phNumber);
         // printf("phPassword %s ok\n", phPassword);
@@ -911,7 +909,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 // printf("\nstrcmp\n");
                 if (!strcmp(element, RELE1_ELEMENT))
                 {
-                     printf("\nstrcmp11\n");
+                    // printf("\nstrcmp11\n");
                     //  heap_trace_start(HEAP_TRACE_ALL);
 
                     output_Data = parse_ReleData(BLE_SMS_Indication, RELE1_NUMBER, Input_Command[3], Input_Command[5], phPassword, input_Payload, &validateData_user, gattsIF, connID, handle_table, data_SMS, mqttInfo);
@@ -922,7 +920,7 @@ char *parseInputData(uint8_t *int_inputData, uint8_t BLE_SMS_Indication, uint8_t
                 }
                 else if (!strcmp(element, RELE2_ELEMENT))
                 {
-                    printf("\nstrcmp12\n");
+                    // printf("\nstrcmp12\n");
                     output_Data = parse_ReleData(BLE_SMS_Indication, RELE2_NUMBER, Input_Command[3], Input_Command[5], phPassword, input_Payload, &validateData_user, gattsIF, connID, handle_table, data_SMS, mqttInfo);
                     free(inputData);
 
@@ -1894,12 +1892,11 @@ void get_NVS_Parameters()
         nvs_set_u32(nvs_System_handle, NVS_LIMIT_USERS, LIMIT_USERS_REGISTER_NUMBER);
     }
 
-   /*  label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
+    /*  label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle);
 
-    
-        label_network_portalRegister = 1;
-        save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle); */
-    
+
+         label_network_portalRegister = 1;
+         save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, label_network_portalRegister, nvs_System_handle); */
 
     char translate_data[50] = {};
 
@@ -2135,14 +2132,13 @@ void resetProcess()
     uint8_t actValue = 0;
 
     inline uint64_t now_time = get_nowTime_in_seconds();
-   
 
-    printf("\n\nnonow time %lld\n\n", now_time);
+    // printf("\n\nnonow time %lld\n\n", now_time);
 
     gpio_set_level(GPIO_OUTPUT_ACT, 1);
     while (get_nowTime_in_seconds() < now_time + 10)
     {
-        printf("\n\nnonow time2 %lld\n\n", get_nowTime_in_seconds());
+        // printf("\n\nnonow time2 %lld\n\n", get_nowTime_in_seconds());
         if (!gpio_get_level(CONFIG_GPIO_INPUT_0) && !gpio_get_level(CONFIG_GPIO_INPUT_1))
         {
 
@@ -2169,7 +2165,7 @@ void resetProcess()
         {
             gpio_set_level(GPIO_OUTPUT_ACT, actValue);
             actValue = ~actValue;
-            printf("\n\nnonow time3 %lld\n\n", get_nowTime_in_seconds());
+            // printf("\n\nnonow time3 %lld\n\n", get_nowTime_in_seconds());
             if (gpio_get_level(CONFIG_GPIO_INPUT_0) && gpio_get_level(CONFIG_GPIO_INPUT_1))
             {
                 resetPinLabel = 1;
@@ -2196,7 +2192,7 @@ void resetProcess()
 
             gpio_set_level(GPIO_OUTPUT_ACT, actValue);
             actValue = ~actValue;
-            printf("\n\nnonow time4 %lld\n\n", get_nowTime_in_seconds());
+            // printf("\n\nnonow time4 %lld\n\n", get_nowTime_in_seconds());
             if (!gpio_get_level(CONFIG_GPIO_INPUT_0) && !gpio_get_level(CONFIG_GPIO_INPUT_1))
             {
 
@@ -2218,7 +2214,7 @@ void resetProcess()
     }
     else
     {
-        printf("\n\n NO RESET\n\n");
+        // printf("\n\n NO RESET\n\n");
     }
 
 endFunction:
@@ -2236,8 +2232,8 @@ void vTimerCallback(TimerHandle_t xTimer)
     }
     else
     {
-        printf("\nact toogle - \n");
-        // printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
+        // printf("\nact toogle - \n");
+        //  printf("\nCD CARD PIN %d\n", gpio_get_level(GPIO_INPUT_IO_CD_SDCARD));
 
         if (gpio_get_level(GPIO_INPUT_IO_SIMPRE))
         {
@@ -2379,150 +2375,6 @@ uint8_t get_RTC_System_Time()
 
     // printf("\n\n time: %s - %d - %d \n\n", nowTime.strTime, nowTime.time, nowTime.date);
 
-    /*  if (PCF85_Readnow(data))
-     {
-         //printf("\r\nRTC NOW >>> 12345 ");
-         //printf("%d:%02d:%02d - %d %d/%d/%d\r\n", data[2], data[1], data[0], data[4], data[6] + YEAR_OFFSET, data[5], data[3]);
-     } */
-
-    //     nowTime.year = data[6] + YEAR_OFFSET - 2000;
-
-    //     if (nowTime.year < 0)
-    //     {
-    //         nowTime.year = nowTime.year + 31;
-    //     }
-
-    //     nowTime.month = data[5];
-    //     nowTime.day = data[3];
-    //     nowTime.time = data[2] * 100 + data[1];
-    //     nowTime.weekDay = data[4];
-
-    //     // printf("\n\nnowTime.year - %d / data[6] - %d\n\n", nowTime.year, data[6]);
-
-    //     nowTime.date = (nowTime.year * 10000) + (nowTime.month * 100) + nowTime.day;
-    //     sprintf(nowTime.strTime, "%02d/%02d/%02d,%02d:%02d", (nowTime.year + 2000), nowTime.month, nowTime.day, data[2], data[1]);
-
-    //     int weekDay = calculate_weekDay(nowTime.year, nowTime.month, nowTime.day);
-
-    // struct tm timeinfo;
-
-    // timeinfo.tm_year = data[6] + YEAR_OFFSET - 1900;
-    // timeinfo.tm_mon = data[5] - 1;
-    // timeinfo.tm_mday = data[3];
-    // timeinfo.tm_hour = data[2];
-    // timeinfo.tm_min = data[1];
-    // timeinfo.tm_sec = data[0];
-    // timeinfo.tm_wday = weekDay - 1;
-    // timeinfo.tm_isdst = 0;
-    //         //  struct timeval *tv = &epoch;
-
-    //         int int_epoch = 0; // mktime(&timeinfo);
-
-    //         printf("\n\n\n int epoch %d\n\n\n", int_epoch);
-    //         char timeZone[50] = {};
-
-    //         esp_err_t err = 0;
-    //         size_t required_size;
-
-    //         printf("\nENTER get_Data_STR_LastCALL_From_Storage\n");
-    //         printf("\nerror 1 %d\n", err);
-
-    //         printf("\n\n\n getenv - %s",getenv("TZ"));
-    //         // settimeofday(&epoch, NULL);
-    //         time_t now;
-    //         struct tm *timeinfo_Now;
-
-    //         //unsetenv("TZ");
-
-    //         /* localtime_r(&now, &timeinfo_Now);
-
-    //         printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now.tm_year + 1900), timeinfo_Now.tm_mon, timeinfo_Now.tm_mday, timeinfo_Now.tm_wday, timeinfo_Now.tm_hour, timeinfo_Now.tm_min, timeinfo_Now.tm_sec);
-    //  */
-
-    //         int_epoch = mktime(&timeinfo);
-
-    //         /* memset(timezone_network, 0, 5);
-    //         sprintf(timezone_network, "%s", "32");
-    //         timeZone_Signal = '-'; */
-    //         printf("\n\n timezone network %d\n\n", atoi(timezone_network));
-
-    //         if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, NULL, &required_size) == ESP_OK)
-    //         {
-    //             printf("\nrequire size %d\n", required_size);
-
-    //             if (nvs_get_str(nvs_System_handle, NVS_TIMEZONE, timeZone, &required_size) == ESP_OK)
-    //             {
-    //                 printf("\naux get str %s\n", timeZone);
-    //                 int_epoch = mktime(&timeinfo);
-    //             }
-    //             else
-    //             {
-
-    //                 int_epoch = mktime(&timeinfo);
-
-    //                 memset(timeZone, 0, 50);
-
-    //                 sprintf(timeZone, "%s", "GMT0");
-    //             }
-    //         }
-    //         else
-    //         {
-    //             int_epoch = mktime(&timeinfo);
-
-    //             memset(timeZone, 0, 50);
-
-    //             sprintf(timeZone, "%s", "GMT0");
-    //         }
-
-    //         struct timeval epoch = {int_epoch, 0};
-
-    //         if (!settimeofday(&epoch, NULL))
-    //         {
-
-    //             /* time(&now);
-
-    //             timeinfo_Now = localtime(&now);
-    //             // localtime_r(&now, &timeinfo_Now);
-
-    //             printf("\n\n 14521452 year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
-    // */
-    //             printf("\n\n timezone qlts %s", timeZone);
-    //             if (!setenv("TZ", timeZone, 1))
-    //             {
-
-    //                 printf("\n\n\n getenv22 - %s", getenv("TZ"));
-    //                 tzset();
-
-    //                 time(&now);
-    //                 timeinfo_Now = localtime(&now);
-    //                 localtime_r(&now, &timeinfo_Now);
-
-    //                 printf("\n\n year - %d, month - %d, day - %d, dayweek - %d, hour - %d, minute - %d, sec - %d\n\n", (timeinfo_Now->tm_year + 1900), timeinfo_Now->tm_mon, timeinfo_Now->tm_mday, timeinfo_Now->tm_wday, timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
-
-    //                /* PCF85_SetTime(timeinfo_Now->tm_hour, timeinfo_Now->tm_min, timeinfo_Now->tm_sec);
-    //                 PCF85_SetDate(timeinfo_Now->tm_wday, timeinfo_Now->tm_mday, (timeinfo_Now->tm_mon + 1), (timeinfo_Now->tm_year + 1900)); */
-    //                 /* get_RTC_System_Time();
-    //                 enableAlarm(); */
-    //             }
-    //             else
-    //             {
-    //                 // enableAlarm();
-    //                 //  printf("\nTIME ZONE ERROR 1212\n");
-    //                 return 0;
-    //             }
-    //         }
-    //         else
-    //         {
-    //             // enableAlarm();
-    //             printf("\nTIME ZONE ERROR 1313\n");
-    //             return 0;
-    //         }
-
-    // printf("\n\nget_RTC_System_Time nowTime.date - %d\n\n", nowTime.date);
-    //  enableAlarm();
-    // printf("\n\nget_RTC_System_Time nowTime.time - %d\n\n", nowTime.time);
-
-    // printf("\n\nget_RTC_System_Time strtime - %s\n\n", nowTime.strTime);
     return 1;
     // }
 }
@@ -2564,9 +2416,8 @@ void initSystem()
 
     init_Storage();
 
-   
     // printf("\n\n label_network_portalRegister 11 %d\n\n", label_network_portalRegister);
-    printf("imei=543219876543210");
+    // printf("imei=543219876543210");
     char HW_Version[10] = {};
 
     size_t required_size = 0;
@@ -2586,7 +2437,7 @@ void initSystem()
         // printf("\nGET USERS NAMESPACE HARDWARE\n");
         if (nvs_get_str(nvs_System_handle, NVS_KEY_HW_VERSION, HW_Version, &required_size) == ESP_OK)
         {
-            printf("\nrequire HW_Version %s\n", HW_Version);
+            // printf("\nrequire HW_Version %s\n", HW_Version);
         }
         else
         {
@@ -2618,6 +2469,24 @@ void initSystem()
     gpio_init(); // init GPIO
     xTaskCreate(wiegand_task, "TAG", 2048 * 4 + 1024, NULL, 5, NULL);
 
+    //nvs_erase_key(nvs_System_handle, NVS_NEW_CODE);
+
+    if (get_INT8_Data_From_Storage(NVS_NEW_CODE, nvs_System_handle) == 255)
+    {
+        uint8_t inicial_led_value = 0;
+        uint8_t inicial_count = 0;
+
+        while (inicial_count < 9)
+        {
+            inicial_led_value = ~inicial_led_value;
+            //printf("led - %d\n",inicial_led_value);
+            gpio_set_level(CONFIG_GPIO_OUTPUT_ACT, inicial_led_value);
+            vTaskDelay(pdMS_TO_TICKS(500));
+            inicial_count++;
+        }
+         save_INT8_Data_In_Storage(NVS_NEW_CODE, 1, nvs_System_handle);
+    }
+
     // resetRele1();
     // resetRele2();
 
@@ -2640,7 +2509,7 @@ void initSystem()
     routine_list = (list_node *)malloc(sizeof(list_node));
     routine_list->next = NULL;
 
-    printf("\n\n akakak 111\n\n");
+    // printf("\n\n akakak 111\n\n");
     rdySem = xSemaphoreCreateBinary();
 
     rdySem_RelayMonoStart = xSemaphoreCreateBinary();
@@ -2655,11 +2524,11 @@ void initSystem()
     xSemaphoreTake(rdySem_Routine_BiState_Send_RelayState1, 0);
     xSemaphoreTake(rdySem_Routine_BiState_Send_RelayState2, 0);
 
-    printf("\n\n akakak 222\n\n");
+    // printf("\n\n akakak 222\n\n");
 
     FILE *f = fopen("/spiffs/language.json", "r");
 
-    printf("\n\n akakak 333\n\n");
+    // printf("\n\n akakak 333\n\n");
 
     if (f != NULL)
     {
@@ -2734,7 +2603,7 @@ void initSystem()
      modifyJSONValue( "INPUT_HAS_BEEN_ACTIVATED1","JA FOSTE ENTRADA 1 AHAHAH"); */
     uint32_t value = 0;
 
-    printf("\n\n akakak 444\n\n");
+    // printf("\n\n akakak 444\n\n");
     value = MyUser_List_AllUsers();
     save_User_Counter_In_Storage(value);
 
@@ -2742,9 +2611,9 @@ void initSystem()
 
     // printf("\n\n X10 1223 -- %d\n\n", gpio_get_level(GPIO_INPUT_IO_SIMPRE));
     get_NVS_Parameters();
-    printf("\n\n akakak 555\n\n");
-    // printf("\n\n akakak 221\n\n");
-    //  xTaskCreate(task_sendFeedbackData, "task_sendFeedbackData", 2 * 2048, NULL, 20, NULL);
+    // printf("\n\n akakak 555\n\n");
+    //  printf("\n\n akakak 221\n\n");
+    //   xTaskCreate(task_sendFeedbackData, "task_sendFeedbackData", 2 * 2048, NULL, 20, NULL);
     xTaskCreate(task_BiState_Send_RelayState1, "task_BiState_Send_RelayState1", 2 * 2048 + 1024, NULL, 15, &rele1_Bistate_Task_Handle);
     xTaskCreate(task_BiState_Send_RelayState2, "task_BiState_Send_RelayState2", 2 * 2048 + 1024, NULL, 15, &rele2_Bistate_Task_Handle);
     // printf("\n\n BEFORE ROUTINE RELAY\n\n");
@@ -2760,7 +2629,7 @@ void initSystem()
     // printf("\n F1 in cfg1 %d\n", get_INT8_Data_From_Storage(NVS_FB_CONF_I1, nvs_Feedback_handle));
     // printf("\n\n akakak 333\n\n");
     xTaskCreate(task_Send_Routines, "task_Send_Routines", 1024 * 4, NULL, 18, &task_Routine_BiState_RelayState2);
-    printf("\n\n akakak 666\n\n");
+    // printf("\n\n akakak 666\n\n");
     init_EG91();
 
     // printf("\n\n akakak 444\n\n");
@@ -3010,7 +2879,7 @@ void decrypt_aes_cfb_padding(const unsigned char *input, size_t input_len, unsig
     int decoded_len = base64_decode((const char *)input, input_len, &decoded_input);
     if (decoded_len < 0)
     {
-        printf("Erro ao decodificar base64\n");
+        //printf("Erro ao decodificar base64\n");
         return;
     }
 

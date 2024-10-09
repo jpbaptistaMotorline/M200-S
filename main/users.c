@@ -305,7 +305,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
 {
     char *rsp;
     /*memset(&rsp, 0, sizeof(rsp));*/
-    printf("\n\nPCHANGED_TO 11 - \n\n");
+    //printf("\n\nPCHANGED_TO 11 - \n\n");
     /*  if (BLE_SMS_Indication != UDP_INDICATION)
      {
         sprintf(mqttInfo->topic, "%s", "\0");
@@ -327,14 +327,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
                         /*memset(&rsp, 0, sizeof(rsp));*/
-                        asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, payload);
-                        return rsp;
-                    }
-                    else if (BLE_SMS_Indication == SMS_INDICATION)
-                    {
-                        /*memset(&rsp, 0, sizeof(rsp));*/
-                        // printf("\n\nPASSWORD_HAS_BEEN_CHANGED_TO\n\n");
-                        asprintf(&rsp, return_Json_SMS_Data("PASSWORD_HAS_BEEN_CHANGED_TO"), payload);
+                        asprintf(&rsp, "%s %c %c %s.%s", USER_ELEMENT, cmd, param,user_validateData->phone, payload);
                         return rsp;
                     }
                     else
@@ -362,16 +355,16 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
         else if (param == USER_PARAMETER)
         {
 
-            printf("\n\n\nnew user start1\n\n\n");
+            //printf("\n\n\nnew user start1\n\n\n");
             if (user_validateData->permition == '1' || user_validateData->permition == '2')
             {
-                printf("\n\n\nnew user start111\n\n\n");
+                //printf("\n\n\nnew user start111\n\n\n");
                 char aux_USR_Data[300] = {};
                 uint8_t newUser_ACK = MyUser_newUSER(payload, &aux_USR_Data, user_validateData->phone, user_validateData->key);
-                printf("\n\n\nnew user start222\n\n\n");
+                //printf("\n\n\nnew user start222\n\n\n");
                 if (newUser_ACK == 0)
                 {
-                    printf("\n\n\nnew user start2\n\n\n");
+                    //printf("\n\n\nnew user start2\n\n\n");
                     if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
 
@@ -379,7 +372,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                         memcpy(file_contents_Users,aux_USR_Data,strlen(aux_USR_Data));
                         //erase_Password_For_Rsp(aux_USR_Data, file_contents_Users);
                         asprintf(&rsp, "%s %c %c %s", USER_ELEMENT, cmd, param, file_contents_Users);
-                        printf("\n\n\nnew user start3\n\n\n");
+                        //printf("\n\n\nnew user start3\n\n\n");
                         if (BLE_SMS_Indication == BLE_INDICATION)
                         {
                             send_UDP_Send(rsp, "");
@@ -393,18 +386,18 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                         /*memset(&rsp, 0, sizeof(rsp));*/
                         memset(&file_contents_Users, 0, sizeof(file_contents_Users));
                         memset(&buffer, 0, sizeof(buffer));
-                        printf("\n\n\nnew user start2222\n\n\n");
+                        //printf("\n\n\nnew user start2222\n\n\n");
                         erase_Password_For_Rsp(aux_USR_Data, buffer);
-                        printf("\n\n\nnew user start3333\n\n\n");
+                        //printf("\n\n\nnew user start3333\n\n\n");
                         sprintf(buffer_UDP_users, "%s %c %c %s", USER_ELEMENT, cmd, param, buffer);
                         send_UDP_Send(buffer_UDP_users, "");
                         // memset(&mqttInfo, 0, sizeof(mqttInfo));
-                        // printf("\n\n\nnew user start4444\n\n\n");
+                        // printf("\n\n\nnew user startu4444\n\n\n");
                         // memcpy(mqttInfo->data,buffer_UDP_users,strlen(buffer_UDP_users));
                         // sprintf(mqttInfo->data, "%s", buffer_UDP_users);
-                        printf("\n\n\nnew user start5555\n\n\n");
+                        //printf("\n\n\nnew user start5555\n\n\n");
                         // send_UDP_queue(&mqttInfo);
-                        printf("\n\n\nnew user start6666\n\n\n");
+                        //printf("\n\n\nnew user start6666\n\n\n");
                         asprintf(&rsp, "%s", return_Json_SMS_Data("NEW_USER_HAS_BEEN_ADDED"));
                         return rsp;
                     }
@@ -420,7 +413,7 @@ char *parse_UserData(uint8_t BLE_SMS_Indication, int line, char cmd, char param,
                 else
                 {
                     // printf("\n\nnewUser_ACK %d\n\n", newUser_ACK);
-                    printf("\n\n\nnew user start3333\n\n\n");
+                    //printf("\n\n\nnew user start3333\n\n\n");
                     return return_ERROR_New_Add_User(&rsp, newUser_ACK);
                 }
             }
@@ -1275,7 +1268,7 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
     int usersErroCount = 1;
     char saveImportUsers[300] = {};
     memset(totalErrorUsers, 0, sizeof(totalErrorUsers));
-    printf("\nfile id %d - %s", idFile, fileID);
+    //printf("\nfile id %d - %s", idFile, fileID);
 
     char importUsers_data[200] = {};
     sprintf(totalErrorUsers, "%s", "UR S I ");
@@ -1304,27 +1297,30 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                 else
                 {
 
-                    printf("\nimport users - %s - %d", importUsers_data, strlen(EG915_readDataFile_struct.receiveData));
+                    //printf("\nimport users - %s - %d", importUsers_data, strlen(EG915_readDataFile_struct.receiveData));
 
                     sprintf(saveImportUsers, "%s %s %s", ownerNumber, ownerPassword, importUsers_data);
-                    printf("\n\nimport users data- %s\n\n", saveImportUsers);
+                    //printf("\n\nimport users data- %s\n\n", saveImportUsers);
 
                     if (strlen(importUsers_data) > 2)
                     {
-                        printf("\n\nimport users data421- \n\n");
+                        //printf("\n\nimport users data421- \n\n");
                         char *mqttImportUsers_send = parseInputData(&saveImportUsers, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 
-                        printf("\n\nimport users dat1111- %s\n\n",mqttImportUsers_send);
+                        //printf("\n\nimport users dat1111- %s\n\n",mqttImportUsers_send);
 
                         char strCount[10] = {};
                         sprintf(strCount, "%d", usersErroCount);
                         char *newline_position = strchr(mqttImportUsers_send, '\n');
-                        printf("\n\nimport users data9876- \n\n");
+                        //printf("\n\nimport users data9876- \n\n");
                         if (newline_position != NULL)
                         {
                             strcat(totalErrorUsers, strCount);
+                            //printf("\n\nimport users data9876 - 222 - %s \n\n",totalErrorUsers);
                             strcat(totalErrorUsers, newline_position + 1);
+                            //printf("\n\nimport users data9876 - 333 - %s \n\n",totalErrorUsers);
                             strcat(totalErrorUsers, ";\0");
+                            //printf("\n\nimport users data9876 - 444 - %s \n\n",totalErrorUsers);
                             usersErroCount++;
                         }
                         else
@@ -1335,14 +1331,14 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                         // free(newline_position);
                         //  send_UDP_Package(mqttImportUsers_send, strlen(mqttImportUsers_send), "");
                         //   send_UDP_Send(mqttImportUsers_send, "");
-                        printf("\n\nimport users data6366- %s \n\n",newline_position);
+                        //printf("\n\nimport users data6366- %s \n\n",newline_position);
                         
                         strIndex = 0;
                         
-                        printf("\n\nimport users dataqqwq- \n\n");
+                        //printf("\n\nimport users dataqqwq- \n\n");
                         memset(importUsers_data, 0, sizeof(importUsers_data));
                         free(mqttImportUsers_send);
-                        printf("\n\nimport users datacqawq- \n\n");
+                        //printf("\n\nimport users datacqawq- \n\n");
                     }
                 }
                 // vTaskDelay(pdMS_TO_TICKS(5));
@@ -1352,19 +1348,20 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                     break;
                 }
             }
+            vTaskDelay(pdMS_TO_TICKS(20));
         }
-        printf("\n\nimport users data22- %s\n\n", importUsers_data);
+        //printf("\n\nimport users data22- %s\n\n", importUsers_data);
         if (strlen(importUsers_data) > 2)
         {
             char saveImportUsers[300] = {};
             sprintf(saveImportUsers, "%s %s %s", ownerNumber, ownerPassword, importUsers_data);
-            printf("\n\nimport users data232- \n\n");
+            //printf("\n\nimport users data232- \n\n");
             char *mqttImportUsers_send = parseInputData(&saveImportUsers, UDP_INDICATION, NULL, NULL, NULL, NULL, NULL);
 
             char strCount[10] = {};
             sprintf(strCount, "%d", usersErroCount);
             char *newline_position = strchr(mqttImportUsers_send, '\n');
-            printf("\n\nimport users data5656- \n\n");
+            //printf("\n\nimport users data5656- \n\n");
             if (newline_position != NULL)
             {
                 strcat(totalErrorUsers, strCount);
@@ -1377,9 +1374,9 @@ char *import_mqtt_users(char *URL, char *ownerNumber, char *ownerPassword)
                 usersErroCount++;
             }
             // free(newline_position);
-            printf("\n\nimport users data888- \n\n");
+            //printf("\n\nimport users data888- \n\n");
             //free(newline_position);
-            printf("\n\nimport users data555- \n\n");
+            //printf("\n\nimport users data555- \n\n");
             free(mqttImportUsers_send);
         }
     }
@@ -2409,8 +2406,8 @@ uint8_t add_defaultUser_wiegand(uint64_t wiegandCode)
             memset(auxWiegand_str, 0, sizeof(auxWiegand_str));
             MyUser_Search_User(wiegandNumber, &auxWiegand_str);
             char wiegandSTR[200] = {};
-            erase_Password_For_Rsp(auxWiegand_str, wiegandSTR);
-            asprintf(&wiegand_MQTT_rsp, "WI G W %s", wiegandSTR);
+            //erase_Password_For_Rsp(auxWiegand_str, wiegandSTR);
+            asprintf(&wiegand_MQTT_rsp, "WI G W %s", auxWiegand_str);
             send_UDP_Send(wiegand_MQTT_rsp, "");
             free(wiegand_MQTT_rsp);
             return 1;
@@ -3287,7 +3284,7 @@ char *MyUser_add_Owner(char *payload, char *SMS_phoneNumber, uint8_t BLE_SMS_Ind
             
             memset(file_contents_Users, 0, 300);
             sprintf(file_contents_Users,"%s.%s.%s",user_validateData.phone,user_validateData.firstName,user_validateData.key);
-            printf("\n\n\n ownerNewData - %s\n\n", file_contents_Users);
+            //printf("\n\n\n ownerNewData - %s\n\n", file_contents_Users);
             return file_contents_Users;
         }
         else
@@ -3862,7 +3859,7 @@ uint8_t replaceUser(MyUser *user_validateData)
     char auxPhone[30];
 
     sprintf(auxPhone, "%s", check_IF_haveCountryCode(user_validateData->phone, 1));
-    int count;
+   
 
     if (strlen(auxPhone) < 1)
     {
@@ -3884,11 +3881,11 @@ uint8_t replaceUser(MyUser *user_validateData)
 
 #endif
 
-    printf("new line replaceUser %s - %c\n", newline, user_validateData->wiegand_rele_permition);
+    printf("new line replaceUser %s - %c\n", newline, user_validateData->permition);
 
     if (user_validateData->permition == '0')
     {
-        // printf("\n\nnew line replaceUser1\n\n");
+        printf("\n\nnew line replaceUser1 - %s\n\n",auxPhone);
 
         if (save_STR_Data_In_Storage(auxPhone, &newline, nvs_Users_handle) == ESP_OK)
         {

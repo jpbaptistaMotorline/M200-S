@@ -592,8 +592,10 @@ uint8_t system_Reset()
     nvs_erase_all(nvs_wiegand_codes_users_handle);
     nvs_erase_all(nvs_wiegand_codes_admin_handle);
     nvs_erase_all(nvs_wiegand_codes_owner_handle);
-    save_INT8_Data_In_Storage(NVS_KEY_OWNER_LABEL, 0, nvs_System_handle);
 
+    save_INT8_Data_In_Storage(NVS_KEY_OWNER_LABEL, 0, nvs_System_handle);
+    save_INT8_Data_In_Storage(NVS_NEW_CODE, 1, nvs_System_handle);
+    
     uint8_t owner_Label1 = get_INT8_Data_From_Storage(NVS_KEY_OWNER_LABEL, nvs_System_handle);
 
     // printf("\n\n owner label reset %d\n\n", owner_Label1);
@@ -606,7 +608,7 @@ uint8_t system_Reset()
 
     // save_INT8_Data_In_Storage(NVS_NETWORK_PORTAL_REGISTER, 0, nvs_System_handle);
     // send_UDP_Send("ME R O");
-    desactivateUDP_network();
+    //desactivateUDP_network();
     // printf("\n\n owner label reset33 %d\n\n", owner_Label1);
 
     
@@ -617,7 +619,7 @@ uint8_t system_Reset()
     // //printf("\n\n\n IMEI -%s / payload -%s\n\n\n",IMEI,payload);
 
  
-
+    //remove("/spiffs/language.json");
     esp_restart();
     // printf("\n\nlabel_ResetSystem == 4\n\n");
     //  example_tg_timer_deinit(TIMER_GROUP_0, TIMER_0);
@@ -1525,6 +1527,15 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                 return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ERROR_USER_NOT_PERMITION"));
             }
         }
+        else if (param == GET_ICCID_PARAMETER) {
+
+            EG91_send_AT_Command("AT+QCCID", "+QCCID", 1000);
+            char ICCID[50] = {};
+            get_STR_Data_In_Storage(NVS_EG91_ICCID_VALUE, nvs_System_handle, ICCID);
+            asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, ICCID);
+            return rsp;
+        
+        }
         else if (param == LAST_PARAMETER)
         {
             char phoneNumber[20];
@@ -1845,28 +1856,28 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
             if (user_validateData->permition == '2')
             {
                 char *json_Translate_File;
-                printf("\n\ncrc32 lang11\n\n\n\n");
+                //printf("\n\ncrc32 lang11\n\n\n\n");
                 FILE *f = fopen("/spiffs/aux_language.json", "r");
                 label_Block_Feedback_SMS = 0;
                 char ckf[9] = {};
                 if (f != NULL)
                 {
 
-                    printf("\n\ncrc32 lang22\n\n\n\n");
+                    //printf("\n\ncrc32 lang22\n\n\n\n");
 
                     sprintf(ckf, "%X", crc32_Language_file);
-                    printf("\n\ncrc32 ckf lang\n%s - %s\n\n\n", ckf, payload);
+                    //printf("\n\ncrc32 ckf lang\n%s - %s\n\n\n", ckf, payload);
 
                     if (!strcmp(ckf, payload))
                     {
                         FILE *f_aux = fopen("/spiffs/language.json", "r");
-                        printf("\n\ncrc32 lang33\n\n\n\n");
+                        //printf("\n\ncrc32 lang33\n\n\n\n");
                         if (f_aux != NULL)
                         {
 
                             fclose(f_aux);
                             remove("/spiffs/language.json");
-                            printf("\n\n f_aux != NULL 55\n\n");
+                            //printf("\n\n f_aux != NULL 55\n\n");
                             fclose(f);
                             rename("/spiffs/aux_language.json", "/spiffs/language.json");
 
@@ -1874,56 +1885,56 @@ char *parse_SystemData(uint8_t BLE_SMS_Indication, char cmd, char param, char *p
                         }
                         else
                         {
-                            printf("\n\n f_aux == NULL 1212\n\n");
+                            //printf("\n\n f_aux == NULL 1212\n\n");
                             fclose(f);
-                            printf("\n\ncrc32 lang77\n\n\n\n");
+                            //printf("\n\ncrc32 lang77\n\n\n\n");
                             rename("/spiffs/aux_language.json", "/spiffs/language.json");
                             f = fopen("/spiffs/language.json", "r");
                         }
 
-                        printf("\n\n\n end lang files ERROR\n\n\n");
+                        //printf("\n\n\n end lang files ERROR\n\n\n");
 
                         // printf("\n\n\n end lang files 1\n\n\n");
                         fseek(f, 0L, SEEK_END);
                         file_Lenght = ftell(f);
                         fseek(f, 0L, SEEK_SET);
                         // rewind(f);
-                        printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
+                        //printf("\n\n\n end lang files 3 - %d\n\n\n", file_Lenght);
 
                         // printf("\n\n\n ckf OK \n\n\n");
 
                         json_Translate_File = (char *)malloc(file_Lenght * sizeof(char));
                         memset(json_Translate_File, 0, file_Lenght);
 
-                        printf("\n\n\n end lang files 4\n\n\n");
+                        //printf("\n\n\n end lang files 4\n\n\n");
 
                         if (json_Translate_File)
                         {
-                            printf("\n\n\n end lang files 5\n\n\n");
+                            //printf("\n\n\n end lang files 5\n\n\n");
 
                             fread(json_Translate_File, sizeof(char), file_Lenght, f);
-                            printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
+                            //printf("\n\n\n end lang\n%s\n\n\n", json_Translate_File);
 
                             cJSON_Delete(sms_Rsp_Json);
                             sms_Rsp_Json = cJSON_Parse(json_Translate_File);
                             jsonCounterTranslate = 1;
                             free(json_Translate_File);
 
-                            printf("\n\n\n end lang files 8\n\n\n");
+                            //printf("\n\n\n end lang files 8\n\n\n");
                             if (sms_Rsp_Json == NULL)
                             {
 
-                                printf("\n\n X10 9999\n\n");
+                                //printf("\n\n X10 9999\n\n");
                                 const char *error_ptr = cJSON_GetErrorPtr();
                                 if (error_ptr != NULL)
                                 {
-                                    printf("Error before: %s\n", error_ptr);
+                                    //printf("Error before: %s\n", error_ptr);
                                 }
                             }
                         }
 
                         fclose(f);
-                        printf("\n\n\n end lang files 9\n\n\n");
+                        //printf("\n\n\n end lang files 9\n\n\n");
 
                         asprintf(&rsp, "%s %c %c %s", ADMIN_ELEMENT, cmd, param, "OK");
 

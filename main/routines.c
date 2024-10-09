@@ -700,7 +700,7 @@ void test_cron_job_sample_callback(cron_job *job)
 
                         uint64_t auxTime_routine = -1;
 
-                        printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                        //printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
                         while (jobNode != NULL)
                         {
@@ -712,14 +712,14 @@ void test_cron_job_sample_callback(cron_job *job)
                                 }
                             }
 
-                            printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                            //printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
-                            printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
+                            //printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
 
                             jobNode = jobNode->next;
                         }
 
-                        printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
+                        //printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
                         nvs_set_u64(nvs_System_handle, NVS_KEY_ROUTINE1_TIME_ON, auxTime_routine);
 
                         free(jobNode);
@@ -802,7 +802,7 @@ void test_cron_job_sample_callback(cron_job *job)
                         save_INT8_Data_In_Storage(NVS_KEY_ROUTINE2_LABEL, 1, nvs_System_handle);
 
                         /* printf("\n\nROUTINE TIME AFTER1: %d - %hhn\n\n", job->id, job->expression.minutes); */
-                        printf("\n\nROUTINE TIME AFTER2:\n\n");
+                        //printf("\n\nROUTINE TIME AFTER2:\n\n");
 
                         /**********************************************************/
 
@@ -813,7 +813,7 @@ void test_cron_job_sample_callback(cron_job *job)
 
                         uint64_t auxTime_routine = -1;
 
-                        printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                        //printf("\n\nROUTINE TIME 12345: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
                         while (jobNode != NULL)
                         {
@@ -825,15 +825,15 @@ void test_cron_job_sample_callback(cron_job *job)
                                 }
                             }
 
-                            printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
+                            //printf("\n\nROUTINE TIME AFTER122: %ld - %d\n\n", jobNode->job->next_execution, jobNode->job->id);
 
-                            printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
+                            //printf("\n\nROUTINE EXPRESSION: %hhn,%hhn,%hhn\n\n", jobNode->job->expression.seconds, jobNode->job->expression.minutes, jobNode->job->expression.hours);
 
                             jobNode = jobNode->next;
                         }
 
                         nvs_set_u64(nvs_System_handle, NVS_KEY_ROUTINE2_TIME_ON, auxTime_routine);
-                        printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
+                        //printf("\n\nROUTINE TIME final: %lld\n\n", auxTime_routine);
 
                         free(jobNode);
                         /************************************************************/
@@ -1169,7 +1169,7 @@ void task_Send_Routines(void *pvParameter)
                     strcat(buffer_BLE, ":\0");
                     strcat(buffer_BLE, value);
                     // printf("\nROUTINES SEND1 - %s\n", buffer_BLE);
-                    printf("\n task_Send_Routines 1 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                    //printf("\n task_Send_Routines 1 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                     if (message.BLE_UDP_Indication == UDP_INDICATION)
                     {
                         /* if (!send_UDP_Send(buffer_BLE,""))
@@ -1180,13 +1180,13 @@ void task_Send_Routines(void *pvParameter)
                     }
                     else
                     {
-                        printf("\n task_Send_Routines 2 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                        //printf("\n task_Send_Routines 2 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                         if (esp_ble_gatts_send_indicate(message.gattsIF, message.connID, message.handle_table, strlen(buffer_BLE), (uint8_t *)buffer_BLE, false) != ESP_OK)
                         {
-                            printf("\n task_Send_Routines 3 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                            //printf("\n task_Send_Routines 3 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                             break;
                         }
-                        printf("\n task_Send_Routines 4 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
+                        //printf("\n task_Send_Routines 4 - %d ; %d ; %d \n", message.gattsIF, message.connID, message.handle_table);
                         xSemaphoreTake(rdySem_Send_Routines, pdMS_TO_TICKS(3000));
                     }
 
@@ -1439,7 +1439,7 @@ char *activate_Routines(uint8_t BLE_indication, uint8_t gattsIF, uint16_t connID
                 /* label_network_portalRegister = get_INT8_Data_From_Storage(NVS_NETWORK_PORTAL_REGISTER, nvs_System_handle); */
 
                 send_UDP_Send("RT S A OK","");
-                printf("\n\n\ send routines UDP2\n\n");
+                //printf("\n\n\ send routines UDP2\n\n");
 
                 vTaskDelay(pdMS_TO_TICKS(500));
 

@@ -151,7 +151,7 @@ uint8_t Input_GPIO_Debounce(uint32_t io_num)
             if (label_initSystem_SIMPRE == 1)
             {
                 // system_stack_high_water_mark("simpre0");
-                printf("\n\nGPIO_INPUT_IO_SIMPRE = %d\n\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
+                //printf("\n\nGPIO_INPUT_IO_SIMPRE = %d\n\n", gpio_get_level(GPIO_INPUT_IO_EG91_STATUS));
                 debounce_Time_Input_SIMPRE = now;
                 if (gpio_get_level(GPIO_INPUT_IO_SIMPRE) != last_Input_SIMPRE)
                 {
@@ -738,7 +738,7 @@ void task_readInputs(void *pvParameter)
                 sprintf(input_Data_IO, "%s %d", "I2 G I", Input2_value);
                 BLE_Broadcast_Notify(input_Data_IO);
 
-                printf("\n\ncount_ResetSystem00 - %d\n\n", label_ResetSystem);
+                //printf("\n\ncount_ResetSystem00 - %d\n\n", label_ResetSystem);
                 if (label_ResetSystem < 5)
                 {
 
@@ -770,12 +770,12 @@ void task_readInputs(void *pvParameter)
                 }
                 else if (label_ResetSystem == 6 && label_Reset_Password_OR_System == 6)
                 {
-
+                    get_RTC_System_Time();
                     if (Input1_value != last_Input1_value)
                     {
 
                         char input_Data_IO[50] = {};
-                        sprintf(input_Data_IO, "%s %d", "& I1", Input1_value);
+                        sprintf(input_Data_IO, "%s %d %s", "& I1", Input1_value,nowTime.strTime);
                         send_UDP_Send(input_Data_IO, "");
 
                         input1_Alarme_Feedbacks_processing(Input1_value);
@@ -785,7 +785,7 @@ void task_readInputs(void *pvParameter)
                     {
 
                         char input_Data_IO[50] = {};
-                        sprintf(input_Data_IO, "%s %d", "& I2", Input2_value);
+                        sprintf(input_Data_IO, "%s %d %s", "& I2", Input2_value,nowTime.strTime);
                         send_UDP_Send(input_Data_IO, "");
 
                         input2_Alarme_Feedbacks_processing(Input2_value);
@@ -838,7 +838,7 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
 
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-
+                        //printf("\n\n now 01< \n\n");
                         /* sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         // TODO: ADICIONAR CASO O NUMERO SEJA INVALIDO ENVIAR PARA O OWNER
@@ -902,7 +902,7 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
 
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-
+                        //printf("\n\n now 0< \n\n");
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
 
@@ -987,7 +987,7 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
 
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-                        // printf("\n\n now < \n\n");
+                        //printf("\n\n now 1< \n\n");
 
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
@@ -1039,7 +1039,7 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
 
                     if (now < ((fd_configurations.time_I1 * 1000000) + feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_I1_nowTime))
                     {
-
+                        //printf("\n\n now 2< \n\n");
                         example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
                         memset(&feedback_SMS_Data.feedback_Data_Send_SMS, 0, sizeof(feedback_SMS_Data.feedback_Data_Send_SMS));
 
@@ -1061,10 +1061,7 @@ void input1_Alarme_Feedbacks_processing(uint8_t inputLevel)
                             char fb_msg[50] = {};
                             sprintf(fb_msg, "= %s", fd_configurations.phone1);
                             send_UDP_Send(fb_msg, "");
-                            /*  send_UDP_Send("=\0", "");
-                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.payload, "%s", return_Json_SMS_Data("THE_ALARM_HAS_BEEN_ACTIVATED_BETWEEN_THE_TIMEOUT_SELECTED"));
-                             sprintf(feedback_SMS_Data.feedback_Data_Send_SMS.phoneNumber, "%s", fd_configurations.phone1);
-                             xQueueSendToBack(queue_EG91_SendSMS, (void *)&feedback_SMS_Data.feedback_Data_Send_SMS, pdMS_TO_TICKS(1000)); */
+                            
                         }
                     }
                 }
@@ -1124,7 +1121,7 @@ void input2_Alarme_Feedbacks_processing(uint8_t inputLevel)
         {
             if (fd_configurations.input_Config & FEEDBACK_I2_NO && label_Alarm_I2_Task_Activated == 0)
             {
-                label_Alarm_I2_Task_Activated = 1;
+                label_Alarm_I2_Task_Activated = 0;
                 send_UDP_Send("<\0>", "");
             }
         }

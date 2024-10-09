@@ -218,7 +218,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
             
 
             label_MonoStableRelay1 = 1;
-            printf("\nfeedback relay hohoho\n");
+            //printf("\nfeedback relay hohoho\n");
             save_INT8_Data_In_Storage(NVS_KEY_RELAY1_LAST_VALUE, 0, nvs_System_handle);
 
             if (cpy_message.relaynumber == RELE1_NUMBER)
@@ -232,7 +232,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
 
                     sprintf(cpy_message.payload, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
                     
-                    printf("\nfeedback relay 11- %s\n", cpy_message.payload);
+                    //printf("\nfeedback relay 11- %s\n", cpy_message.payload);
 
                     BLE_Broadcast_Notify(cpy_message.payload);
 
@@ -244,7 +244,7 @@ void task_BiState_Send_RelayState1(void *pvParameter)
                     {
                         
                         sprintf(cpy_message.mqttInfo_ble.data, "%s", cpy_message.payload);
-                         printf("\nfeedback relay6565 22- %s - %s\n", cpy_message.mqttInfo_ble.data, cpy_message.mqttInfo_ble.topic);
+                         //printf("\nfeedback relay6565 22- %s - %s\n", cpy_message.mqttInfo_ble.data, cpy_message.mqttInfo_ble.topic);
                         send_UDP_queue(&(cpy_message.mqttInfo_ble));
                     }
 
@@ -680,11 +680,11 @@ char *configuration_Relay_Parameter(char *payload, uint8_t BLE_SMS, mqtt_informa
         else if (BLE_SMS == SMS_INDICATION)
         {
             char UDP_Rsp[100] = {};
-            printf("\n\nfound_Count - %s\n\n", mqttInfo->data);
+            //printf("\n\nfound_Count - %s\n\n", mqttInfo->data);
             sprintf(mqttInfo->data, "%s %s", "ME S D", payload);
-            printf("\n\nfound_Count - %d\n\n", found_Count);
+            //printf("\n\nfound_Count - %d\n\n", found_Count);
             sprintf(mqttInfo->topic,"%s","");
-            printf("\n\nfound_Count - %d\n\n", found_Count);
+            //printf("\n\nfound_Count - %d\n\n", found_Count);
             // send_UDP_Send(UDP_Rsp);
             send_UDP_queue(mqttInfo);
 
@@ -717,7 +717,7 @@ char *getUserApp_id(char *topic)
         
     }
 
-    printf("\n\n get user topic %s\n\n",topic);
+    //printf("\n\n get user topic %s\n\n",topic);
     return topic;
     
 }
@@ -766,7 +766,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
     {
         // if ((label_MonoStableRelay1 != 1 && releNumber == RELE1_NUMBER) || (label_MonoStableRelay2 != 1 && releNumber == RELE2_NUMBER))
         // {
-        printf("\n\n ENTER IN MONOSTABLE CHECK\n\n");
+        //printf("\n\n ENTER IN MONOSTABLE CHECK\n\n");
         // printf("\n\n logs_struct.type SMS 11 %d\n\n", BLE_SMS_Indication);
         if (validate_DataUser(user_validateData, phPassword))
         {
@@ -1031,7 +1031,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                         sdCard_Write_LOGS(&logs_struct);
                     }
 
-                    if (BLE_SMS_Indication == BLE_INDICATION)
+                    if (BLE_SMS_Indication == BLE_INDICATION || BLE_SMS_Indication == UDP_INDICATION)
                     {
 
                         return return_ERROR_Codes(&rsp, "ERROR USER RELE NOT PERMITION\n<57>");
@@ -1115,7 +1115,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                     return return_ERROR_Codes(&rsp, return_Json_SMS_Data("ONLY_PERMISSION_TO_CALL"));
                 }
 
-                printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
+                //printf("\n\n logs_struct.type SMS 22 %d\n\n", BLE_SMS_Indication);
 
                 if (setReles(releNumber, BLE_SMS_Indication, gattsIF, connID, handle_table, data_SMS, mqttInfo))
                 {
@@ -1136,11 +1136,12 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 1)
                         {
-                            printf("\n\n alarm1 timeout\n\n");
+                            //printf("\n\n alarm1 timeout\n\n");
                             alarm_I1_Check_And_Save_Data(user_validateData->phone);
                         }
                         else if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
+                            //printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1) 2222\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE1_NUMBER);
                         }
 
@@ -1367,7 +1368,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                            printf("\n\n12312321if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
 
@@ -2447,6 +2448,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
                             }
                             else if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                             {
+                                //printf("\n\n9999 if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                                 normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE1_NUMBER);
                             }
 
@@ -2480,7 +2482,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                            //printf("\n\n55555 if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
                         // asprintf(&rsp, "%s %c %c %d", RELE2_ELEMENT, cmd, param, getRele2());
@@ -2519,7 +2521,7 @@ char *parse_ReleData(uint8_t BLE_SMS_Indication, uint8_t releNumber, char cmd, c
 
                         if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)
                         {
-                            // printf("\n\nif (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
+                             //printf("\n\n101010if (fd_configurations.alarmMode.A == 0 && fd_configurations.normal_FB_Mode == 1)\n\n");
                             normal_Feedback_Check_And_Save_Data(user_validateData->phone, RELE2_NUMBER);
                         }
 
@@ -2846,17 +2848,17 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
     char feedBackRelay[50];
     memset(feedBackRelay, 0, sizeof(feedBackRelay));
-    printf("\n\n logs_struct.type SMS 555 \n\n");
+    //printf("\n\n logs_struct.type SMS 555 \n\n");
     data_BLE_Send_RelayState message;
 
-    printf("\n\n logs_struct.type SMS 666 \n\n");
+    //printf("\n\n logs_struct.type SMS 666 \n\n");
     memset(&message, 0, sizeof(message));
 
     
     // printf("\n\n logs_struct.type SMS 777 \n\n");
     if (releNumber == RELE1_NUMBER)
     {
-         printf("\n\n logs_struct.type SMS 44 %d\n\n", message.BLE_SMS_INDICATION);
+         //printf("\n\n logs_struct.type SMS 44 %d\n\n", message.BLE_SMS_INDICATION);
         //  printf("setReles 11\n");
         if (rele1_Mode_Label == MONOESTABLE_MODE_INDEX)
         {
@@ -2865,7 +2867,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
             {
                 if (label_MonoStableRelay1 != 1)
                 {
-                    printf("\n\n logs_struct.type SMS 55 %d\n\n", message.BLE_SMS_INDICATION);
+                    //printf("\n\n logs_struct.type SMS 55 %d\n\n", message.BLE_SMS_INDICATION);
 
                     message.connID = connID;
                     message.gattsIF = gattsIF;
@@ -2874,7 +2876,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
 
                     if (BLE_SMS_Indication == BLE_INDICATION)
                     {
-                        printf("\n\n\n rele in bistate1\n\n\n");
+                        //printf("\n\n\n rele in bistate1\n\n\n");
                         sprintf(message.mqttInfo_ble.topic, "%s", "");
                         message.BLE_SMS_INDICATION = BLE_INDICATION;
                     }
@@ -2890,7 +2892,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     }
                     // printf("\n\n logs_struct.type SMS 66 %d\n\n", message.BLE_SMS_INDICATION);
                     sprintf(feedBackRelay, "%s %c %c %d", RELE1_ELEMENT, SET_CMD, RELE_PARAMETER, getRele1());
-                    printf("\nfeedback relay- %s\n", feedBackRelay);
+                    //printf("\nfeedback relay- %s\n", feedBackRelay);
                     sprintf(message.payload, "%s", feedBackRelay);
                    // sprintf(message.mqttInfo_ble.data,"%s",feedBackRelay);
 
@@ -2901,7 +2903,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                 }
                 else
                 {
-                    printf("\n\n\n rele in bistate2\n\n\n");
+                    //printf("\n\n\n rele in bistate2\n\n\n");
                     message.connID = connID;
                     message.gattsIF = gattsIF;
                     message.handle_table = handle_table;
@@ -2944,7 +2946,7 @@ uint8_t setReles(int releNumber, uint8_t BLE_SMS_Indication, uint8_t gattsIF, ui
                     message.EG91_data = *data_SMS;
 
                     xQueueSendToBack(queue_BLE_Parameters1, (void *)&message, pdMS_TO_TICKS(100));
-                    printf("\n label after cpy call2\n");
+                    //printf("\n label after cpy call2\n");
                 }
                 else
                 {

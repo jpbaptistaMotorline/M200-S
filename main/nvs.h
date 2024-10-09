@@ -165,6 +165,8 @@
 
 #define NVS_EG91_ICCID_VALUE                 "NVS_ICCID_EG"
 
+#define NVS_NEW_CODE                         "NVS_NEW_CODE"
+
 
 
 

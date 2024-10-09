@@ -104,8 +104,6 @@ typedef struct StructUser
  
     char wiegand_code[MYUSER_PHONE_SIZE];
     char wiegand_rele_permition;
-    
-   
 
 } MyUser;
 

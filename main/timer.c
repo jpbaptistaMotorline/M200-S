@@ -67,7 +67,7 @@ void initTimers()
     vSemaphoreCreateBinary(semaphore_ACT);
     vSemaphoreCreateBinary(rdySem_Timer_Input2_feedback_Timeout);
     xSemaphoreTake(rdySem_Timer_Input2_feedback_Timeout, 0);
-    s_timer_queue = xQueueCreate(2, sizeof(example_timer_event_t));
+    //s_timer_queue = xQueueCreate(2, sizeof(example_timer_event_t));
     alarm_I1_Timeout_queue = xQueueCreate(2, sizeof(example_timer_event_t));
 
     example_tg_timer_init(TIMER_GROUP_1, TIMER_0, true, 5);
@@ -99,10 +99,9 @@ void initTimers()
 void updateSystemTimer(int seconds)
 {
     // seconds = seconds / 2;
-    if (label_ResetSystem == 1)
-    {
+    
         timer_set_alarm_value(TIMER_GROUP_1, TIMER_0, seconds * TIMER_SCALE);
-    }
+    
 }
 
 void timer0_main_ctrl()
@@ -707,7 +706,7 @@ void task_I1_Alarm_Timeout(void *pvParameter)
                  feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.relay1_Activation = 0;
                  char str[50] = {};
                  sprintf(str,"? %s",feedback_SMS_Data.Alarm_I1_Send_SMS_Parameters.alarm_SMS_Number);
-                printf("\n\nTIMER FEEDBACK COMUM TIMEOUT\n\n");
+                //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT\n\n");
                  send_UDP_Send(str,"");
                 //system_stack_high_water_mark("alarm feedback");
              
@@ -718,7 +717,7 @@ void task_I1_Alarm_Timeout(void *pvParameter)
         }
         else if (fd_configurations.alarmMode.A == 0)
         {
-             printf("\n\nTIMER FEEDBACK COMUM TIMEOUT22\n\n");
+             //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT22\n\n");
             example_tg_timer_deinit(TIMER_GROUP_1, TIMER_1);
             //
           
@@ -727,16 +726,16 @@ void task_I1_Alarm_Timeout(void *pvParameter)
         //system_stack_high_water_mark("alarm feedback1");
         /* Print the timer values passed by event */
         //printf("\n------- EVENT TIME --------\n");
-         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT33\n\n");
+         //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT33\n\n");
         print_timer_counter(evt.timer_counter_value);
 
         /* Print the timer values as visible by this task */
         //printf("-------- TASK TIME --------\n");
-         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT44\n\n");
+         //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT44\n\n");
         uint64_t task_counter_value;
-         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT55\n\n");
+         //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT55\n\n");
         timer_get_counter_value(evt.info.timer_group, evt.info.timer_idx, &task_counter_value);
-         printf("\n\nTIMER FEEDBACK COMUM TIMEOUT66\n\n");
+         //printf("\n\nTIMER FEEDBACK COMUM TIMEOUT66\n\n");
         print_timer_counter(task_counter_value);
         // ESP_LOGI("TAG", "xPortGetFreeHeapSize            : %d", xPortGetFreeHeapSize());
         // ESP_LOGI("TAG", "esp_get_minimum_free_heap_size  : %d", esp_get_minimum_free_heap_size());

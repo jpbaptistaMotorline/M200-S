@@ -27,7 +27,7 @@
 #define SPP_CMD_MAX_LEN            (20)
 #define SPP_STATUS_MAX_LEN         (20)
 #define SPP_DATA_BUFF_MAX_LEN      (2*1024)
-#define DEFAULT_BLE_NAME            "MOTORLINE M200"
+#define DEFAULT_BLE_NAME            "MOTORLINE M250"
 
 //TimerHandle_t xTimer_ADV;
 
